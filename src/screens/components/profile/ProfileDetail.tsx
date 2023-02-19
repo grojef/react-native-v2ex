@@ -13,7 +13,6 @@ import ProfileTopics from './ProfileTopics'
  */
 export interface ProfileDetailProps {
   containerStyle?: StyleProp<ViewStyle>
-
   profile: AppObject.Member
 }
 
@@ -27,7 +26,6 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ containerStyle, profile }
           info={profile}
           styleType="full"
         />
-        <ProfileTopics username={profile.username} containerStyle={[{ marginTop: theme.spacing.small }]} />
       </View>
     )
   }

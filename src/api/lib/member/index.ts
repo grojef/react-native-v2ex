@@ -1,27 +1,32 @@
-import { AppAPI, AppObject } from '../../types'
+import {AppAPI, AppObject} from '../../types'
 
 export default (v2ex: AppAPI.APP): AppAPI.MemberAPI => ({
-  myToken: () => v2ex.get<AppObject.MemberToken>('/token', undefined, undefined, undefined, 'v2'),
+    myToken: () => v2ex.get<AppObject.MemberToken>('/token', undefined, undefined, undefined,),
 
-  myProfile: () => v2ex.get<AppObject.Member>('/member', undefined, undefined, undefined, 'v2'),
+    myProfile: () => v2ex.get<AppObject.Member>('/system/user/profile', undefined, undefined, undefined,),
 
-  profile: (id: string | number) =>
-    v2ex.get<AppObject.Member>(
-      `/members/show.json?${typeof id === 'string' ? 'username' : 'id'}=${id}`,
-      undefined,
-      undefined,
-      undefined,
-      undefined
-    ),
+    profile: (id: string | number) =>
+        v2ex.get<AppObject.Member>(
+            `/system/user/profile`,
+            undefined,
+            undefined,
+            undefined,
+            undefined
+        ),
 
-  token: (token: string) =>
-    v2ex.get<AppObject.MemberToken>(
-      `/token`,
-      {
-        Authorization: `Bearer ${token}`
-      },
-      undefined,
-      undefined,
-      'v2'
-    )
+    token: (loginId: string, password) =>
+        v2ex.send<AppObject.MemberToken>(
+            `/login`,
+            'post',
+            undefined,
+            undefined,
+            {'username': loginId, "password": password}
+        ),
+    logout: () =>
+        v2ex.send<AppObject.MemberToken>(
+            `/logout`,
+            'post',
+            undefined,
+            undefined,
+        )
 })

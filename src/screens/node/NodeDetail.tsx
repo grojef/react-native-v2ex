@@ -22,14 +22,14 @@ const NodeDetail = ({
   const nodeName = useMemo(() => route.params.nodeName, [route])
   const [info, setInfo] = useState<AppObject.Node | undefined>(undefined)
 
-  useEffect(() => {
-    if (info) {
-      navigation.setOptions({
-        title: route.params.nodeTitle || info?.title,
-        headerRight: () => <LikeNodeHeaderButton node={info} />
-      })
-    }
-  }, [interestNodes, info]) // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   if (info) {
+  //     navigation.setOptions({
+  //       title: route.params.nodeTitle || info?.title,
+  //       headerRight: () => <LikeNodeHeaderButton node={info} />
+  //     })
+  //   }
+  // }, [interestNodes, info]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <View style={SylCommon.Layout.fill}>

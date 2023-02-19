@@ -30,30 +30,20 @@ const LikeTopicHeaderButton = ({
 }) => {
   const { theme } = useTheme()
   const { logined } = useSession()
-  const { likeTopics } = useAppSelector((RootState) => RootState.member)
 
   const dispatch = useAppDispatch()
-  const isLike = useMemo(
-    () => (logined ? likeTopics && likeTopics.findIndex((v) => v.id === topic.id) >= 0 : false),
-    [likeTopics]
-  )
-
   const buttonPress = () => {
     if (!logined) {
       NavigationService.navigate(ROUTES.SignIn)
     } else {
-      if (isLike) {
-        dispatch(unLikeTopic(topic) as any)
-      } else {
-        dispatch(likeTopic(topic) as any)
-      }
+      NavigationService.navigate(ROUTES.My)
     }
   }
 
   return (
     <HeaderButton
-      text={translate(`common.${isLike ? 'cancel' : 'favorite'}`)}
-      textColor={isLike ? theme.colors.captionText : theme.colors.secondary}
+      text={translate(`common.edit`)}
+      textColor={theme.colors.captionText}
       onPress={buttonPress}
       containerStyle={containerStyle}
     />

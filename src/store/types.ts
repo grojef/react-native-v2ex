@@ -75,6 +75,10 @@ export namespace IState {
       info: AppObject.Node
     }[]
 
+    counter:number
+
+    dict:Record<string, Array<AppObject.DictMeta>>
+
     /**
      * 当前登录用户
      */

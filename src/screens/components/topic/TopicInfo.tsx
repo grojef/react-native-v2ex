@@ -1,13 +1,14 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/01.
  */
-import { NavigationService, ROUTES } from '@src/navigation'
-import { ITheme, SylCommon, useTheme } from '@src/theme'
-import { AppObject } from '@src/types'
+import {NavigationService, ROUTES} from '@src/navigation'
+import {ITheme, SylCommon, useTheme} from '@src/theme'
+import {AppObject} from '@src/types'
 import React from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
-import { RenderHTML } from '../common'
+import {Linking, StyleProp, View, ViewStyle} from 'react-native'
+import {RenderHTML} from '../common'
 import TopicCardItem from './TopicCardItem'
+import {ApiLib} from "@src/api";
 
 /**
  * TopicInfo props
@@ -24,19 +25,25 @@ export interface TopicInfoProps {
   info: AppObject.Topic
 }
 
-const TopicInfo: React.FC<TopicInfoProps> = ({ containerStyle, info }: TopicInfoProps) => {
-  const { theme } = useTheme()
+const TopicInfo: React.FC<TopicInfoProps> = ({containerStyle, info}: TopicInfoProps) => {
+  const {theme} = useTheme()
 
   const renderContent = () => {
     return (
       <View style={[SylCommon.Card.container(theme), styles.container(theme), containerStyle]}>
         <TopicCardItem
           topic={info}
-          showlastReplay={false}
+          displayStyle={'full'}
           onPress={() => {
-            NavigationService.navigate(ROUTES.WebViewer, {
-              url: info.url
-            })
+            Linking.canOpenURL(`tel:${info.phoneNumber}`).then((supported) => {
+              if (!supported) {
+              } else {
+                Linking.openURL(`tel:${info.phoneNumber}`).then(() => {
+                  info.callFlag = '1'
+                  ApiLib.topic.call(info.id)
+                })
+              }
+            }).catch()
           }}
         />
         <RenderHTML

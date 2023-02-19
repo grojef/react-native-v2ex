@@ -28,7 +28,7 @@ const MyTopics = ({
     if (!profile) return
 
     ApiLib.topic
-      .topics(profile?.username, 'username')
+      .topics(profile?.user.userName, 'username')
       .then((rlt: AppObject.Topic[]) => {
         setRefreshing(false)
         setList(rlt)

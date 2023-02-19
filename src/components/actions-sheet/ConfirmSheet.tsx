@@ -39,7 +39,6 @@ const ConfirmActionSheet = (props: SheetProps) => {
   const actionSheetRef = useRef<ActionSheetRef>(null)
 
   const buttonConfirm = (yes: boolean) => {
-    console.log('buttonConfirm', yes, sheetId)
     SheetManager.hide(sheetId, {
       payload: yes,
       context: 'global'

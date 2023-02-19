@@ -22,32 +22,10 @@ export interface TopicReplayItemProps {
 
 const TopicReplayItem: React.FC<TopicReplayItemProps> = ({ containerStyle, info }: TopicReplayItemProps) => {
   const { theme } = useTheme()
-  const avatar_link = useMemo(() => (info.member ? info.member.avatar || info.member.avatar_normal : undefined), [info])
   return (
     <View style={[styles.container(theme), containerStyle]}>
       <View style={styles.infoContainer(theme)}>
-        <Avatar size={40} source={{ uri: avatar_link }} username={info.member?.username} style={styles.avatar(theme)} />
 
-        <View style={styles.infoMain(theme)}>
-          <View style={styles.infoMainItem(theme)}>
-            <TextWithIconPress
-              text={info.member?.username ?? 'none'}
-              textStyle={[{ color: theme.colors.secondary }]}
-              onPress={() => {
-                NavigationService.navigate(ROUTES.Profile, { username: info.member?.username })
-              }}
-            />
-            <TextWithIconPress
-              text={translate('label.replyedTime').replace('$', dayjs(info.created * 1000).fromNow())}
-            />
-          </View>
-          <View style={styles.infoMainItem(theme)}>
-            <RenderHTML
-              htmlString={info.content_rendered}
-              contentWidth={theme.dimens.layoutContainerWidth - 40 - theme.spacing.large}
-            />
-          </View>
-        </View>
       </View>
       <BorderLine width={0.4} />
     </View>

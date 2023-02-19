@@ -11,7 +11,7 @@ const HotTopics = ({ route, navigation }: ScreenProps) => {
   return (
     <View style={SylCommon.Layout.fill}>
       <FetchTopicCardList displayStyle="full" nodeName={NODE_TABS.HOT} />
-      <CheckUpdate />
+      {/*<CheckUpdate />*/}
     </View>
   )
 }

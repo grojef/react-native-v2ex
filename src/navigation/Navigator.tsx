@@ -292,8 +292,8 @@ const MainAppNavigator = () => {
           tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
-              theme.assets.images.icons.bottomTab.hot.active,
-              theme.assets.images.icons.bottomTab.hot.inActive
+              theme.assets.images.icons.bottomTab.home.active,
+              theme.assets.images.icons.bottomTab.home.inActive
             )
         })}
       />
@@ -308,20 +308,6 @@ const MainAppNavigator = () => {
               focused,
               theme.assets.images.icons.bottomTab.nodes.active,
               theme.assets.images.icons.bottomTab.nodes.inActive
-            )
-        }}
-      />
-      <MainBottomTabNavigator.Screen
-        name={ROUTES.InterestNodes}
-        component={Screens.InterestNodesScreen}
-        options={{
-          title: translate(`router.${ROUTES.InterestNodes}`),
-          ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({ focused }) =>
-            renderBottomIcon(
-              focused,
-              theme.assets.images.icons.bottomTab.like.active,
-              theme.assets.images.icons.bottomTab.like.inActive
             )
         }}
       />
@@ -424,14 +410,6 @@ export const AppNavigationContainer = () => {
                   headerTitleStyle: { color: theme.colors.transparent },
                   headerBackTitleVisible: false,
                   headerShown: true,
-                  headerRight: () => (
-                    <HeaderButton
-                      text={translate('button.getToken')}
-                      onPress={() => {
-                        NavigationService.navigate(ROUTES.WebViewer, { url: tokenGeneratedLink })
-                      }}
-                    />
-                  )
                 }}
               />
               <StackNavigator.Screen
@@ -469,6 +447,15 @@ export const AppNavigationContainer = () => {
                 component={Screens.ProfileScreen}
                 options={{
                   title: translate(`router.${ROUTES.Profile}`),
+                  ...defaultScreenOptions(theme),
+                  headerShown: true
+                }}
+              />
+              <StackNavigator.Screen
+                name={ROUTES.NotificationInfo}
+                component={Screens.NotificationInfoScreen}
+                options={{
+                  title: translate(`router.${ROUTES.NotificationInfo}`),
                   ...defaultScreenOptions(theme),
                   headerShown: true
                 }}

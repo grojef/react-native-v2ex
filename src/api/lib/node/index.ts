@@ -10,5 +10,5 @@ export default (v2ex: AppAPI.APP): AppAPI.NodeAPI => ({
       version
     ),
 
-  all: () => v2ex.get<AppObject.Node[]>('/nodes/all.json', undefined, undefined, undefined, undefined)
+  all: () => v2ex.get<AppObject.Node[]>('/system/dict/data/type/cms_ctm_tag', undefined, undefined, undefined, undefined)
 })

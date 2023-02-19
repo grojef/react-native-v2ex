@@ -2,7 +2,7 @@
  * App Api Configuration
  */
 export const AppApiOptions = {
-  url: 'https://www.v2ex.com',
+  url: 'http://43.136.117.70:8080',
   store: 'api',
   userAgent: 'V2ex App API Library',
   authentication: {

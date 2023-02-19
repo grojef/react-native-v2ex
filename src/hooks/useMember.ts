@@ -9,22 +9,20 @@ import { useAppDispatch, useAppSelector } from '.'
 import { cacheMember } from '../actions'
 import { AppObject } from '../types'
 
-export const useMember = ({ userid: id, forcePull = true }: { userid: string | number; forcePull?: boolean }) => {
+export const useMember = ({ userName: userName, forcePull = true }: { userName: string | number; forcePull?: boolean }) => {
   const members = useAppSelector((_state: RootState) => _state.cache.members)
-  const [info, setInfo] = useState<AppObject.Member | undefined>(memberFromCache(id, members))
+  const [info, setInfo] = useState<AppObject.Member | undefined>(memberFromCache(userName, members))
 
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const _info = memberFromCache(id, members, forcePull ? 5 * 1000 : CACHE_EXPIRE_TIME)
-
+    const _info = memberFromCache(userName, members, forcePull ? 5 * 1000 : CACHE_EXPIRE_TIME)
     if (_info !== undefined) {
       setInfo(_info)
     } else {
-      dispatch(cacheMember(id) as any)
+      dispatch(cacheMember(userName) as any)
     }
-  }, [id, info, members]) // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [userName, info, members]) // eslint-disable-line react-hooks/exhaustive-deps
   return {
     member: info
   }

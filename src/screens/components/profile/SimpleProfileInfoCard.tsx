@@ -41,14 +41,14 @@ const SimpleProfileInfoCard: React.FC<SimpleProfileInfoCardProps> = ({
       <View style={[ProfileInfoStyle.container(theme), containerStyle]}>
         <TouchableOpacity
           onPress={() => {
-            if (withArrow) NavigationService.navigate(ROUTES.Profile, { username: info?.username })
+            if (withArrow) NavigationService.navigate(ROUTES.Profile, { username: info?.user.userName })
           }}
           style={ProfileInfoStyle.infoItem(theme)}>
           <View style={ProfileInfoStyle.baseAvatar(theme)}>
             <Avatar
               size={60}
-              source={info?.avatar_normal ? { uri: info?.avatar_normal } : undefined}
-              username={info?.username}
+              source={info?.user.avatar_normal ? { uri: info?.user.avatar_normal } : undefined}
+              username={info?.user.userName}
             />
           </View>
           <View style={ProfileInfoStyle.baseRightBox(theme)}>
@@ -60,16 +60,15 @@ const SimpleProfileInfoCard: React.FC<SimpleProfileInfoCardProps> = ({
                   theme.typography.subheadingText,
                   { color: theme.colors.secondary }
                 ]}>
-                {info?.username}
+                {info?.user.userName}
               </Text>
-              {info?.tagline ? (
+              {info?.user.tagline ? (
                 <Text
                   style={[
                     ProfileInfoStyle.baseRightItem(theme),
                     styles.baseRightItem(theme),
                     theme.typography.bodyText
                   ]}>
-                  {info.tagline}
                 </Text>
               ) : null}
               {info ? (
@@ -79,12 +78,12 @@ const SimpleProfileInfoCard: React.FC<SimpleProfileInfoCardProps> = ({
                     styles.baseRightItem(theme),
                     theme.typography.captionText
                   ]}>
-                  {translate('label.v2exNumber').replace('$', info?.id.toString())}
+                  {translate('label.v2exNumber').replace('$', info?.user.userName)}
                 </Text>
               ) : null}
-              {info?.created ? (
+              {info?.user.createTime ? (
                 <Text style={[ProfileInfoStyle.infoItem(theme), theme.typography.captionText]}>
-                  {translate('label.joinSinceTime').replace('$', dayjs(info?.created * 1000).format())}
+                  {translate('label.joinSinceTime').replace('$', dayjs(info?.user.createTime).format())}
                 </Text>
               ) : null}
             </View>

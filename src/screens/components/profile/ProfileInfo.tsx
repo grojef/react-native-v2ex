@@ -41,7 +41,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
   withArrow = false
 }: ProfileInfoProps) => {
   const { theme } = useTheme()
-  const isLogin = useMemo(() => info && info.username, [info])
+  const isLogin = useMemo(() => info && info.user.userName, [info])
 
   const renderContent = () => {
     return (
@@ -51,15 +51,15 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
             !withArrow
               ? undefined
               : isLogin
-              ? NavigationService.navigate(ROUTES.Profile, { username: info?.username })
+              ? NavigationService.navigate(ROUTES.Profile, { userName: info?.user.userName })
               : NavigationService.navigate(ROUTES.SignIn)
           }
           style={ProfileInfoStyle.infoItem(theme)}>
           <View style={ProfileInfoStyle.baseAvatar(theme)}>
             <Avatar
               size={60}
-              source={info?.avatar_normal ? { uri: info?.avatar_normal } : undefined}
-              username={info?.username}
+              source={info?.user.avatar_normal ? { uri: info?.user.avatar_normal } : undefined}
+              username={info?.user.nickName}
             />
           </View>
           <View style={ProfileInfoStyle.baseRightBox(theme)}>
@@ -70,18 +70,13 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
                   theme.typography.subheadingText,
                   { color: theme.colors.secondary }
                 ]}>
-                {info?.username ?? translate('label.goLogin')}
+                {info?.user.nickName ?? translate('label.goLogin')}
               </Text>
-              {!isLogin || (isLogin && info?.tagline) ? (
-                <Text style={[ProfileInfoStyle.baseRightItem(theme), theme.typography.bodyText]}>
-                  {info?.tagline ?? translate('label.loginTips')}
-                </Text>
-              ) : null}
-              {info?.last_modified ? (
+              {info?.user.createTime ? (
                 <Text style={[ProfileInfoStyle.baseRightItem(theme), theme.typography.captionText]}>
                   {translate('label.profileLastModified').replace(
                     '$',
-                    dayjs(info?.last_modified * 1000).format('YYYY-MM-DD HH:mm:ss')
+                    dayjs(info?.user.createTime).format('YYYY-MM-DD HH:mm:ss')
                   )}
                 </Text>
               ) : null}
@@ -95,67 +90,67 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({
         </TouchableOpacity>
         {styleType === 'full' && (
           <>
-            {info?.bio ? (
-              <Text style={[ProfileInfoStyle.infoItem(theme), theme.typography.bodyText]}>{info?.bio}</Text>
+            {info?.user.bio ? (
+              <Text style={[ProfileInfoStyle.infoItem(theme), theme.typography.bodyText]}>{info?.user.bio}</Text>
             ) : null}
 
-            {info && (info.location || info.website) ? (
+            {info && (info.user.location || info.user.website) ? (
               <View style={ProfileInfoStyle.infoItem(theme)}>
-                {info?.location ? (
+                {info?.user.location ? (
                   <TextWithIconPress
                     containerStyle={{ marginRight: theme.spacing.small }}
-                    text={info?.location}
+                    text={info?.user.location}
                     icon={theme.assets.images.icons.profile.location}
                   />
                 ) : null}
-                {info?.website ? (
+                {info?.user.website ? (
                   <TextWithIconPress
                     onPress={() => {
-                      NavigationService.navigate(ROUTES.WebViewer, { url: info.website })
+                      NavigationService.navigate(ROUTES.WebViewer, { url: info.user.website })
                     }}
                     containerStyle={{ marginRight: theme.spacing.small }}
-                    text={info?.website}
+                    text={info?.user.website}
                     icon={theme.assets.images.icons.profile.urlschme}
                   />
                 ) : null}
               </View>
             ) : null}
-            {info && (info.github || info.telegram || info.twitter) ? (
+            {info && (info.user.github || info.user.telegram || info.user.twitter) ? (
               <View style={ProfileInfoStyle.infoItem(theme)}>
-                {info?.github ? (
+                {info?.user.github ? (
                   <TextWithIconPress
                     onPress={() => {
-                      NavigationService.navigate(ROUTES.WebViewer, { url: `https://github.com/${info.twitter}` })
+                      NavigationService.navigate(ROUTES.WebViewer, { url: `https://github.com/${info.user.twitter}` })
                     }}
                     containerStyle={{ marginRight: theme.spacing.small }}
-                    text={info?.github}
+                    text={info?.user.github}
                     icon={theme.assets.images.icons.profile.github}
                   />
                 ) : null}
-                {info?.telegram ? (
+                {info?.user.telegram ? (
                   <TextWithIconPress
                     containerStyle={{ marginRight: theme.spacing.small }}
-                    text={info?.telegram}
+                    text={info?.user.telegram}
                     icon={theme.assets.images.icons.profile.telegram}
                   />
                 ) : null}
-                {info?.twitter ? (
+                {info?.user.twitter ? (
                   <TextWithIconPress
                     onPress={() => {
-                      NavigationService.navigate(ROUTES.WebViewer, { url: `https://twitter.com/${info.twitter}` })
+                      NavigationService.navigate(ROUTES.WebViewer, { url: `https://twitter.com/${info.user.twitter}` })
                     }}
                     containerStyle={{ marginRight: theme.spacing.small }}
-                    text={info?.twitter}
+                    text={info?.user.twitter}
                     icon={theme.assets.images.icons.profile.twitter}
                   />
                 ) : null}
               </View>
             ) : null}
-            {info?.created ? (
+            {info?.user.created ? (
               <Text style={[ProfileInfoStyle.infoItem(theme), theme.typography.captionText]}>
                 {translate('label.joinV2exSinceTime')
-                  .replace('$', info?.id.toString())
-                  .replace('$', dayjs(info?.created * 1000).format())}
+                  .replace('$', info?.user.userId.toString())
+                  .replace('$', dayjs(info?.user.created * 1000).format())}
               </Text>
             ) : null}
           </>

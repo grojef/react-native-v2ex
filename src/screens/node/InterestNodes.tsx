@@ -74,20 +74,20 @@ const InterestNodes = ({
                 backgroundColor: theme.colors.tabBarBackground
               }
             }}>
-            {likeNodes.map((item: AppObject.Node) => (
-              <Tab.Screen
-                key={`NODE-${item.name}`}
-                name={`NODE-${item.name}`}
-                component={NodeTopicListScreen}
-                options={{
-                  title: item.title
-                }}
-                initialParams={{
-                  nodeName: item.name,
-                  nodeTitle: item.title
-                }}
-              />
-            ))}
+            {/*{likeNodes.map((item: AppObject.Node) => (*/}
+            {/*  <Tab.Screen*/}
+            {/*    key={`NODE-${item.name}`}*/}
+            {/*    name={`NODE-${item.name}`}*/}
+            {/*    component={NodeTopicListScreen}*/}
+            {/*    options={{*/}
+            {/*      title: item.title*/}
+            {/*    }}*/}
+            {/*    initialParams={{*/}
+            {/*      nodeName: item.name,*/}
+            {/*      nodeTitle: item.title*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*))}*/}
           </Tab.Navigator>
         )}
       </NeedLogin>

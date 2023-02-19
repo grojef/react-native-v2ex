@@ -109,7 +109,7 @@ const HeaderButton = ({
 
   return (
     <Pressable onPress={onPress} style={style}>
-      {source && <Image source={source} width={24} />}
+      {source && <Image source={source} />}
       {text && <Text style={styles.headerText(theme, textColor)}>{text}</Text>}
     </Pressable>
   )

@@ -1,63 +1,98 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/03/4.
  */
-import { logout as actionLogout } from '@src/actions'
-import { Spinner } from '@src/components'
-import { useMember } from '@src/hooks/useMember'
-import { translate } from '@src/i18n'
-import { ProfileScreenProps as ScreenProps } from '@src/navigation'
-import { SylCommon, useTheme } from '@src/theme'
-import { IState, AppObject } from '@src/types'
-import React, { useEffect, useLayoutEffect, useMemo } from 'react'
-import { ScrollView } from 'react-native-gesture-handler'
-import { connect } from 'react-redux'
-import { ProfileDetail } from '../components'
-import { FollowPeopleHeaderButton, LogoutHeaderButton } from '../components/button'
+import {logout as actionLogout} from '@src/actions'
+import {Spinner} from '@src/components'
+import {useMember} from '@src/hooks/useMember'
+import {translate} from '@src/i18n'
+import {ProfileScreenProps as ScreenProps, ROUTES} from '@src/navigation'
+import {SylCommon, useTheme} from '@src/theme'
+import {IState, AppObject} from '@src/types'
+import React, {useEffect, useLayoutEffect, useMemo} from 'react'
+import {ScrollView} from 'react-native-gesture-handler'
+import {connect} from 'react-redux'
+import {ProfileDetail} from '../components'
+import {LogoutHeaderButton} from '../components/button'
+import {Footer, HeaderButton, ProfileCard, SetStatusBar, TableList, TableRow} from '../components'
 
 const Profile = ({
-  route,
-  navigation,
-  authMember,
-  logout
-}: ScreenProps & {
+                   route,
+                   navigation,
+                   authMember,
+                   logout
+                 }: ScreenProps & {
   authMember?: AppObject.Member
   logout: () => void
 }) => {
-  const { theme } = useTheme()
-  const username = useMemo(() => route.params.username, [route])
-  const { member } = useMember({ userid: username })
-
+  const {theme} = useTheme()
+  const username = useMemo(() => route.params.userName, [route])
+  const {member} = useMember({userName: username})
   useEffect(() => {
-    navigation.setOptions({ title: member?.username })
+    navigation.setOptions({title: authMember?.user.userName})
   }, [username, member])
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: member
+      headerRight: authMember
         ? () =>
-            !authMember || authMember.id !== member.id ? (
-              <FollowPeopleHeaderButton member={member} />
-            ) : (
-              <LogoutHeaderButton member={member} />
-            )
+          (
+            <LogoutHeaderButton member={authMember}/>
+          )
         : undefined
     })
-  }, [navigation, member])
+  }, [navigation, authMember])
+
+
+  const renderProfile
+    = (user: AppObject.User) => {
+
+    return (<TableList title={translate('common.setting')}>
+        <TableRow
+          title={translate(`router.${ROUTES.ThemeSetting}`)}
+          leftIcon={theme.assets.images.icons.table.theme}
+          withArrow={true}
+          onPress={() => {
+            navigation.navigate(ROUTES.ThemeSetting)
+          }}
+        />
+        <TableRow
+          title={translate(`router.${ROUTES.Language}`)}
+          leftIcon={theme.assets.images.icons.table.language}
+          withArrow={true}
+          onPress={() => {
+            navigation.navigate(ROUTES.Language)
+          }}
+        />
+        <TableRow
+          title={translate(`router.${ROUTES.CacheSetting}`)}
+          leftIcon={theme.assets.images.icons.table.cached}
+          withArrow={true}
+          onPress={() => {
+            navigation.navigate(ROUTES.CacheSetting)
+          }}
+        />
+      </TableList>
+    )
+  }
 
   return (
     <ScrollView style={SylCommon.Layout.fill}>
-      {member ? (
-        <ProfileDetail profile={member} />
+      {authMember ? (
+        <><ProfileDetail profile={authMember}/>
+          {renderProfile(authMember.user)}
+        </>
       ) : (
-        <Spinner style={{ height: theme.dimens.WINDOW_HEIGHT }} text={translate('placeholder.loading')} />
+        <Spinner style={{height: theme.dimens.WINDOW_HEIGHT}}
+                 text={translate('placeholder.loading')}/>
       )}
+
     </ScrollView>
   )
 }
 
-const mapStateToProps = ({ member }: { member: IState.MemberState }) => {
-  const { profile: authMember } = member
-  return { authMember }
+const mapStateToProps = ({member}: { member: IState.MemberState }) => {
+  const {profile: authMember} = member
+  return {authMember}
 }
 
 export default connect(mapStateToProps, {

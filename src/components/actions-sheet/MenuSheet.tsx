@@ -1,21 +1,30 @@
-import React, { useRef } from 'react'
-import ActionSheet, { ActionSheetRef, registerSheet, SheetProps } from 'react-native-actions-sheet'
+import React, {useRef} from 'react'
+import ActionSheet, {ActionSheetRef, registerSheet, SheetProps} from 'react-native-actions-sheet'
 import MenuButton from './Btn'
+import {useAppSelector} from "@src/hooks";
+import {RootState} from "@src/store";
 
 const Sheet = (props: SheetProps) => {
   const actionSheetRef = useRef<ActionSheetRef>(null)
-
+  const {payload: {press}} = props
+  const allNode = useAppSelector((_state: RootState) => _state.app.allNode)
+  const renderMenu = () => {
+    return (<>
+        {allNode?.map((tag) => {
+          return (<MenuButton key={tag.dictValue} title={tag.dictLabel} onPress={() => press(tag.dictValue)}/>)
+        })}
+      </>
+    )
+  }
   return (
     <ActionSheet
       ref={actionSheetRef}
       id={props.sheetId}
       statusBarTranslucent
       gestureEnabled={true}
-      containerStyle={{ backgroundColor: '#BFD7EA' }}
-      indicatorStyle={{ backgroundColor: 'rgba(71, 87, 114, 0.13)' }}>
-      <MenuButton title="操作 一" onPress={() => console.log('action 1')} />
-      <MenuButton title="操作 二" onPress={() => console.log('action 2')} />
-      <MenuButton title="操作 三" color={'#c0392b'} onPress={() => console.log('action 3...')} />
+      containerStyle={{}}
+      indicatorStyle={{backgroundColor: 'rgba(71, 87, 114, 0.13)'}}>
+      {renderMenu()}
     </ActionSheet>
   )
 }

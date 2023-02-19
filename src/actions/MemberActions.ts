@@ -29,7 +29,6 @@ import { cacheMemberFollowing, cacheMemberInterestNodes, cacheMemberLikeTopicss 
 
 export const myProfile = () => async (dispatch: Dispatch, getState: () => RootState) => {
   const _member = await ApiLib.member.myProfile()
-
   dispatch({
     type: MEMBER_PROFILE,
     payload: _member
@@ -38,9 +37,9 @@ export const myProfile = () => async (dispatch: Dispatch, getState: () => RootSt
   dispatch({
     type: MEMBER_SATE_SETTING,
     payload: {
-      interestNodes: getState().cache.membersInterestNodes[_member.id],
-      followPeoples: getState().cache.membersFollowing[_member.id],
-      likeTopics: getState().cache.membersLikeTopics[_member.id]
+      interestNodes: getState().cache.membersInterestNodes[_member.user.userId],
+      followPeoples: getState().cache.membersFollowing[_member.user.userId],
+      likeTopics: getState().cache.membersLikeTopics[_member.user.userId]
     }
   })
 }
@@ -110,10 +109,10 @@ export const setCurrentToken = (token?: AppObject.MemberToken) => ({
   payload: token
 })
 
-export const loginByToken = (token: string) => async (dispatch: Dispatch) => {
+export const loginByToken = (loginId: string,password: string) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: APP_AUTH_LOADING })
-    const token_info = await ApiLib.member.token(token)
+    const token_info = await ApiLib.member.token(loginId,password)
     dispatch(loginByTokenSuccess(token_info) as any)
   } catch (e: any) {
     logError(e)
@@ -146,6 +145,7 @@ export const errorMessage = (error: string) => ({
 export const logout = () => (dispatch: Dispatch) => {
   AsyncStorage.setItem(MEMBER_TOKEN_KEY, '')
   ApiLib.setToken(undefined)
+  ApiLib.member.logout().then(r => null)
   dispatch({ type: APP_LOGOUT })
 
   NavigationService.navigate('SignIn')

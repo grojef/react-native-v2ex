@@ -2,17 +2,18 @@
  * Created by leon<silenceace@gmail.com> on 22/04/18.
  */
 
-import { useToast } from '@src/components'
-import { useMember } from '@src/hooks/useMember'
-import { useSession } from '@src/hooks/useSession'
-import { NODE_TABS } from '@src/navigation'
-import { useTheme } from '@src/theme'
-import { AppObject } from '@src/types'
-import { ApiLib } from '@src/api'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { RefreshControl, StyleProp, ViewStyle } from 'react-native'
-import { NeedLogin } from '../common'
+import {useToast} from '@src/components'
+import {useMember} from '@src/hooks/useMember'
+import {useSession} from '@src/hooks/useSession'
+import {NODE_TABS} from '@src/navigation'
+import {useTheme} from '@src/theme'
+import {AppObject} from '@src/types'
+import {ApiLib} from '@src/api'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {RefreshControl, StyleProp, ViewStyle} from 'react-native'
+import {NeedLogin} from '../common'
 import TopicCardList from './TopicCardList'
+import CountDown from "@src/screens/components/topic/CountDown";
 
 export interface FetchTopicCardListProps {
   /**
@@ -29,14 +30,14 @@ export interface FetchTopicCardListProps {
 }
 
 const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
-  nodeName,
-  v2API = false,
-  containerStyle,
-  displayStyle
-}: FetchTopicCardListProps) => {
-  const { theme } = useTheme()
-  const { logined } = useSession()
-  const { showMessage } = useToast()
+                                                                 nodeName,
+                                                                 v2API = false,
+                                                                 containerStyle,
+                                                                 displayStyle
+                                                               }: FetchTopicCardListProps) => {
+  const {theme} = useTheme()
+  const {logined} = useSession()
+  const {showMessage} = useToast()
   const [page, setPage] = useState(1)
   const [mounted, setMounted] = useState<boolean>(false)
   const [refreshing, setRefreshing] = useState<boolean>(false)
@@ -63,16 +64,11 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
       if (pageNum === 1) {
         setList(undefined)
       }
-
       setRefreshing(pageNum === 1)
       setLoadMore(pageNum > 1 && v2API)
-      ;(specialNode
-        ? nodeName === NODE_TABS.LATEST
-          ? ApiLib.topic.latestTopics()
-          : ApiLib.topic.hotTopics()
-        : v2API && logined
-        ? ApiLib.topic.pager(nodeName, pageNum)
-        : ApiLib.topic.topics(nodeName, 'node_name')
+      ;(nodeName != NODE_TABS.HOT
+          ? ApiLib.topic.pager(nodeName, pageNum)
+          : ApiLib.topic.pager(nodeName,pageNum)
       )
         .then((rlt: AppObject.Topic[]) => {
           if (rlt.length === 0 || specialNode || !v2API) {
@@ -82,7 +78,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
           setRefreshing(false)
           setLoadMore(false)
 
-          setList((list || []).concat(rlt))
+          setList(rlt)
         })
         .catch((err) => {
           showMessage(err.message)
@@ -123,11 +119,12 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
       }}
       mustLogin={v2API}
       placeholderBackground={theme.colors.surface}>
+      {nodeName != NODE_TABS.HOT && <CountDown/>}
       <TopicCardList
         containerStyle={containerStyle}
         topics={list}
         displayStyle={displayStyle}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         onEndReached={onReached}
         canLoadMoreContent={hasMore}
         searchIndicator={false}

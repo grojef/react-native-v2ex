@@ -18,6 +18,7 @@ function goBack() {
   navigationRef.goBack()
 }
 
+
 function goUserProfile(username: string) {
   navigate(ROUTES.Profile, { username })
 }

@@ -12,6 +12,7 @@ import {NavigationService, ROUTES} from '@src/navigation'
 import {BorderLine, TextWithIconPress} from '../common'
 import {useMemo} from 'react'
 import {translate} from '@src/i18n'
+import {AntOutline, ArrowDownCircleOutline} from 'antd-mobile-icons'
 
 export interface TopicCardItemProps {
   /**
@@ -40,19 +41,24 @@ export interface TopicCardItemProps {
   onPress?: (topic: AppObject.Topic) => void
 }
 
-const TopicCardItem = ({
-                         containerStyle,
-                         displayStyle,
-                         topic,
-                         onPress
-                       }: TopicCardItemProps) => {
+const TopicCardTip = ({
+                        containerStyle,
+                        displayStyle,
+                        topic,
+                        onPress
+                      }: TopicCardItemProps) => {
   const {theme} = useTheme()
+
+  const renderCall = (topic: any) => {
+    return (topic.callFlag == '1' &&
+      <View style={[styles.calledItem()]}><Text style={[styles.calledTag()]}>已拨打</Text></View>)
+  }
 
   return (
     <View style={[styles.container(theme), containerStyle]}>
       <View style={styles.infoContainer(theme)}>
         <Avatar
-          size={50}
+          size={30}
           source={undefined}
           style={styles.avatar(theme)}
         />
@@ -61,40 +67,26 @@ const TopicCardItem = ({
             activeOpacity={0.8}
             style={[styles.infoMainItem(theme)]}
             onPress={() => {
-
               onPress && onPress(topic)
             }}>
             <Text type="body"
-                  style={[styles.title(theme)]}>
+                  style={[styles.title(theme), topic.callFlag == '1' && styles.called()]}>
               {topic.phoneNumber}
             </Text>
+            {renderCall(topic)}
           </TouchableOpacity>
-
-          <View style={styles.infoMainItem(theme)}>
-            <View style={styles.summaryContainer(theme)}>
-              <TextWithIconPress
-                containerStyle={[{marginRight: theme.spacing.small}]}
-                text={topic.replies?.toString()}
-                icon={theme.assets.images.icons.topic.comment}
-              />
-              <TextWithIconPress
-                text={dayjs(topic.createTime, 'yyyy-MM-dd HH:mm:ss').fromNow()}
-                icon={theme.assets.images.icons.topic.time}
-              />
-            </View>
-            {displayStyle === 'full' && topic.batCode ? (
-              <TextWithIconPress
-                text={topic.batCode}
-                onPress={() => {
-                  onPress && onPress(topic)
-                }}
-                icon={theme.assets.images.icons.topic.paper}
-                textStyle={[{color: theme.colors.secondary}]}
-              />
-            ) : (topic.callFlag == '1' &&
-              <TextWithIconPress text={dayjs(topic.callTime, 'yyyy-MM-dd HH:mm:ss').fromNow()}/>
-            )}
-          </View>
+        </View>
+        <View style={styles.infoMainItem(theme)}>
+          {displayStyle === 'full' && topic.batCode ? (
+            <TextWithIconPress
+              text={topic.batCode}
+              onPress={() => {
+                onPress && onPress(topic)
+              }}
+              icon={theme.assets.images.icons.topic.paper}
+              textStyle={[{color: theme.colors.secondary}]}
+            />
+          ) : null}
         </View>
       </View>
       <BorderLine width={0.4}/>
@@ -115,8 +107,8 @@ const styles = {
     marginBottom: theme.spacing.tiny
   }),
   avatar: (theme: ITheme): ViewStyle => ({
-    width: 40,
-    marginRight: theme.spacing.large
+    width: 30,
+    marginRight: theme.spacing.tiny
   }),
   infoMain: (theme: ITheme): ViewStyle => ({
     flex: 1,
@@ -126,7 +118,7 @@ const styles = {
   infoMainItem: (theme: ITheme): ViewStyle => ({
     flexDirection: 'row',
     marginBottom: theme.spacing.small,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   }),
   summaryContainer: (theme: ITheme): ViewStyle => ({
     flexDirection: 'row',
@@ -134,10 +126,20 @@ const styles = {
   }),
   title: (theme: ITheme): TextStyle => ({
     ...theme.typography.bodyText,
+    paddingLeft: 10
+  }),
+  calledItem: (): ViewStyle => ({
+    backgroundColor: 'rgba(255,0,0,0.78)',
+    marginLeft: 10,
+    borderRadius:6,
+  }),
+  calledTag: (): TextStyle => ({
+    fontSize:10,
+    color:'#FFF'
   }),
   called: (): TextStyle => ({
-    color: '#F00'
+    color: 'red'
   })
 }
 
-export default TopicCardItem
+export default TopicCardTip

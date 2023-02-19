@@ -1,54 +1,66 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/14.
  */
-import { loginByToken } from '@src/actions'
-import { Button, Input, Text, useToast } from '@src/components'
-import { translate } from '@src/i18n'
-import { ROUTES, SignInScreenProps as ScreenProps } from '@src/navigation'
-import { SylCommon, useTheme } from '@src/theme'
-import { IState, ITheme } from '@src/types'
+import {loginByToken} from '@src/actions'
+import {Button, Input, Text, useToast} from '@src/components'
+import {translate} from '@src/i18n'
+import {ROUTES, SignInScreenProps as ScreenProps} from '@src/navigation'
+import {SylCommon, useTheme} from '@src/theme'
+import {IState, ITheme} from '@src/types'
 import * as utils from '@src/utils'
-import React, { useEffect, useState } from 'react'
-import { Image, ImageStyle, Pressable, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { connect } from 'react-redux'
-import { SetStatusBar } from '../components'
+import React, {useEffect, useState} from 'react'
+import {
+  Image,
+  ImageStyle,
+  Pressable,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from 'react-native'
+import {connect} from 'react-redux'
+import {SetStatusBar} from '../components'
+import {useDict} from "@src/hooks/useDict";
 
 const Screen = ({
-  navigation,
-  loading = false,
-  error,
-  success,
-  auth: _auth = (token: string) => {
-    utils.Alert.alert({ message: 'token: ' + token })
-  }
-}: ScreenProps) => {
-  const [token, setToken] = useState('')
-  const { theme } = useTheme()
-  const { showMessage } = useToast()
+                  navigation,
+                  loading = false,
+                  error,
+                  success,
+                  auth: _auth = (loginId: string, password: string) => {
+                    utils.Alert.alert({message: 'token: ' + loginId})
+                  }
+                }: ScreenProps) => {
+  const [token, setToken] = useState('admin')
+  const [pwd, setPwd] = useState('admin123')
+  const {theme} = useTheme()
+  const {showMessage} = useToast()
   const [keyboardRaise, setKeyboardRaise] = useState(false)
 
   const goNextRoute = () => {
     navigation.reset({
       index: 0,
-      routes: [{ name: ROUTES.Main }]
+      routes: [{name: ROUTES.Main}]
     })
   }
 
+  useDict()
+
   useEffect(() => {
     if (success) {
-      showMessage({ type: 'success', text2: success })
+      showMessage({type: 'success', text2: success})
       goNextRoute()
     }
   }, [success]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (error) {
-      showMessage({ type: 'error', text2: error })
+      showMessage({type: 'error', text2: error})
     }
   }, [error]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onLoginPress = () => {
-    _auth(token)
+    _auth(token,pwd)
   }
 
   const renderButtons = () => {
@@ -62,11 +74,6 @@ const Screen = ({
           loading={loading}>
           {translate('button.loginByToken')}
         </Button>
-        <TouchableOpacity onPress={goNextRoute}>
-          <Text style={[SylCommon.Button.textAction(theme), styles.linkSkip(theme)]}>
-            {translate('link.skipLogin')}
-          </Text>
-        </TouchableOpacity>
       </View>
     )
   }
@@ -76,9 +83,9 @@ const Screen = ({
       style={[
         SylCommon.Card.container(theme),
         styles.mainContainer(theme, keyboardRaise),
-        { backgroundColor: theme.colors.background }
+        {backgroundColor: theme.colors.background}
       ]}>
-      <SetStatusBar backgroundColor={theme.colors.background} />
+      <SetStatusBar backgroundColor={theme.colors.background}/>
       <View style={styles.columnItem(theme)}>
         <Image
           source={
@@ -91,7 +98,7 @@ const Screen = ({
         <Input
           autoCapitalize="none"
           underlineColorAndroid="transparent"
-          placeholder={translate('placeholder.token')}
+          placeholder={'请输入账号'}
           keyboardType="default"
           returnKeyType="next"
           autoCorrect={false}
@@ -103,6 +110,22 @@ const Screen = ({
           containerStyle={styles.input(theme)}
           textContentType="none"
         />
+        <Input
+          autoCapitalize="none"
+          secureTextEntry={true}
+          underlineColorAndroid="transparent"
+          placeholder={'请输入密码'}
+          keyboardType="default"
+          returnKeyType="next"
+          autoCorrect={false}
+          value={pwd}
+          onFocus={() => setKeyboardRaise(true)}
+          onBlur={() => setKeyboardRaise(false)}
+          editable={!loading}
+          onChangeText={setPwd}
+          containerStyle={styles.input(theme)}
+          textContentType="none"
+        />
         {renderButtons()}
       </View>
       <View style={styles.footer(theme)}>
@@ -111,7 +134,7 @@ const Screen = ({
           onPress={() => {
             navigation.navigate(ROUTES.PrivacyPolicy)
           }}>
-          <Text style={[styles.footerText(theme), { color: theme.colors.secondary }]}>
+          <Text style={[styles.footerText(theme), {color: theme.colors.secondary}]}>
             {translate('common.privacyPolicy')}
           </Text>
         </Pressable>
@@ -120,7 +143,7 @@ const Screen = ({
           onPress={() => {
             navigation.navigate(ROUTES.TermsOfService)
           }}>
-          <Text style={[styles.footerText(theme), { color: theme.colors.secondary }]}>
+          <Text style={[styles.footerText(theme), {color: theme.colors.secondary}]}>
             {translate('common.termsOfService')}
           </Text>
         </Pressable>
@@ -137,7 +160,7 @@ const styles = {
     flex: 1,
     width: theme.dimens.defaultButtonWidth,
     backgroundColor: theme.colors.transparent,
-    paddingTop: theme.dimens.WINDOW_HEIGHT / (keyboardRaise ? 10 : 3),
+    paddingTop: theme.dimens.WINDOW_HEIGHT / 20,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignSelf: 'center',
@@ -185,9 +208,9 @@ const styles = {
   })
 }
 
-const mapStateToProps = ({ ui: { login } }: { ui: IState.UIState }) => {
-  const { error, success, loading } = login
-  return { error, success, loading }
+const mapStateToProps = ({ui: {login}}: { ui: IState.UIState }) => {
+  const {error, success, loading} = login
+  return {error, success, loading}
 }
 
-export default connect(mapStateToProps, { auth: loginByToken })(Screen)
+export default connect(mapStateToProps, {auth: loginByToken})(Screen)

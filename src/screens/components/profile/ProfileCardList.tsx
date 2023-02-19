@@ -44,7 +44,7 @@ const ProfileCardList: React.FC<ProfileCardListProps> = ({
   const renderItemRow = ({ item }: { item: AppObject.Member }) =>
     !item || item === null ? null : (
       <SimpleProfileInfoCard
-        key={item.id}
+        key={item.user.userId}
         containerStyle={[styles.infoItemContainer(theme), itemContainerStyle]}
         info={item}
       />

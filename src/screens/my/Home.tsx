@@ -31,28 +31,6 @@ const My = ({
   const { theme } = useTheme()
   const { showMessage } = useToast()
 
-  const underConstruction = () => {
-    showMessage({
-      type: 'error',
-      text2: translate('label.underConstruction')
-    })
-  }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        profile && (
-          <HeaderButton
-            containerStyle={[{ marginRight: theme.dimens.layoutContainerHorizontalMargin }]}
-            text={translate('common.more')}
-            onPress={() => {
-              navigation.navigate(ROUTES.WebViewer, { url: profile?.url })
-            }}
-          />
-        )
-    })
-  }, [profile]) // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <ScrollView
       overScrollMode={'never'}
@@ -72,99 +50,36 @@ const My = ({
           following: (followPeoples && followPeoples.length) || 0
         }}
       />
-      <TableList title={translate('common.setting')}>
+      <TableList title={translate('common.personal')}>
         <TableRow
-          title={translate(`router.${ROUTES.ThemeSetting}`)}
-          leftIcon={theme.assets.images.icons.table.theme}
-          withArrow={true}
-          onPress={() => {
-            navigation.navigate(ROUTES.ThemeSetting)
-          }}
-        />
-        <TableRow
-          title={translate(`router.${ROUTES.Language}`)}
-          leftIcon={theme.assets.images.icons.table.language}
-          withArrow={true}
-          onPress={() => {
-            navigation.navigate(ROUTES.Language)
-          }}
-        />
-        <TableRow
-          title={translate(`router.${ROUTES.CacheSetting}`)}
-          leftIcon={theme.assets.images.icons.table.cached}
-          withArrow={true}
-          onPress={() => {
-            navigation.navigate(ROUTES.CacheSetting)
-          }}
-        />
-      </TableList>
-
-      <TableList title={translate('common.integrated')}>
-        <TableRow
-          title={translate(`button.rate`)}
-          leftIcon={theme.assets.images.icons.table.score}
-          withArrow={true}
-          onPress={underConstruction}
-        />
-        <TableRow
-          title={translate(`button.shareFriend`)}
-          leftIcon={theme.assets.images.icons.table.share}
-          withArrow={true}
-          onPress={underConstruction}
-        />
-        <TableRow
-          title={translate(`router.${ROUTES.URLSchemes}`)}
+          title={translate(`common.role`)}
           leftIcon={theme.assets.images.icons.table.urlschme}
-          withArrow={true}
-          onPress={() => {
-            navigation.navigate(ROUTES.URLSchemes)
-          }}
+          withArrow={false}
+          rightText={`@${profile?.user.userType}`}
         />
         <TableRow
-          title={translate(`router.${ROUTES.OpenSourceLicense}`)}
-          leftIcon={theme.assets.images.icons.table.opensource}
-          withArrow={true}
-          onPress={() => {
-            navigation.navigate(ROUTES.OpenSourceLicense)
-          }}
+          title={translate(`common.dept`)}
+          leftIcon={theme.assets.images.icons.table.urlschme}
+          withArrow={false}
+          rightText={`${profile?.user.dept.deptName}`}
         />
         <TableRow
-          title={translate(`router.${ROUTES.About}`)}
-          leftIcon={theme.assets.images.icons.table.group}
-          withArrow={true}
-          onPress={() => {
-            navigation.navigate(ROUTES.About)
-          }}
+          title={translate(`common.phone`)}
+          leftIcon={theme.assets.images.icons.table.email}
+          withArrow={false}
+          rightText={`${profile?.user.phonenumber}`}
         />
-      </TableList>
-
-      <TableList title={translate('common.feedback')}>
         <TableRow
           title={translate(`common.email`)}
           leftIcon={theme.assets.images.icons.table.email}
-          withArrow={true}
-          rightText={`${app.aboutUs.email}`}
-          onPress={() => {
-            linking(`mailto:${app.aboutUs.email}`)
-          }}
+          withArrow={false}
+          rightText={`${profile?.user.email}`}
         />
         <TableRow
-          title={translate(`common.twitter`)}
-          leftIcon={theme.assets.images.icons.table.twitter}
-          withArrow={true}
-          rightText={`@${app.aboutUs.twitter}`}
-          onPress={() => {
-            navigation.navigate(ROUTES.WebViewer, { url: `https://twitter.com/${app.aboutUs.twitter}` })
-          }}
-        />
-        <TableRow
-          title={translate(`common.github`)}
-          leftIcon={theme.assets.images.icons.table.github}
-          withArrow={true}
-          rightText={`@${app.aboutUs.github}`}
-          onPress={() => {
-            navigation.navigate(ROUTES.WebViewer, { url: `https://github.com/${app.aboutUs.github}` })
-          }}
+          title={translate(`common.createTime`)}
+          leftIcon={theme.assets.images.icons.table.urlschme}
+          withArrow={false}
+          rightText={`${profile?.user.createTime}`}
         />
       </TableList>
       <Footer />

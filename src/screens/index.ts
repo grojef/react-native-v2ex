@@ -3,6 +3,7 @@ export { default as DrawScreen } from './catalog/Draw'
 
 export * from './node'
 export * from './notification'
+export * from './notificationinfo'
 export * from './search'
 export * from './profile'
 export * from './my'

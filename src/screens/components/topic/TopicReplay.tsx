@@ -30,18 +30,6 @@ const TopicReplay: React.FC<TopicReplayProps> = ({ containerStyle, info }: Topic
   const renderContent = () => {
     return (
       <>
-        <NeedLogin mustLogin={false}>
-          {list && list.length === 0 ? (
-            <Placeholder placeholderText={translate('placeholder.noReplies')} />
-          ) : (
-            <TabCardContainer
-              containerStyle={[styles.container(theme), containerStyle]}
-              icon={theme.assets.images.icons.tabbar.title.comment}
-              title={translate('label.latestReplay')}>
-              <ReplayList topicId={info.id} refreshCallBack={refreshCallback} />
-            </TabCardContainer>
-          )}
-        </NeedLogin>
       </>
     )
   }

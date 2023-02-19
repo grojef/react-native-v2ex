@@ -1,12 +1,18 @@
-import { Placeholder, Spinner } from '@src/components'
-import { translate } from '@src/i18n'
-import { NavigationService, ROUTES } from '@src/navigation'
-import { SylCommon, useTheme } from '@src/theme'
-import { AppObject, ITheme } from '@src/types'
-import React from 'react'
-import { FlatList, StyleProp, View, ViewStyle } from 'react-native'
-import Animated, { LightSpeedInLeft, LightSpeedInRight } from 'react-native-reanimated'
-import TopicCardItem from './TopicCardItem'
+import {Button, Placeholder, Spinner, Text, useToast} from '@src/components'
+import {translate} from '@src/i18n'
+import {NavigationService, ROUTES} from '@src/navigation'
+import {SylCommon, useTheme} from '@src/theme'
+import {AppObject, IState, ITheme} from '@src/types'
+import React, {useState} from 'react'
+import {FlatList, StyleProp, View, ViewStyle} from 'react-native'
+import Animated, {LightSpeedInLeft, LightSpeedInRight} from 'react-native-reanimated'
+import TopicCardTip from './TopicCardTip'
+import CountDown from "@src/screens/components/topic/CountDown";
+import {SheetManager} from "react-native-actions-sheet";
+import {connect} from "react-redux";
+import {ApiLib} from "@src/api";
+import {useAppDispatch} from "@src/hooks";
+import {cacheCounter} from "@src/actions";
 
 export interface TopicCardListProps {
   /**
@@ -27,35 +33,35 @@ export interface TopicCardListProps {
    * Display Style
    */
   displayStyle?: 'simple' | 'full' | 'auto'
-
+  app: IState.AppState,
   useFlatList?: boolean
 }
 
 const TopicCardList: React.FC<TopicCardListProps> = ({
-  useFlatList = true,
-  containerStyle,
-  onRowPress,
-  itemContainerStyle,
-  canLoadMoreContent,
-  displayStyle,
-  topics,
-  onEndReached,
-  refreshControl,
-  searchIndicator,
-  refreshCallback
-}: TopicCardListProps) => {
-  const { theme } = useTheme()
-
+                                                       app,
+                                                       useFlatList = true,
+                                                       containerStyle,
+                                                       onRowPress,
+                                                       itemContainerStyle,
+                                                       canLoadMoreContent,
+                                                       displayStyle,
+                                                       topics,
+                                                       onEndReached,
+                                                       refreshControl,
+                                                       searchIndicator,
+                                                       refreshCallback
+                                                     }: TopicCardListProps) => {
+  const {theme} = useTheme()
   const onItemPress = (topic: AppObject.Topic) => {
     if (onRowPress) onRowPress(topic)
-    NavigationService.navigate(ROUTES.TopicDetail, { topicId: topic.id })
+    NavigationService.navigate(ROUTES.TopicDetail, {topicId: topic.id})
   }
 
-  const renderItemRow = ({ item }: { item: AppObject.Topic }) =>
-    !item || item === null ? null : (
+  const renderItemRow = ({item}: { item: AppObject.Topic }) =>
+    !item || false ? null : (
       <Animated.View key={item.id} entering={LightSpeedInLeft}>
-        <TopicCardItem
-          displayStyle={displayStyle}
+        <TopicCardTip
+          displayStyle={'full'}
           containerStyle={[styles.topicItemContainer(theme), itemContainerStyle]}
           topic={item}
           onPress={onItemPress}
@@ -65,11 +71,11 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
 
   const renderFooter = () => {
     if (canLoadMoreContent) {
-      return <Spinner style={{ padding: theme.spacing.large }} />
+      return <Spinner style={{padding: theme.spacing.large}}/>
     } else if (topics && topics.length > 0) {
       return (
         <Placeholder
-          containerStyle={[{ backgroundColor: theme.colors.background }]}
+          containerStyle={[{backgroundColor: theme.colors.background}]}
           placeholderText={translate('tips.noMore')}
         />
       )
@@ -77,11 +83,13 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
     return null
   }
 
-  const renderItemSeparator = () => <View style={styles.itemSeparator(theme)} />
+
+
+  const renderItemSeparator = () => <View style={styles.itemSeparator(theme)}/>
 
   const renderContent = () => {
     if (!topics) {
-      return <Spinner style={{ marginTop: 50 }} />
+      return <Spinner style={{marginTop: 50}}/>
     }
 
     if (topics.length > 0) {
@@ -103,21 +111,15 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
           ItemSeparatorComponent={renderItemSeparator}
         />
       ) : (
-        <View style={[styles.container(theme), containerStyle]}>{topics.map((v) => renderItemRow({ item: v }))}</View>
-      )
-    }
-    if (!searchIndicator) {
-      return (
-        <Placeholder
-          placeholderText={translate('placeholder.noTopics')}
-          buttonText={translate('button.tryAgain')}
-          buttonPress={refreshCallback}
-        />
+        <View
+          style={[styles.container(theme), containerStyle]}>{topics.map((v) => renderItemRow({item: v}))}</View>
       )
     }
   }
 
-  return <View style={[styles.container(theme), containerStyle]}>{renderContent()}</View>
+  return <View style={[styles.container(theme), containerStyle]}>
+    {renderContent()}
+  </View>
 }
 
 /**
@@ -132,7 +134,25 @@ const styles = {
   }),
   itemSeparator: (theme: ITheme) => ({
     height: 0
-  })
+  }),
+  refreshContainer: (theme: ITheme): ViewStyle => ({
+    marginTop: theme.spacing.small,
+    marginBottom: theme.spacing.small,
+    backgroundColor: '#fff',
+    flexDirection: "row",
+  }),
+  refreshBox: (): ViewStyle => ({
+    flex: 1,
+    justifyContent: 'space-between',
+    height: 50,
+    padding: 10
+  }),
+  refreshLeft: (theme: ITheme): ViewStyle => ({}),
+  refreshRight: (theme: ITheme): ViewStyle => ({}),
 }
 
-export default TopicCardList
+const mapStateToProps = ({app}: { app: IState.AppState }) => {
+  return {app}
+}
+
+export default connect(mapStateToProps)(TopicCardList)

@@ -32,8 +32,7 @@ const LogoutHeaderButton = ({
   const { theme } = useTheme()
   const { profile } = useSession()
   const dispatch = useAppDispatch()
-
-  return member && profile && member.id === profile.id ? (
+  return member && profile && member.user.userId === profile.user.userId ? (
     <>
       <HeaderButton
         source={theme.assets.images.icons.header.logout}

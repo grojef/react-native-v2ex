@@ -2,6 +2,7 @@ import { registerSheet } from 'react-native-actions-sheet'
 import ConfirmSheet from './ConfirmSheet'
 import ContentSheet from './ContentSheet'
 import './MenuSheet'
+import MenuSheet from "@src/components/actions-sheet/MenuSheet";
 
 /**
  * Registering the sheets here because otherwise sheet closes on

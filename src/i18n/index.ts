@@ -7,5 +7,4 @@ export type { LanguageTagType }
 
 export function changeLocale(language: LanguageTagType) {
   i18n.locale = language === 'auto' ? i18n.currentLocale() : language
-  console.log('changeLocale', language)
 }

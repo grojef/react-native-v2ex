@@ -19,6 +19,7 @@ export const NODE_TABS = {
   DESIGN: 'design',
   MEMBERS: 'members',
   LIFE: 'life'
+
 }
 
 export type NODE_TABS = typeof NODE_TABS[keyof typeof NODE_TABS]
