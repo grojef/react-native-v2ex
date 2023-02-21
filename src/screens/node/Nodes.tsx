@@ -3,17 +3,25 @@
  */
 
 import * as Actions from '@src/actions'
-import { Placeholder, Text, useToast } from '@src/components'
-import { nodeChildren, TabNodes } from '@src/helper/node'
-import { translate } from '@src/i18n'
-import {NavigationService, NODE_TABS, NodesScreenProps as ScreenProps} from '@src/navigation'
-import { RootState } from '@src/store'
-import { SylCommon, useTheme } from '@src/theme'
-import { ITheme, AppObject } from '@src/types'
-import React, { useEffect } from 'react'
-import { SectionList, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { connect } from 'react-redux'
+import {Placeholder, Text, useToast} from '@src/components'
+import {nodeChildren, TabNodes} from '@src/helper/node'
+import {translate} from '@src/i18n'
+import {
+  NavigationService,
+  NODE_TABS,
+  NodesScreenProps as ScreenProps,
+  ROUTES
+} from '@src/navigation'
+import {RootState} from '@src/store'
+import {SylCommon, useTheme} from '@src/theme'
+import {ITheme, AppObject} from '@src/types'
+import React, {useEffect} from 'react'
+import {SectionList, TouchableOpacity, View, ViewStyle} from 'react-native'
+import {connect} from 'react-redux'
 import {FetchTopicCardList, HeaderButton} from '../components'
+import {actionSheetEventManager} from "react-native-actions-sheet/dist/src/eventmanager";
+import {SheetManager} from "react-native-actions-sheet";
+import {logout as actionLogout} from "@src/actions";
 
 // const Node = ({
 //   navigation,
@@ -120,11 +128,35 @@ import {FetchTopicCardList, HeaderButton} from '../components'
 //   return { allNode }
 // }
 
-const Node = ({ route, navigation }: ScreenProps) => {
-  const { theme } = useTheme()
+const Node = ({route, navigation}: ScreenProps) => {
+  const {theme} = useTheme()
+
+  const search = () => {
+    SheetManager.show('search-sheet', {
+      onClose: (data: any) => {
+        if (data === true) {
+        }
+      },
+      payload: {
+        description: translate('confirm.logout')
+      }
+    })
+  }
+
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderButton onPress={search} source={theme.assets.images.icons.header.search}
+                      containerStyle={[{marginRight: theme.dimens.layoutContainerHorizontalMargin}]}
+        />
+      )
+    })
+  }, []);
+
   return (
     <View style={SylCommon.Layout.fill}>
-      <FetchTopicCardList displayStyle="full" nodeName={NODE_TABS.HOT} />
+      <FetchTopicCardList displayStyle="full" nodeName={NODE_TABS.HOT}/>
       {/*<CheckUpdate />*/}
     </View>
   )

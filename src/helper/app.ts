@@ -8,5 +8,4 @@ import {useDict} from "@src/hooks/useDict";
 
 export const onAppStart = async (store: Store) => {
     store.dispatch(initV2ex() as any)
-    store.dispatch(cacheDict() as any)
 }

@@ -51,11 +51,8 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
       if (pageNum === 1) {
         setList(undefined)
       }
-
       setRefreshing(pageNum === 1)
-
       setLoadMore(pageNum > 1)
-
       ApiLib.notification
         .list(pageNum)
         .then((rlt: AppObject.Notification[]) => {

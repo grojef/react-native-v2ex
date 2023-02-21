@@ -9,7 +9,7 @@ import {AppObject} from '../types'
 
 export const useDict = () => {
     const dictValue = useAppSelector((_state: RootState) => _state.cache.dict)
-    const [dict, setDict] = useState<Record<string, Array<AppObject.DictMeta>>>()
+    const [dict, setDict] = useState<Map<string, Array<AppObject.DictMeta>>>()
     const dispatch = useAppDispatch()
     useEffect(() => {
         if (dictValue !== undefined) {
@@ -17,7 +17,7 @@ export const useDict = () => {
         } else {
             dispatch(cacheDict() as any)
         }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dictValue,dict]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return {
         dict: dict

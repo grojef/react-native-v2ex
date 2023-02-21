@@ -39,7 +39,6 @@ const TopicInfo: React.FC<TopicInfoProps> = ({containerStyle, info}: TopicInfoPr
               if (!supported) {
               } else {
                 Linking.openURL(`tel:${info.phoneNumber}`).then(() => {
-                  info.callFlag = '1'
                   ApiLib.topic.call(info.id)
                 })
               }

@@ -1,7 +1,7 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/14.
  */
-import {loginByToken} from '@src/actions'
+import {cacheDict, loginByToken} from '@src/actions'
 import {Button, Input, Text, useToast} from '@src/components'
 import {translate} from '@src/i18n'
 import {ROUTES, SignInScreenProps as ScreenProps} from '@src/navigation'
@@ -21,6 +21,7 @@ import {
 import {connect} from 'react-redux'
 import {SetStatusBar} from '../components'
 import {useDict} from "@src/hooks/useDict";
+import {useAppDispatch} from "@src/hooks";
 
 const Screen = ({
                   navigation,
@@ -34,6 +35,7 @@ const Screen = ({
   const [token, setToken] = useState('admin')
   const [pwd, setPwd] = useState('admin123')
   const {theme} = useTheme()
+  const dispatch = useAppDispatch()
   const {showMessage} = useToast()
   const [keyboardRaise, setKeyboardRaise] = useState(false)
 
@@ -44,10 +46,9 @@ const Screen = ({
     })
   }
 
-  useDict()
-
   useEffect(() => {
     if (success) {
+      dispatch(cacheDict() as any)
       showMessage({type: 'success', text2: success})
       goNextRoute()
     }

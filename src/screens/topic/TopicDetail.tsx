@@ -2,39 +2,37 @@
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
 import {Spinner} from '@src/components'
-import {useTopic} from '@src/hooks/useTopic'
 import {translate} from '@src/i18n'
 import {ROUTES, TopicDetailScreenProps as ScreenProps} from '@src/navigation'
 import {SylCommon, useTheme} from '@src/theme'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Linking, ScrollView, View} from 'react-native'
 import {SetStatusBar, TableList, TableRow, TopicInfo} from '../components'
-import {LikeTopicHeaderButton} from '../components/button'
 import {useDict} from "@src/hooks/useDict";
 import {ApiLib} from "@src/api";
+import {AppObject} from "@src/api/types";
 
 const TopicDetail = ({route, navigation}: ScreenProps) => {
   const {theme} = useTheme()
-  const {topic} = useTopic({topicId: route.params.topicId})
   const {dict} = useDict()
+  const {topicId} = route.params
+  const [topic, setTopic] = useState<AppObject.Topic>();
   useEffect(() => {
-    if (topic) {
-      navigation.setOptions({
-        title: translate(`router.${ROUTES.TopicDetail}`),
-        headerRight: () => <LikeTopicHeaderButton topic={topic}/>
-      })
-    }
-  }, [topic, navigation])
+    ApiLib.topic.topic(route.params.topicId).then(res => {
+      return setTopic(res)
+    }).catch((err) => {
+      console.error(err)
+    })
+  }, [topicId, navigation])
 
   const findDict = (dictType: any, dictValue: any) => {
     // @ts-ignore
     if (dictValue) {
-      return dict ? dict[dictType]?.find(s => s.dictValue == dictValue)?.dictLabel : '';
+      return dict ? dict.get(dictType)?.find(s => s.dictValue == dictValue)?.dictLabel : '';
     } else {
       return ''
     }
   }
-
 
   const reanderContent = () => {
     if (!topic) {
@@ -64,7 +62,6 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
                 if (!supported) {
                 } else {
                   Linking.openURL(`tel:${topic.phoneNumber}`).then(() => {
-                    topic.callFlag = '1'
                     ApiLib.topic.call(topic.id)
                   })
                 }

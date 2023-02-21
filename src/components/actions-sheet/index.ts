@@ -1,8 +1,8 @@
 import { registerSheet } from 'react-native-actions-sheet'
 import ConfirmSheet from './ConfirmSheet'
 import ContentSheet from './ContentSheet'
+import SearchSheet from './SearchSheet'
 import './MenuSheet'
-import MenuSheet from "@src/components/actions-sheet/MenuSheet";
 
 /**
  * Registering the sheets here because otherwise sheet closes on
@@ -10,7 +10,7 @@ import MenuSheet from "@src/components/actions-sheet/MenuSheet";
  */
 registerSheet('confirm-sheet', ConfirmSheet, 'global')
 registerSheet('content-sheet', ContentSheet, 'global')
-
+registerSheet('search-sheet', SearchSheet, 'global')
 export {}
 
 /**

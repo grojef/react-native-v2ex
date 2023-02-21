@@ -53,7 +53,7 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
                                                      }: TopicCardListProps) => {
   const {theme} = useTheme()
   const onItemPress = (topic: AppObject.Topic) => {
-    if (onRowPress) onRowPress(topic)
+    topic = {...topic, callFlag: '1'}
     NavigationService.navigate(ROUTES.TopicDetail, {topicId: topic.id})
   }
 
@@ -82,7 +82,6 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
     }
     return null
   }
-
 
 
   const renderItemSeparator = () => <View style={styles.itemSeparator(theme)}/>

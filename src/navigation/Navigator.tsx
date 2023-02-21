@@ -105,22 +105,6 @@ const badgeStyles = {
   })
 }
 
-const getDrawHeaderTitle = (
-  route: Partial<Route<string>> & {
-    state?: PartialState<NavigationState>
-  }
-) => {
-  // If the focused route is not found, we need to assume it's the initial screen
-  // This can happen during if there hasn't been any navigation inside the screen
-  // In our case, it's "Feed" as that's the first screen inside the navigator
-  const routeName = getFocusedRouteNameFromRoute(route) ?? ROUTES.Hot
-  switch (routeName) {
-    case ROUTES.Hot:
-      return translate(`router.${ROUTES.Hot}`)
-    case ROUTES.Latest:
-      return translate(`router.${ROUTES.Latest}`)
-  }
-}
 
 const bottomTabBarIconSize = 30
 const renderBottomIcon = (focused: boolean, activeIcon: any, inactiveIcon: any): ReactNode => {
@@ -151,124 +135,6 @@ const defaultTabBarSetting = (theme: ITheme, insets: EdgeInsets): BottomTabNavig
   }
 }
 
-const HotDrawerContent = (props: DrawerContentComponentProps) => {
-  const { theme } = useTheme()
-  const insets = useSafeAreaInsets()
-
-  const isFocus = useCallback(
-    (route_index: number) => {
-      return props.state.index === route_index
-    },
-    [props]
-  )
-
-  const textStyle = useCallback(
-    (route_index: number) => {
-      return {
-        color: isFocus(route_index) ? theme.colors.secondary : theme.colors.captionText
-      }
-    },
-    [theme, isFocus]
-  )
-  return (
-    <View style={[drawContentStyles.drawerContent(theme), { paddingTop: insets.top }]}>
-      <TouchableOpacity
-        style={drawContentStyles.drawItem(theme)}
-        onPress={() => {
-          NavigationService.navigate(ROUTES.Hot)
-        }}>
-        <Image source={theme.assets.images.icons.draw.hot[isFocus(0) ? 'active' : 'inActive']} />
-        <Text type="label" style={textStyle(0)}>
-          {translate(`router.${ROUTES.Hot}`)}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={drawContentStyles.drawItem(theme)}
-        onPress={() => {
-          NavigationService.navigate(ROUTES.Latest)
-        }}>
-        <Image source={theme.assets.images.icons.draw.latest[isFocus(1) ? 'active' : 'inActive']} />
-        <Text type="label" style={textStyle(1)}>
-          {translate(`router.${ROUTES.Latest}`)}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  )
-}
-
-const drawContentStyles = {
-  drawerContent: (theme: ITheme): ViewStyle => ({
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: theme.colors.background
-  }),
-  drawItem: (theme: ITheme): ViewStyle => ({
-    marginBottom: theme.spacing.medium
-  })
-}
-
-/**
- * Crate Drawer Navigator
- */
-const HotDraw = createDrawerNavigator()
-const HotDrawerNavigator = ({
-  initialRouteName,
-  navigation
-}: {
-  initialRouteName?: string
-  navigation: NavigationProp<RootStackParamList>
-} & CommonScreenProps) => {
-  initialRouteName = initialRouteName ?? ROUTES.Hot
-  const { theme } = useTheme()
-  const { languageTag } = useAppSelector((state: RootState) => state.setting)
-
-  useEffect(() => {
-    resetLocales(languageTag)
-  }, [languageTag])
-
-  return (
-    <HotDraw.Navigator
-      initialRouteName={initialRouteName}
-      drawerContent={(props) => <HotDrawerContent {...props} />}
-      screenOptions={{
-        headerRight: () => (
-          <HeaderButton
-            onPress={() => navigation.navigate(ROUTES.SiteStat)}
-            source={theme.assets.images.icons.header.stat}
-            containerStyle={[{ marginRight: theme.dimens.layoutContainerHorizontalMargin }]}
-          />
-        ),
-        drawerActiveTintColor: theme.colors.secondary,
-        drawerActiveBackgroundColor: theme.colors.secondary,
-        drawerInactiveTintColor: theme.colors.captionText,
-        drawerStyle: { width: 45 }
-      }}>
-      <HotDraw.Screen
-        key={ROUTES.Hot}
-        name={ROUTES.Hot}
-        component={Screens.HotScreen}
-        options={{
-          ...defaultCommonScreenOptions(theme),
-          headerShown: true,
-          title: translate(`router.${ROUTES.Hot}`)
-        }}
-      />
-      <HotDraw.Screen
-        key={ROUTES.Latest}
-        name={ROUTES.Latest}
-        component={Screens.LatestScreen}
-        options={{
-          ...defaultCommonScreenOptions(theme),
-          headerShown: true,
-          title: translate(`router.${ROUTES.Latest}`)
-        }}
-      />
-    </HotDraw.Navigator>
-  )
-}
-
 const MainBottomTabNavigator = createBottomTabNavigator()
 const MainAppNavigator = () => {
   const insets = useSafeAreaInsets()
@@ -283,19 +149,18 @@ const MainAppNavigator = () => {
   return (
     <MainBottomTabNavigator.Navigator>
       <MainBottomTabNavigator.Screen
-        name={ROUTES.HotDraw}
-        component={HotDrawerNavigator}
-        options={({ route }) => ({
-          title: getDrawHeaderTitle(route),
+        name={ROUTES.Latest}
+        component={Screens.LatestScreen}
+        options={{
+          title: translate(`router.${ROUTES.Latest}`),
           ...defaultTabBarSetting(theme, insets),
-          headerShown: false,
           tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.home.active,
               theme.assets.images.icons.bottomTab.home.inActive
             )
-        })}
+        }}
       />
       <MainBottomTabNavigator.Screen
         name={ROUTES.Nodes}

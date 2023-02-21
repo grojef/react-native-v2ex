@@ -123,6 +123,9 @@ class V2ex {
         version?: AppAPI.API_VERSION
     ): Promise<T> {
         let uri = `${this.configuration.url}${path}`
+
+        console.log(uri)
+
         if (params) {
             let separator = '?'
             Object.keys(params).forEach((key) => {

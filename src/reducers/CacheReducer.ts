@@ -8,7 +8,7 @@ import {
     APP_CACHE_RESET,
     APP_CACHE_RESET_MEMBERS,
     APP_CACHE_RESET_NODES,
-    APP_LOGOUT,
+    APP_LOGOUT, AppObject,
     IState,
     MEMBER_PROFILE
 } from '../types'
@@ -16,7 +16,7 @@ import {
 const INITIAL_STATE: IState.CacheState = {
     members: [],
     nodes: [],
-    dict: {},
+    dict: new Map<string,AppObject.DictMeta[]>(),
     membersFollowing: {0: undefined},
     membersInterestNodes: {0: undefined},
     membersLikeTopics: {0: undefined},

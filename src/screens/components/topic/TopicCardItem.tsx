@@ -61,7 +61,6 @@ const TopicCardItem = ({
             activeOpacity={0.8}
             style={[styles.infoMainItem(theme)]}
             onPress={() => {
-
               onPress && onPress(topic)
             }}>
             <Text type="body"

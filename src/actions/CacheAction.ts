@@ -34,26 +34,20 @@ export const cacheMember = (userid: string | number) => async (dispatch: AppDisp
 
 export const cacheDict = () => async (dispatch: AppDispatch) => {
     try {
-        const dicts: Record<string, Array<AppObject.DictMeta>> = {}
+        const dictMap: Map<string, Array<AppObject.DictMeta>> = new Map<string, Array<AppObject.DictMeta>>()
         for (let i = 0; i < DictTypes.length; i++) {
-            dicts[DictTypes[i]] = await ApiLib.dict.dict(DictTypes[i])
-            // if (DictTypes[i] =='cms_ctm_tag'){
-            //     dispatch({
-            //         type: APP_ALL_NODE_INFO,
-            //         payload: dicts
-            //     })
-            // }
+            dictMap.set(DictTypes[i], await ApiLib.dict.dict(DictTypes[i]))
         }
         dispatch({
             type: APP_CACHE_ADD_DICT,
-            payload: dicts
+            payload: dictMap
         })
     } catch (e: any) {
         logError(e)
     }
 }
 
-export const cacheCounter = (counter:number) => async (dispatch: AppDispatch) => {
+export const cacheCounter = (counter: number) => async (dispatch: AppDispatch) => {
     try {
         dispatch({
             type: APP_CACHE_DELAY_TIME,

@@ -9,7 +9,6 @@ import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { NeedLogin } from '../components'
-import { NodeTopicListScreen } from '../topic'
 
 const Tab = createMaterialTopTabNavigator()
 

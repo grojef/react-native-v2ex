@@ -4,6 +4,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { FetchTopicCardList } from '../components'
+import {useSession} from "@src/hooks/useSession";
 
 const LatestTopics = ({ route, navigation }: ScreenProps) => {
   const { theme } = useTheme()

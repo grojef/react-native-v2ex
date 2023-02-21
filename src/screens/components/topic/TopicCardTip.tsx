@@ -10,9 +10,10 @@ import {Avatar, Text} from '@src/components'
 import dayjs from 'dayjs'
 import {NavigationService, ROUTES} from '@src/navigation'
 import {BorderLine, TextWithIconPress} from '../common'
-import {useMemo} from 'react'
+import {useMemo, useState} from 'react'
 import {translate} from '@src/i18n'
 import {AntOutline, ArrowDownCircleOutline} from 'antd-mobile-icons'
+import {ApiLib} from "@src/api";
 
 export interface TopicCardItemProps {
   /**
@@ -49,9 +50,27 @@ const TopicCardTip = ({
                       }: TopicCardItemProps) => {
   const {theme} = useTheme()
 
-  const renderCall = (topic: any) => {
-    return (topic.callFlag == '1' &&
+  const renderCall = (tip: any) => {
+    return (tip.callFlag == '1' &&
       <View style={[styles.calledItem()]}><Text style={[styles.calledTag()]}>已拨打</Text></View>)
+  }
+
+  const [tip, setTip] = useState(topic);
+
+  const fetchPhoneData = (tip: AppObject.Topic) => {
+    ApiLib.topic.topic(tip.id).then((res) => {
+      Linking.canOpenURL(`tel:${res.phoneNumber}`).then((supported) => {
+        if (!supported) {
+        } else {
+          Linking.openURL(`tel:${res.phoneNumber}`).then(() => {
+            ApiLib.topic.call(res.id).then(r => null)
+            setTip({...tip, callFlag: '1'})
+            NavigationService.navigate(ROUTES.TopicDetail, {topicId: res.id})
+          })
+        }
+      }).catch()
+
+    })
   }
 
   return (
@@ -67,21 +86,21 @@ const TopicCardTip = ({
             activeOpacity={0.8}
             style={[styles.infoMainItem(theme)]}
             onPress={() => {
-              onPress && onPress(topic)
+              fetchPhoneData(tip)
             }}>
             <Text type="body"
-                  style={[styles.title(theme), topic.callFlag == '1' && styles.called()]}>
-              {topic.phoneNumber}
+                  style={[styles.title(theme), tip.callFlag == '1' && styles.called()]}>
+              {tip.phoneNumber}
             </Text>
-            {renderCall(topic)}
+            {renderCall(tip)}
           </TouchableOpacity>
         </View>
         <View style={styles.infoMainItem(theme)}>
-          {displayStyle === 'full' && topic.batCode ? (
+          {displayStyle === 'full' && tip.batCode ? (
             <TextWithIconPress
-              text={topic.batCode}
+              text={tip.batCode}
               onPress={() => {
-                onPress && onPress(topic)
+                onPress && onPress(tip)
               }}
               icon={theme.assets.images.icons.topic.paper}
               textStyle={[{color: theme.colors.secondary}]}
@@ -131,11 +150,11 @@ const styles = {
   calledItem: (): ViewStyle => ({
     backgroundColor: 'rgba(255,0,0,0.78)',
     marginLeft: 10,
-    borderRadius:6,
+    borderRadius: 6,
   }),
   calledTag: (): TextStyle => ({
-    fontSize:10,
-    color:'#FFF'
+    fontSize: 10,
+    color: '#FFF'
   }),
   called: (): TextStyle => ({
     color: 'red'

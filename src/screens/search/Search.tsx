@@ -39,4 +39,5 @@ const mapStateToProps = (state: RootState) => {
   return { loading: state.member }
 }
 
+// @ts-ignore
 export default connect(mapStateToProps)(Search)

@@ -117,9 +117,8 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
       onMount={() => {
         fetchTopics(1)
       }}
-      mustLogin={v2API}
       placeholderBackground={theme.colors.surface}>
-      {nodeName != NODE_TABS.HOT && <CountDown/>}
+      {nodeName == NODE_TABS.LATEST && <CountDown/>}
       <TopicCardList
         containerStyle={containerStyle}
         topics={list}
