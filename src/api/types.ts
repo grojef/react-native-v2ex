@@ -204,7 +204,7 @@ export declare namespace AppAPI {
          */
         pager(name: string, page: number): Promise<AppObject.Topic[]>
 
-        intent(page:number):Promise<AppObject.Topic[]>
+        intent(page:number,batCode?:string,feature?:string):Promise<AppObject.Topic[]>
 
         /**
          * get node topic by api version 1

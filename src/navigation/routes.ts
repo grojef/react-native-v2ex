@@ -20,6 +20,7 @@ export type RootStackParamList = {
     SignIn: undefined
     NodeTopics: { nodeName: string; nodeTitle: string }
     TopicDetail: { topicId: number }
+    TopicEdit: { topicId: number }
     Profile: { userName: string }
     Following: undefined
     FavoriteTopics: undefined
@@ -77,6 +78,9 @@ export type NodesScreenProps = NativeStackScreenProps<RootStackParamList, 'Nodes
 export type NodeTopicsScreenProps = NativeStackScreenProps<RootStackParamList, 'NodeTopics'> & CommonScreenProps
 
 export type TopicDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'TopicDetail'> & CommonScreenProps
+
+export type TopicEditScreenProps = NativeStackScreenProps<RootStackParamList, 'TopicEdit'> & CommonScreenProps
+
 
 export type MyScreenProps = NativeStackScreenProps<RootStackParamList, 'My'> & CommonScreenProps
 
@@ -178,6 +182,11 @@ export const ROUTES = {
      * 话题详情
      */
     TopicDetail: 'TopicDetail',
+
+    /**
+     * 话题详情
+     */
+    TopicEdit: 'TopicEdit',
     /**
      * 我的
      */

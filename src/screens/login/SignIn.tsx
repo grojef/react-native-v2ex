@@ -6,7 +6,7 @@ import {Button, Input, Text, useToast} from '@src/components'
 import {translate} from '@src/i18n'
 import {ROUTES, SignInScreenProps as ScreenProps} from '@src/navigation'
 import {SylCommon, useTheme} from '@src/theme'
-import {IState, ITheme} from '@src/types'
+import {APP_AUTH_RESET, IState, ITheme} from '@src/types'
 import * as utils from '@src/utils'
 import React, {useEffect, useState} from 'react'
 import {
@@ -14,14 +14,13 @@ import {
   ImageStyle,
   Pressable,
   TextStyle,
-  TouchableOpacity,
   View,
   ViewStyle
 } from 'react-native'
 import {connect} from 'react-redux'
 import {SetStatusBar} from '../components'
-import {useDict} from "@src/hooks/useDict";
 import {useAppDispatch} from "@src/hooks";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Screen = ({
                   navigation,
@@ -32,12 +31,25 @@ const Screen = ({
                     utils.Alert.alert({message: 'token: ' + loginId})
                   }
                 }: ScreenProps) => {
-  const [token, setToken] = useState('admin')
-  const [pwd, setPwd] = useState('admin123')
+  const [token, setToken] = useState('')
+  const [pwd, setPwd] = useState('')
   const {theme} = useTheme()
   const dispatch = useAppDispatch()
   const {showMessage} = useToast()
   const [keyboardRaise, setKeyboardRaise] = useState(false)
+
+
+  const initToken = async () => {
+    const sessionToken = await AsyncStorage.getItem('token')
+    if (sessionToken) {
+      setToken(sessionToken)
+    }
+  }
+
+  useEffect(() => {
+    initToken().then()
+  }, [navigation])
+
 
   const goNextRoute = () => {
     navigation.reset({
@@ -48,20 +60,23 @@ const Screen = ({
 
   useEffect(() => {
     if (success) {
+      AsyncStorage.setItem('token',token)
       dispatch(cacheDict() as any)
       showMessage({type: 'success', text2: success})
       goNextRoute()
     }
+
   }, [success]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (error) {
       showMessage({type: 'error', text2: error})
+      dispatch({type: APP_AUTH_RESET, payLoad: {}})
     }
   }, [error]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onLoginPress = () => {
-    _auth(token,pwd)
+    _auth(token, pwd)
   }
 
   const renderButtons = () => {
@@ -161,7 +176,7 @@ const styles = {
     flex: 1,
     width: theme.dimens.defaultButtonWidth,
     backgroundColor: theme.colors.transparent,
-    paddingTop: theme.dimens.WINDOW_HEIGHT / 20,
+    paddingTop: theme.dimens.WINDOW_HEIGHT / 60,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignSelf: 'center',

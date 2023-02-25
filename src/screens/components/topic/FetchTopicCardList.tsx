@@ -3,7 +3,6 @@
  */
 
 import {useToast} from '@src/components'
-import {useMember} from '@src/hooks/useMember'
 import {useSession} from '@src/hooks/useSession'
 import {NODE_TABS} from '@src/navigation'
 import {useTheme} from '@src/theme'
@@ -27,14 +26,20 @@ export interface FetchTopicCardListProps {
    * Display Style
    */
   displayStyle?: 'simple' | 'full' | 'auto'
+
+  tag: string,
+  fea: string
 }
 
 const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
                                                                  nodeName,
                                                                  v2API = false,
                                                                  containerStyle,
-                                                                 displayStyle
+                                                                 displayStyle,
+                                                                 tag,
+                                                                 fea
                                                                }: FetchTopicCardListProps) => {
+
   const {theme} = useTheme()
   const {logined} = useSession()
   const {showMessage} = useToast()
@@ -65,10 +70,10 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
         setList(undefined)
       }
       setRefreshing(pageNum === 1)
-      setLoadMore(pageNum > 1 && v2API)
+      setLoadMore(pageNum > 1)
       ;(nodeName != NODE_TABS.HOT
           ? ApiLib.topic.pager(nodeName, pageNum)
-          : ApiLib.topic.pager(nodeName,pageNum)
+          : ApiLib.topic.intent(pageNum, tag, fea)
       )
         .then((rlt: AppObject.Topic[]) => {
           if (rlt.length === 0 || specialNode || !v2API) {
@@ -89,18 +94,9 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
 
   const onRefresh = () => {
     setList(undefined)
-
     setPage(1)
     fetchTopics(1)
   }
-
-  if (!mounted) {
-    // ..
-  }
-
-  useEffect(() => {
-    setPage(1)
-  }, [nodeName])
 
   useEffect(() => {
     fetchTopics(page)
@@ -115,10 +111,9 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
   return (
     <NeedLogin
       onMount={() => {
-        fetchTopics(1)
       }}
       placeholderBackground={theme.colors.surface}>
-      {nodeName == NODE_TABS.LATEST && <CountDown/>}
+      {nodeName == NODE_TABS.LATEST && <CountDown refreshData={fetchTopics}/>}
       <TopicCardList
         containerStyle={containerStyle}
         topics={list}

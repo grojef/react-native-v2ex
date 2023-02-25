@@ -7,12 +7,7 @@ import React, {useState} from 'react'
 import {FlatList, StyleProp, View, ViewStyle} from 'react-native'
 import Animated, {LightSpeedInLeft, LightSpeedInRight} from 'react-native-reanimated'
 import TopicCardTip from './TopicCardTip'
-import CountDown from "@src/screens/components/topic/CountDown";
-import {SheetManager} from "react-native-actions-sheet";
 import {connect} from "react-redux";
-import {ApiLib} from "@src/api";
-import {useAppDispatch} from "@src/hooks";
-import {cacheCounter} from "@src/actions";
 
 export interface TopicCardListProps {
   /**
@@ -146,8 +141,6 @@ const styles = {
     height: 50,
     padding: 10
   }),
-  refreshLeft: (theme: ITheme): ViewStyle => ({}),
-  refreshRight: (theme: ITheme): ViewStyle => ({}),
 }
 
 const mapStateToProps = ({app}: { app: IState.AppState }) => {

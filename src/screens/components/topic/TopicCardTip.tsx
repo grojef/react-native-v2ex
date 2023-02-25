@@ -11,8 +11,6 @@ import dayjs from 'dayjs'
 import {NavigationService, ROUTES} from '@src/navigation'
 import {BorderLine, TextWithIconPress} from '../common'
 import {useMemo, useState} from 'react'
-import {translate} from '@src/i18n'
-import {AntOutline, ArrowDownCircleOutline} from 'antd-mobile-icons'
 import {ApiLib} from "@src/api";
 
 export interface TopicCardItemProps {

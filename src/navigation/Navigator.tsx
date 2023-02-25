@@ -308,6 +308,15 @@ export const AppNavigationContainer = () => {
                 }}
               />
               <StackNavigator.Screen
+                name={ROUTES.TopicEdit}
+                component={Screens.TopicEditScreen}
+                options={{
+                  title: translate(`router.${ROUTES.TopicEdit}`),
+                  ...defaultScreenOptions(theme),
+                  headerShown: true
+                }}
+              />
+              <StackNavigator.Screen
                 name={ROUTES.Profile}
                 component={Screens.ProfileScreen}
                 options={{
@@ -321,15 +330,6 @@ export const AppNavigationContainer = () => {
                 component={Screens.NotificationInfoScreen}
                 options={{
                   title: translate(`router.${ROUTES.NotificationInfo}`),
-                  ...defaultScreenOptions(theme),
-                  headerShown: true
-                }}
-              />
-              <StackNavigator.Screen
-                name={ROUTES.NodeDetail}
-                component={Screens.NodeDetailScreen}
-                options={{
-                  title: translate(`router.${ROUTES.NodeDetail}`),
                   ...defaultScreenOptions(theme),
                   headerShown: true
                 }}

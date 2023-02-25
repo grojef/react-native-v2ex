@@ -19,6 +19,7 @@ import {
     AppObject
 } from '../types'
 import {DictTypes} from "@config/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const cacheMember = (userid: string | number) => async (dispatch: AppDispatch) => {
     try {
@@ -32,7 +33,8 @@ export const cacheMember = (userid: string | number) => async (dispatch: AppDisp
     }
 }
 
-export const cacheDict = () => async (dispatch: AppDispatch) => {
+// @ts-ignore
+export const cacheDict = () => async (dispatch: AppDispatch,) => {
     try {
         const dictMap: Map<string, Array<AppObject.DictMeta>> = new Map<string, Array<AppObject.DictMeta>>()
         for (let i = 0; i < DictTypes.length; i++) {
@@ -42,6 +44,7 @@ export const cacheDict = () => async (dispatch: AppDispatch) => {
             type: APP_CACHE_ADD_DICT,
             payload: dictMap
         })
+        return dictMap
     } catch (e: any) {
         logError(e)
     }

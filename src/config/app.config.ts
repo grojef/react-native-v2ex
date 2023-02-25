@@ -10,7 +10,7 @@ export const AppApiOptions = {
   }
 }
 
-export const brandName = 'V2HUB'
+export const brandName = 'SH'
 
 export const aboutUs = {
   author: 'leon',

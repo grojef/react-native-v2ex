@@ -4,52 +4,58 @@
 import {Button} from '@src/components'
 import {translate} from '@src/i18n'
 import {SylCommon, useTheme} from '@src/theme'
-import {ITheme} from '@src/types'
-import React, {useRef} from 'react'
+import {AppObject, ITheme} from '@src/types'
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import {Text, TextInput, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
 import ActionSheet, {ActionSheetRef, SheetManager, SheetProps} from 'react-native-actions-sheet'
-import {useDict} from "@src/hooks/useDict";
+import {ApiLib} from "@src/api";
 
-/* usage:
-  SheetManager.show('confirm-sheet', {
-    onClose: (data: any) => {
-      console.log('onClose', data)
-      showToast(data)
-    },
-    payload: {
-      title: '请确认',
-      description: '确定进行此操作吗？',
-      confirmText: '确定',
-      cancelText: '取消'
-    }
-  })
-**/
 
 const SearchActionSheet = (props: SheetProps) => {
   const {theme} = useTheme()
   const {
     sheetId,
     payload: {
-      title = translate('brand.name'),
-      description,
       height,
+      fea,
+      tag,
       confirmText = translate('common.confirm'),
       cancelText = translate('common.cancel')
     }
   } = props
   const actionSheetRef = useRef<ActionSheetRef>(null)
 
-  const {dict} = useDict()
-  console.log(dict)
-  const tags = dict && dict.get('cms_ctm_tag')
-  const features = dict && dict.get('cms_feature')
+  const [tags, setTags] = useState<AppObject.DictMeta[]>([]);
+  const [features, setFeatures] = useState<AppObject.DictMeta[]>();
+
+  const initTags = useCallback(() => {
+    ApiLib.dict.dict('cms_ctm_tag').then(res => {
+      setTags(res)
+    })
+  }, [])
+
+  const initFeatures = useCallback(() => {
+    ApiLib.dict.dict('cms_feature').then(res => {
+      setFeatures(res)
+    })
+  }, [])
+
+  useEffect(() => {
+      initTags()
+      initFeatures()
+  }, []);
+
+
+  const [sTag, setsTag] = useState(tag);
+  const [sFea, setsFea] = useState(fea);
 
   const buttonConfirm = (yes: boolean) => {
     SheetManager.hide(sheetId, {
-      payload: yes,
+      payload: {'bool': yes, 'sTag': sTag, 'sFea': sFea},
       context: 'global'
     })
   }
+
 
   return (
     <ActionSheet
@@ -69,18 +75,21 @@ const SearchActionSheet = (props: SheetProps) => {
         borderTopRightRadius: 20
       }}>
       <View style={[styles.container(theme), SylCommon.Card.container(theme), {height: height}]}>
-        {title && <Text style={styles.title(theme)}>{title}</Text>}
         <View><Text style={styles.label(theme)}>标签:</Text></View>
         <View style={[styles.tagContainer()]}>
           {tags?.map(tag => {
-            return (<View key={tag.dictValue} style={[styles.tagItem()]}><Text
-              style={styles.text(theme)}>{tag.dictLabel}</Text></View>)
+            return (<TouchableOpacity key={tag.dictCode} onPress={() => {
+              setsTag(tag.dictValue == sTag ? '' : tag.dictValue)
+            }}><View style={[styles.tagItem(), tag.dictValue == sTag && styles.tagItemHit()]}><Text
+              style={styles.text(theme)}>{tag.dictLabel}</Text></View></TouchableOpacity>)
           })}
         </View>
         <View><Text style={styles.label(theme)}>属性:</Text></View>
         <View style={[styles.tagContainer()]}>
           {features?.map(tag => {
-            return (<TouchableOpacity><View key={tag.dictValue} style={[styles.tagItem()]}><Text
+            return (<TouchableOpacity key={tag.dictCode} onPress={() => {
+              setsFea(tag.dictValue == sFea ? '' : tag.dictValue)
+            }}><View style={[styles.tagItem(), tag.dictValue == sFea && styles.tagItemHit()]}><Text
               style={styles.text(theme)}>{tag.dictLabel}</Text></View></TouchableOpacity>)
           })}
         </View>
@@ -137,8 +146,8 @@ const styles = {
     width: '100%',
     textAlign: 'center',
     lineHeight: 12,
-    fontSize:15,
-    fontWeight:'bold',
+    fontSize: 15,
+    fontWeight: 'bold',
     paddingVertical: theme.spacing.small
   }),
 
@@ -148,12 +157,14 @@ const styles = {
   }),
 
   tagItem: (): ViewStyle => ({
-    backgroundColor: 'oldlace',
     borderRadius: 6,
     borderWidth: 1,
     height: 28,
     width: 60,
     margin: 6
+  }),
+  tagItemHit: (): ViewStyle => ({
+    backgroundColor: '#898B8B',
   }),
   buttonContainer: (theme: ITheme): ViewStyle => ({
     paddingVertical: theme.spacing.small,

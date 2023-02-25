@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "V2HUB",
+    "name": "SH",
     "intro": "This project used React Native to build a V2EX mobile client application. The main goal was to build a React Native rapid development scaffold."
   },
   "common": {

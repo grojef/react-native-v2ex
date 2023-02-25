@@ -1,10 +1,12 @@
-import {StyleProp, View, ViewStyle} from "react-native";
-import React, {useEffect, useRef, useState} from "react";
+import {StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle} from "react-native";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {TextWithIconPress} from "@src/screens/components";
 import {ITheme, SylCommon, useTheme} from "@src/theme";
 import {Button, useToast} from "@src/components";
 import {SheetManager} from "react-native-actions-sheet";
 import {ApiLib} from "@src/api";
+import {AppObject} from "@src/api/types";
+import MenuButton from "@src/components/actions-sheet/Btn";
 
 export interface CountDownProps {
   /**
@@ -12,7 +14,7 @@ export interface CountDownProps {
    */
   containerStyle?: StyleProp<ViewStyle>
 
-  refreshData?:any
+  refreshData?: any
 
 }
 
@@ -46,13 +48,44 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
 
   const {theme} = useTheme()
   const {showMessage} = useToast();
-  const pressTag = (labelValue: string) => {
+
+  const [allNode, setAllNode] = useState<AppObject.DictMeta[]>([]);
+
+  const initTags = useCallback(() => {
+    ApiLib.dict.dict('cms_ctm_tag').then(res => {
+      setAllNode(res)
+    })
+  }, [])
+
+  useEffect(() => {
+    initTags()
+  }, []);
+
+
+  const renderChildren = () => {
+    return (
+      <View style={[styles.container(theme), SylCommon.Card.container(theme)]}>
+        <Text style={styles.label(theme)}>{'标签'}</Text>
+        <View style={[styles.tagContainer(theme)]}>
+          {allNode?.map(tag => {
+            return (<TouchableOpacity onPress={() => pressTag(tag.dictValue, tag.dictLabel)}
+                                      key={tag.dictCode}><View style={[styles.tagItem()]}><Text
+              style={styles.text(theme)}>{tag.dictLabel}</Text></View></TouchableOpacity>)
+          })}
+        </View>
+      </View>)
+  }
+
+  const [text, setText] = useState('刷新');
+  const pressTag = (labelValue: string, labelName: string) => {
     SheetManager.hide('menu-sheet')
+    setText(labelName)
     ApiLib.topic.grab(labelValue).then((data) => {
       showMessage("认领成功！")
       if (data.delayTime) {
         setCounter(data.delayTime)
       }
+      refreshData()
     }).catch((res) => {
       showMessage({text1: res.msg, type: 'error'})
       if (res.data && res.data.delayTime) {
@@ -77,11 +110,11 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
         />
       </View>
       <View style={[styles.refreshRight(theme), styles.refreshBox()]}>
-        <Button disabled={cd.current>0} onPress={() => {
+        <Button disabled={cd.current > 0} onPress={() => {
           SheetManager.show('menu-sheet', {
-            payload: {press: pressTag}
-          })
-        }} type={"small"} style={{height: 30}}>刷新</Button>
+            payload: {renderMenu: renderChildren}
+          }).then()
+        }} type={"small"} style={{height: 30}}>{text}</Button>
       </View>
     </View>)
   );
@@ -93,11 +126,17 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
  */
 const styles = {
   container: (theme: ITheme): ViewStyle => ({
-    flex: 1
+    paddingBottom: theme.spacing.extraLarge,
+    maxHeight: theme.dimens.WINDOW_HEIGHT / 2,
+    minHeight: theme.dimens.WINDOW_HEIGHT / 6,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface
   }),
-  topicItemContainer: (theme: ITheme): ViewStyle => ({
-    ...SylCommon.Card.container(theme)
-  }),
+
   itemSeparator: (theme: ITheme) => ({
     height: 0
   }),
@@ -115,6 +154,40 @@ const styles = {
   }),
   refreshLeft: (theme: ITheme): ViewStyle => ({}),
   refreshRight: (theme: ITheme): ViewStyle => ({}),
+  tagContainer: (theme: ITheme): ViewStyle => ({
+    paddingBottom: theme.spacing.medium,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+  }),
+
+  label: (theme: ITheme): TextStyle => ({
+    ...theme.typography.labelText,
+    width: '100%',
+    textAlign: 'center',
+    lineHeight: 12,
+    fontSize: 15,
+    fontWeight: 'bold',
+    paddingVertical: theme.spacing.small
+  }),
+  tagItem: (): ViewStyle => ({
+    borderRadius: 6,
+    borderWidth: 1,
+    height: 28,
+    width: 60,
+    margin: 6
+  }),
+  text: (theme: ITheme): TextStyle => ({
+    ...theme.typography.labelText,
+    width: '100%',
+    textAlign: 'center',
+    lineHeight: 12,
+    paddingVertical: theme.spacing.small
+  }),
+
 }
 
 export default CountDown

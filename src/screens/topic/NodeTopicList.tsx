@@ -9,7 +9,7 @@ const NodeTopics = ({ route, navigation }: ScreenProps) => {
     })
   }, [route, navigation])
 
-  return <FetchTopicCardList nodeName={route.params.nodeName} />
+  return <FetchTopicCardList tag={''} fea={''} nodeName={route.params.nodeName} />
 }
 
 export default NodeTopics

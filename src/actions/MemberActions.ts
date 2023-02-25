@@ -116,7 +116,7 @@ export const loginByToken = (loginId: string,password: string) => async (dispatc
     dispatch(loginByTokenSuccess(token_info) as any)
   } catch (e: any) {
     logError(e)
-    loginByTokenFail(dispatch, e.message)
+    loginByTokenFail(dispatch, e.msg)
   }
 }
 
