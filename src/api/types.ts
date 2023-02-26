@@ -198,13 +198,15 @@ export declare namespace AppAPI {
 
         call(id: number): Promise<void>,
 
+        update(topic?: AppObject.Topic): Promise<void>,
+
         /**
          *  pager note topic list by api version 2
          * @param name : node name
          */
         pager(name: string, page: number): Promise<AppObject.Topic[]>
 
-        intent(page:number,batCode?:string,feature?:string):Promise<AppObject.Topic[]>
+        intent(page: number, batCode?: string, feature?: string): Promise<AppObject.Topic[]>
 
         /**
          * get node topic by api version 1
@@ -346,7 +348,7 @@ export declare namespace AppObject {
         createBy: string
         feature: string
         intentFlag: string
-        niceName: string
+        nickName: string
         phoneNumber: string
         remark: string
         sex: string

@@ -12,7 +12,11 @@ export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
     pager: (name) =>
         v2ex.get<AppObject.Topic[]>(`/cms/claimInfo/only`, undefined, undefined, undefined,),
 
-    intent: (page:number,batCode:string,feature:string) =>
+    update: (topic: AppObject.Topic) => {
+        return v2ex.send<void>('/cms/claimInfo', 'PUT', undefined, undefined, topic)
+    },
+
+    intent: (page: number, batCode: string, feature: string) =>
         v2ex.get<AppObject.Topic[]>(`/cms/claimInfo/intent?batCode=${batCode}&feature=${feature}&pageNum=${page}&pageSize=100`, undefined, {}, undefined,),
 
     grab: (label) => {

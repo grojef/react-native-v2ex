@@ -4,7 +4,8 @@
     "intro": "This project used React Native to build a V2EX mobile client application. The main goal was to build a React Native rapid development scaffold."
   },
   "common": {
-    "edit": "修改",
+    "edit": "Edit",
+    "save": "Save",
     "dept": "Dept",
     "phone": "Phone",
     "personal": "Personal",

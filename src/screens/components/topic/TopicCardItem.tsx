@@ -22,7 +22,7 @@ export interface TopicCardItemProps {
   /**
    * Display Style
    */
-  displayStyle?: 'simple' | 'full' | 'auto'
+  displayStyle?: 'simple' | 'full' | 'auto' | 'disable'
 
   /**
    * Whether to show last reply users
@@ -81,12 +81,9 @@ const TopicCardItem = ({
                 icon={theme.assets.images.icons.topic.time}
               />
             </View>
-            {displayStyle === 'full' && topic.batCode ? (
+            {topic.batCode ? (
               <TextWithIconPress
                 text={topic.batCode}
-                onPress={() => {
-                  onPress && onPress(topic)
-                }}
                 icon={theme.assets.images.icons.topic.paper}
                 textStyle={[{color: theme.colors.secondary}]}
               />

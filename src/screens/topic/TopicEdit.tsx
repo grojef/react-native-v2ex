@@ -1,28 +1,27 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
-import {Input, Placeholder, Spinner, Text} from '@src/components'
+import {Input, Spinner} from '@src/components'
 import {translate} from '@src/i18n'
-import {ROUTES, TopicDetailScreenProps as ScreenProps} from '@src/navigation'
+import {TopicDetailScreenProps as ScreenProps} from '@src/navigation'
 import {ITheme, SylCommon, useTheme} from '@src/theme'
 import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {Linking, ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableList, TableRow, TopicInfo} from '../components'
-import {useDict} from "@src/hooks/useDict";
+import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
+import {SetStatusBar, TableChildren, TableList, TableRow} from '../components'
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
-import {cacheDict} from "@src/actions";
-import {LogoutHeaderButton} from "@src/screens/components/button";
+import {Picker} from "@react-native-picker/picker";
+import {EditTopicHeaderButton} from "@src/screens/components/button";
 
 const TopicEdit = ({route, navigation}: ScreenProps) => {
   const {theme} = useTheme()
-  const [dict, setDict] = useState<Map<string, Array<AppObject.DictMeta>>>(new Map);
   const {topicId} = route.params
   const [topic, setTopic] = useState<AppObject.Topic>();
   const [keyboardRaise, setKeyboardRaise] = useState(false)
   const [token, setToken] = useState('')
+
   useEffect(() => {
-    ApiLib.topic.topic(route.params.topicId).then(res => {
+    ApiLib.topic.topic(topicId).then(res => {
       return setTopic(res)
     }).catch((err) => {
       console.error(err)
@@ -30,58 +29,124 @@ const TopicEdit = ({route, navigation}: ScreenProps) => {
 
   }, [topicId, navigation])
 
+  const [dictIntent, setDictIntent] = useState<AppObject.DictMeta[]>([])
+  const [dictFeatures, setDictFeatures] = useState<AppObject.DictMeta[]>([])
+  const [dictSex, setDictSex] = useState<AppObject.DictMeta[]>([])
 
-  const findDict = (dictType: any, dictValue: any) => {
-    // @ts-ignore
+  useEffect(() => {
+    ApiLib.dict.dict('sys_user_sex').then(res => {
+      setDictSex(res)
+    })
+    ApiLib.dict.dict('cms_feature').then(res => {
+      setDictFeatures(res)
+    })
+    ApiLib.dict.dict('call_intent_type').then(res => {
+      setDictIntent(res)
+    })
+  }, []);
+
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        (
+          <EditTopicHeaderButton onPress={()=>{
+            ApiLib.topic.update(topic).then()
+          }}/>
+        )
+    })
+  }, [navigation])
+
+
+  const findDict = (dict: AppObject.DictMeta[], dictValue: any) => {
     if (dictValue) {
-      return dict ? dict.get(dictType)?.find(s => s.dictValue == dictValue)?.dictLabel : '';
+      return dict ? dict.find(s => s.dictValue == dictValue)?.dictLabel : '';
     } else {
       return ''
     }
   }
+
 
   const reanderContent = () => {
     if (!topic) {
       return <Spinner style={{marginTop: 50}}/>
     }
 
+    // @ts-ignore
     return (
       <>
         <SetStatusBar/>
+
         <ScrollView>
           <TableList title={translate('common.customerInfo')}>
             <TableRow
-                      title={translate(`common.phone`)}
-                      leftIcon={theme.assets.images.icons.table.email}
-                      withArrow={true}
-                      rightText={`${topic.phoneNumber}`}
+              title={translate(`common.phone`)}
+              leftIcon={theme.assets.images.icons.table.email}
+              withArrow={false}
+              rightText={`${topic.phoneNumber}`}
             />
             <TableRow
               title={translate(`common.nickName`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={`${topic.niceName ? topic.niceName : ''}`}
+              rightText={`${topic.nickName ? topic.nickName : ''}`}
             />
-            <TableRow
+            <TableChildren
               title={translate(`common.sex`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={`${findDict('sys_user_sex', topic.sex)}`}
-            />
-            <TableRow
+              rightText={findDict(dictSex, topic.sex)}
+            >
+              <Picker
+                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                onValueChange={(itemValue: string, itemIndex) => {
+                  setTopic({...topic, sex: itemValue})
+                }
+                }>
+                {dictSex?.map(sex => {
+                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
+                                      value={sex.dictValue}/>
+                })}
+              </Picker>
+            </TableChildren>
+            <TableChildren
               title={translate(`common.intentFlag`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={`${findDict('call_intent_type', topic.intentFlag)}`}
-            />
-            <TableRow
+              rightText={findDict(dictIntent, topic.intentFlag)}
+            >
+              <Picker
+                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                onValueChange={(itemValue: string, itemIndex) => {
+                  setTopic({...topic, intentFlag: itemValue})
+                }
+                }>
+                {dictIntent?.map(sex => {
+                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
+                                      value={sex.dictValue}/>
+                })}
+              </Picker>
+            </TableChildren>
+
+            <TableChildren
               title={translate(`common.feature`)}
               leftIcon={theme.assets.images.icons.table.urlschme}
               withArrow={true}
-              rightText={`${findDict('cms_feature', topic.feature)}`}
-            />
+              rightText={findDict(dictFeatures, topic.feature)}
+            >
+              <Picker
+                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                onValueChange={(itemValue: string, itemIndex) => {
+                  setTopic({...topic, feature: itemValue})
+                }
+                }>
+                {dictFeatures?.map(sex => {
+                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
+                                      value={sex.dictValue}/>
+                })}
+              </Picker>
+            </TableChildren>
             <Input
-              label={'备注:'}
               labelStyle={styles.label(theme)}
               multiline={true}
               autoCapitalize="none"
@@ -111,20 +176,21 @@ const TopicEdit = ({route, navigation}: ScreenProps) => {
 const styles = {
   inputContainer: (theme: ITheme): ViewStyle => ({
     width: '100%',
-    borderBottomWidth:1,
-    height:100,
+    borderBottomWidth: 1,
+    height: 100,
     alignItems: 'center'
   }),
-  inputStyle:(theme: ITheme): ViewStyle => ({
+  inputStyle: (theme: ITheme): ViewStyle => ({
     width: '100%',
-    height:100,
+    height: 100,
     alignItems: 'baseline'
   }),
   label: (theme: ITheme): TextStyle => ({
-    paddingLeft:10,
-    paddingRight:0,
-    textAlign:"right",
-    maxWidth:60
+    paddingLeft: 10,
+    paddingRight: 0,
+    textAlign: "right",
+    fontSize: 14,
+    maxWidth: 60
   }),
 }
 export default TopicEdit

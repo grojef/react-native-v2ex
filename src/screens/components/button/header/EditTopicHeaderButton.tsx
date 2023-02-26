@@ -1,17 +1,13 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/05/27.
  */
-import {followPeople, interestNode, unFollowPeople, unInterestNode} from '@src/actions'
-import {useAppDispatch, useAppSelector} from '@src/hooks'
-import {useSession} from '@src/hooks/useSession'
+
 import {translate} from '@src/i18n'
 import {NavigationService, ROUTES} from '@src/navigation'
 import {useTheme} from '@src/theme'
-import {AppObject} from '@src/types'
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {} from 'react'
 import {StyleProp, ViewStyle} from 'react-native'
 import {HeaderButton} from '../../common'
-import {ApiLib} from "@src/api";
 
 /**
  * Follow People Button
@@ -24,22 +20,18 @@ import {ApiLib} from "@src/api";
  */
 const EditTopicHeaderButton = ({
                                  containerStyle,
-                                 topicId
+                                 onPress,
                                }: {
   containerStyle?: StyleProp<ViewStyle>
-  topicId: number
+  onPress: () => void
 }) => {
   const {theme} = useTheme()
 
-  const buttonPress = () => {
-    NavigationService.navigate(ROUTES.TopicEdit, {topicId: topicId})
-  }
-
   return (
     <HeaderButton
-      text={translate(`common.edit`)}
+      text={translate(`common.save`)}
       textColor={theme.colors.secondary}
-      onPress={buttonPress}
+      onPress={onPress}
       containerStyle={containerStyle}
     />
   )

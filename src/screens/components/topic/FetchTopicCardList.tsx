@@ -26,7 +26,6 @@ export interface FetchTopicCardListProps {
    * Display Style
    */
   displayStyle?: 'simple' | 'full' | 'auto'
-
   tag: string,
   fea: string
 }

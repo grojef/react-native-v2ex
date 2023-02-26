@@ -56,7 +56,7 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
     !item || false ? null : (
       <Animated.View key={item.id} entering={LightSpeedInLeft}>
         <TopicCardTip
-          displayStyle={'full'}
+          displayStyle={displayStyle}
           containerStyle={[styles.topicItemContainer(theme), itemContainerStyle]}
           topic={item}
           onPress={onItemPress}

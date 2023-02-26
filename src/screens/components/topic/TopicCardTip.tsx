@@ -7,7 +7,6 @@ import {View, TouchableOpacity, ViewStyle, TextStyle, StyleProp, Linking} from '
 import {ITheme, AppObject} from '@src/types'
 import {SylCommon, useTheme} from '@src/theme'
 import {Avatar, Text} from '@src/components'
-import dayjs from 'dayjs'
 import {NavigationService, ROUTES} from '@src/navigation'
 import {BorderLine, TextWithIconPress} from '../common'
 import {useMemo, useState} from 'react'
@@ -49,7 +48,7 @@ const TopicCardTip = ({
   const {theme} = useTheme()
 
   const renderCall = (tip: any) => {
-    return (tip.callFlag == '1' &&
+    return (tip.callFlag == '1' && displayStyle == 'full' &&
       <View style={[styles.calledItem()]}><Text style={[styles.calledTag()]}>已拨打</Text></View>)
   }
 
@@ -72,7 +71,7 @@ const TopicCardTip = ({
   }
 
   return (
-    <View style={[styles.container(theme), containerStyle]}>
+    <View style={[styles.container(theme), containerStyle, styles.expired(displayStyle,tip)]}>
       <View style={styles.infoContainer(theme)}>
         <Avatar
           size={30}
@@ -84,17 +83,19 @@ const TopicCardTip = ({
             activeOpacity={0.8}
             style={[styles.infoMainItem(theme)]}
             onPress={() => {
-              fetchPhoneData(tip)
+              if (onPress) {
+                displayStyle == 'full' ? fetchPhoneData(tip) : onPress(tip)
+              }
             }}>
             <Text type="body"
-                  style={[styles.title(theme), tip.callFlag == '1' && styles.called()]}>
+                  style={[styles.title(theme), displayStyle == 'full' && tip.callFlag == '1' && styles.called()]}>
               {tip.phoneNumber}
             </Text>
             {renderCall(tip)}
           </TouchableOpacity>
         </View>
         <View style={styles.infoMainItem(theme)}>
-          {displayStyle === 'full' && tip.batCode ? (
+          {tip.batCode ? (
             <TextWithIconPress
               text={tip.batCode}
               onPress={() => {
@@ -103,7 +104,7 @@ const TopicCardTip = ({
               icon={theme.assets.images.icons.topic.paper}
               textStyle={[{color: theme.colors.secondary}]}
             />
-          ) : null}
+          ) : undefined}
         </View>
       </View>
       <BorderLine width={0.4}/>
@@ -155,8 +156,18 @@ const styles = {
     color: '#FFF'
   }),
   called: (): TextStyle => ({
-    color: 'red'
-  })
+    color: 'rgba(255,0,0,0.78)'
+  }),
+  expired: (displayStyle: "simple" | "full" | "auto" | undefined, tip: AppObject.Topic): ViewStyle => {
+    if (displayStyle == 'simple') {
+      tip.callTime
+      return {
+        backgroundColor: '#ADD8E6'
+      }
+    }
+    return {}
+  }
+
 }
 
 export default TopicCardTip

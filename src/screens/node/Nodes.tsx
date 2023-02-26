@@ -54,7 +54,7 @@ const Node = ({route, navigation}: ScreenProps) => {
 
   return (
     <View style={SylCommon.Layout.fill}>
-      <FetchTopicCardList tag={tag} fea={fea} displayStyle="full"
+      <FetchTopicCardList tag={tag} fea={fea} displayStyle="simple"
                           nodeName={NODE_TABS.HOT}/>
     </View>
   )
