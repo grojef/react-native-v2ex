@@ -6,9 +6,11 @@ import dict from './lib/dict'
 import notification from './lib/notification'
 import topic from './lib/topic'
 import reply from './lib/reply'
-import {NavigationService, ROUTES} from '@src/navigation'
+import {NavigationService} from '@src/navigation'
 
 import {logError} from '../helper/logger'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {MEMBER_TOKEN_KEY} from "@config/constants";
 
 /**
  * default configuration
@@ -142,6 +144,7 @@ class V2ex {
 
         headers = _.merge(_headers, headers)
         return new Promise<T>((resolve, reject) => {
+            console.log(uri)
             fetch(uri, {method, headers, body: JSON.stringify(data)})
                 .then((response: Response) => {
                     if (response.ok) {
@@ -157,7 +160,9 @@ class V2ex {
                 .then((responseData) => {
                     if (responseData) {
                         if (responseData.code == 401) {
-                            NavigationService.navigate(ROUTES.SignIn)
+                            AsyncStorage.setItem(MEMBER_TOKEN_KEY, '')
+                            ApiLib.setToken(undefined)
+                            NavigationService.navigate("SignIn")
                             return
                         }
                         if (responseData.code == 500) {

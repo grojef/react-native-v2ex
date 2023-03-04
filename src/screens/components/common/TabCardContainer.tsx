@@ -1,11 +1,11 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
-import { Text } from '@src/components'
-import { ITheme, SylCommon, useTheme } from '@src/theme'
+import {Text} from '@src/components'
+import {ITheme, SylCommon, useTheme} from '@src/theme'
 import React from 'react'
-import { Image, ImageSourcePropType, StyleProp, View, ViewStyle } from 'react-native'
-import { BorderLine } from './General'
+import {Image, ImageSourcePropType, StyleProp, View, ViewStyle} from 'react-native'
+import {BorderLine} from './General'
 
 /**
  * TabCardContainer props
@@ -34,7 +34,7 @@ const TabCardContainer: React.FC<TabCardContainerProps> = ({
     return (
       <View style={[SylCommon.Card.container(theme), styles.container(theme), containerStyle]}>
         <View style={styles.tabBar(theme)}>
-          {icon && <Image source={icon} width={20} height={20} style={{ marginRight: theme.spacing.small }} />}
+          {icon && <Image source={icon} style={{ width:20,height:20,marginRight: theme.spacing.small }} />}
           <Text style={{ ...theme.typography.bodyText }}>{title ?? ''}</Text>
         </View>
         <BorderLine />

@@ -1,14 +1,14 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/01.
  */
-import {NavigationService, ROUTES} from '@src/navigation'
 import {ITheme, SylCommon, useTheme} from '@src/theme'
 import {AppObject} from '@src/types'
 import React from 'react'
-import {Linking, StyleProp, View, ViewStyle} from 'react-native'
+import {StyleProp, View, ViewStyle} from 'react-native'
 import {RenderHTML} from '../common'
 import TopicCardItem from './TopicCardItem'
 import {ApiLib} from "@src/api";
+import Dialer from "@src/components/dialer";
 
 /**
  * TopicInfo props
@@ -35,14 +35,9 @@ const TopicInfo: React.FC<TopicInfoProps> = ({containerStyle, info}: TopicInfoPr
           topic={info}
           displayStyle={'full'}
           onPress={() => {
-            Linking.canOpenURL(`tel:${info.phoneNumber}`).then((supported) => {
-              if (!supported) {
-              } else {
-                Linking.openURL(`tel:${info.phoneNumber}`).then(() => {
-                  ApiLib.topic.call(info.id)
-                })
-              }
-            }).catch()
+            new Dialer().callPhone(info.phoneNumber, () => {
+              ApiLib.topic.call(info.id);
+            })
           }}
         />
         <RenderHTML

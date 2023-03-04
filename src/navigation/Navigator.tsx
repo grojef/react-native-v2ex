@@ -1,41 +1,37 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/2/21.
  */
-import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createDrawerNavigator, DrawerContentComponentProps } from '@react-navigation/drawer'
+import {BottomTabNavigationOptions, createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {
   DefaultTheme,
-  getFocusedRouteNameFromRoute,
   NavigationContainer,
-  NavigationContainerRefWithCurrent,
-  NavigationProp,
-  NavigationState,
-  PartialState,
-  Route
+  NavigationContainerRefWithCurrent
 } from '@react-navigation/native'
-import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack'
-import { Text } from '@src/components'
-import { ToastProvider } from '@src/components/toast'
-import { useAppSelector } from '@src/hooks'
-import { useUnRead } from '@src/hooks/useUnRead'
-import { changeLocale, LanguageTagType, translate } from '@src/i18n'
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationOptions
+} from '@react-navigation/native-stack'
+import {ToastProvider} from '@src/components/toast'
+import {useAppSelector} from '@src/hooks'
+import {useUnRead} from '@src/hooks/useUnRead'
+import {changeLocale, LanguageTagType, translate} from '@src/i18n'
 import * as Screens from '@src/screens'
-import { HeaderButton } from '@src/screens/components'
-import { RootState, store } from '@src/store'
-import { ITheme, useTheme } from '@src/theme'
-import { wait } from '@src/utils/utils'
+import {RootState, store} from '@src/store'
+import {ITheme, useTheme} from '@src/theme'
+import {wait} from '@src/utils/utils'
 import dayjs from 'dayjs'
 import enUS from 'dayjs/locale/en'
 import zhCN from 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
-import { Image, Platform, StatusBar, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { SheetProvider } from 'react-native-actions-sheet'
-import { EdgeInsets, SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
+import React, {ReactNode, useEffect, useState} from 'react'
+import {Image, Platform, StatusBar, TextStyle, View} from 'react-native'
+import {SheetProvider} from 'react-native-actions-sheet'
+import {EdgeInsets, SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context'
 import SplashScreen from 'react-native-splash-screen'
 import '../components/actions-sheet'
 import NavigationService from './NavigationService'
-import { CommonScreenProps, RootStackParamList, ROUTES } from './routes'
+import {RootStackParamList, ROUTES} from './routes'
+
 /**
  * dayjs
  */
@@ -171,8 +167,8 @@ const MainAppNavigator = () => {
           tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
-              theme.assets.images.icons.bottomTab.nodes.active,
-              theme.assets.images.icons.bottomTab.nodes.inActive
+              theme.assets.images.icons.bottomTab.like.active,
+              theme.assets.images.icons.bottomTab.like.inActive
             )
         }}
       />
@@ -185,8 +181,8 @@ const MainAppNavigator = () => {
           tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
-              theme.assets.images.icons.bottomTab.notifications.active,
-              theme.assets.images.icons.bottomTab.notifications.inActive
+              theme.assets.images.icons.bottomTab.nodes.active,
+              theme.assets.images.icons.bottomTab.nodes.inActive
             ),
           tabBarBadge: unread > 0 ? unread : undefined,
           tabBarBadgeStyle: badgeStyles.badge(theme)

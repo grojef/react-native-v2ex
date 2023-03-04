@@ -1,26 +1,21 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/14.
  */
-import {cacheDict, loginByToken} from '@src/actions'
+import {loginByToken} from '@src/actions'
 import {Button, Input, Text, useToast} from '@src/components'
 import {translate} from '@src/i18n'
 import {ROUTES, SignInScreenProps as ScreenProps} from '@src/navigation'
 import {SylCommon, useTheme} from '@src/theme'
-import {APP_AUTH_RESET, IState, ITheme} from '@src/types'
+import {APP_AUTH_RESET, APP_LOGOUT, IState, ITheme} from '@src/types'
 import * as utils from '@src/utils'
 import React, {useEffect, useState} from 'react'
-import {
-  Image,
-  ImageStyle,
-  Pressable,
-  TextStyle,
-  View,
-  ViewStyle
-} from 'react-native'
+import {Image, ImageStyle, Pressable, TextStyle, View, ViewStyle} from 'react-native'
 import {connect} from 'react-redux'
 import {SetStatusBar} from '../components'
 import {useAppDispatch} from "@src/hooks";
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import {ApiLib} from "@src/api";
+import {MEMBER_TOKEN_KEY} from "@config/constants";
 
 const Screen = ({
                   navigation,
@@ -31,7 +26,7 @@ const Screen = ({
                     utils.Alert.alert({message: 'token: ' + loginId})
                   }
                 }: ScreenProps) => {
-  const [token, setToken] = useState('')
+  const [userId, setUserId] = useState('')
   const [pwd, setPwd] = useState('')
   const {theme} = useTheme()
   const dispatch = useAppDispatch()
@@ -40,14 +35,15 @@ const Screen = ({
 
 
   const initToken = async () => {
-    const sessionToken = await AsyncStorage.getItem('token')
-    if (sessionToken) {
-      setToken(sessionToken)
+    const sessionUserId = await AsyncStorage.getItem('sessionUserId')
+    if (sessionUserId) {
+      setUserId(sessionUserId)
     }
   }
 
   useEffect(() => {
     initToken().then()
+    dispatch({type: APP_AUTH_RESET, payLoad: {}})
   }, [navigation])
 
 
@@ -58,12 +54,17 @@ const Screen = ({
     })
   }
 
+
   useEffect(() => {
-    if (success) {
-      AsyncStorage.setItem('token',token)
-      dispatch(cacheDict() as any)
+    if (success && ApiLib.token) {
+      AsyncStorage.setItem('sessionUserId', userId)
       showMessage({type: 'success', text2: success})
       goNextRoute()
+    } else {
+      //防止死循环登录
+      AsyncStorage.setItem(MEMBER_TOKEN_KEY, '')
+      ApiLib.member.logout().then(r => null)
+      dispatch({type: APP_LOGOUT})
     }
 
   }, [success]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -76,7 +77,7 @@ const Screen = ({
   }, [error]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onLoginPress = () => {
-    _auth(token, pwd)
+    _auth(userId, pwd)
   }
 
   const renderButtons = () => {
@@ -85,7 +86,7 @@ const Screen = ({
         <Button
           style={styles.button(theme)}
           type="large"
-          disabled={token === '' || loading}
+          disabled={userId === '' || loading}
           onPress={onLoginPress}
           loading={loading}>
           {translate('button.loginByToken')}
@@ -118,11 +119,11 @@ const Screen = ({
           keyboardType="default"
           returnKeyType="next"
           autoCorrect={false}
-          value={token}
+          value={userId}
           onFocus={() => setKeyboardRaise(true)}
           onBlur={() => setKeyboardRaise(false)}
           editable={!loading}
-          onChangeText={setToken}
+          onChangeText={setUserId}
           containerStyle={styles.input(theme)}
           textContentType="none"
         />
@@ -220,7 +221,7 @@ const styles = {
     flexWrap: 'wrap'
   }),
   footerText: (theme: ITheme): TextStyle => ({
-    ...theme.typography.labelText
+    ...theme.typography.captionText
   })
 }
 

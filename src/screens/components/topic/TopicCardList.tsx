@@ -1,11 +1,10 @@
-import {Button, Placeholder, Spinner, Text, useToast} from '@src/components'
+import {Placeholder, Spinner} from '@src/components'
 import {translate} from '@src/i18n'
-import {NavigationService, ROUTES} from '@src/navigation'
 import {SylCommon, useTheme} from '@src/theme'
 import {AppObject, IState, ITheme} from '@src/types'
-import React, {useState} from 'react'
+import React from 'react'
 import {FlatList, StyleProp, View, ViewStyle} from 'react-native'
-import Animated, {LightSpeedInLeft, LightSpeedInRight} from 'react-native-reanimated'
+import Animated, {LightSpeedInLeft} from 'react-native-reanimated'
 import TopicCardTip from './TopicCardTip'
 import {connect} from "react-redux";
 
@@ -47,10 +46,7 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
                                                        refreshCallback
                                                      }: TopicCardListProps) => {
   const {theme} = useTheme()
-  const onItemPress = (topic: AppObject.Topic) => {
-    topic = {...topic, callFlag: '1'}
-    NavigationService.navigate(ROUTES.TopicDetail, {topicId: topic.id})
-  }
+
 
   const renderItemRow = ({item}: { item: AppObject.Topic }) =>
     !item || false ? null : (
@@ -59,7 +55,6 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
           displayStyle={displayStyle}
           containerStyle={[styles.topicItemContainer(theme), itemContainerStyle]}
           topic={item}
-          onPress={onItemPress}
         />
       </Animated.View>
     )

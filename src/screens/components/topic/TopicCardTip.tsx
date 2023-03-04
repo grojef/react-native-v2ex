@@ -3,14 +3,16 @@
  */
 
 import * as React from 'react'
-import {View, TouchableOpacity, ViewStyle, TextStyle, StyleProp, Linking} from 'react-native'
-import {ITheme, AppObject} from '@src/types'
-import {SylCommon, useTheme} from '@src/theme'
+import {useState} from 'react'
+import {StyleProp, TextStyle, TouchableOpacity, View, ViewStyle,} from 'react-native'
+import {AppObject, ITheme} from '@src/types'
+import {useTheme} from '@src/theme'
 import {Avatar, Text} from '@src/components'
-import {NavigationService, ROUTES} from '@src/navigation'
 import {BorderLine, TextWithIconPress} from '../common'
-import {useMemo, useState} from 'react'
 import {ApiLib} from "@src/api";
+import Dialer from "@src/components/dialer"
+import {NavigationService, ROUTES} from "@src/navigation";
+
 
 export interface TopicCardItemProps {
   /**
@@ -56,22 +58,22 @@ const TopicCardTip = ({
 
   const fetchPhoneData = (tip: AppObject.Topic) => {
     ApiLib.topic.topic(tip.id).then((res) => {
-      Linking.canOpenURL(`tel:${res.phoneNumber}`).then((supported) => {
-        if (!supported) {
-        } else {
-          Linking.openURL(`tel:${res.phoneNumber}`).then(() => {
-            ApiLib.topic.call(res.id).then(r => null)
+      new Dialer().callPhone(res.phoneNumber, () => {
+        ApiLib.topic.call(res.id).then(() => {
+          setTimeout(() => {
             setTip({...tip, callFlag: '1'})
-            NavigationService.navigate(ROUTES.TopicDetail, {topicId: res.id})
-          })
-        }
-      }).catch()
-
+          }, 3000)
+        })
+      })
     })
   }
 
+  const detail = (tip: AppObject.Topic) => {
+    NavigationService.navigate(ROUTES.TopicDetail, {topicId: tip.id})
+  }
+
   return (
-    <View style={[styles.container(theme), containerStyle, styles.expired(displayStyle,tip)]}>
+    <View style={[styles.container(theme), containerStyle, styles.expired(displayStyle, tip)]}>
       <View style={styles.infoContainer(theme)}>
         <Avatar
           size={30}
@@ -83,9 +85,7 @@ const TopicCardTip = ({
             activeOpacity={0.8}
             style={[styles.infoMainItem(theme)]}
             onPress={() => {
-              if (onPress) {
-                displayStyle == 'full' ? fetchPhoneData(tip) : onPress(tip)
-              }
+              displayStyle == 'full' ? fetchPhoneData(tip) : detail(tip)
             }}>
             <Text type="body"
                   style={[styles.title(theme), displayStyle == 'full' && tip.callFlag == '1' && styles.called()]}>
@@ -99,7 +99,7 @@ const TopicCardTip = ({
             <TextWithIconPress
               text={tip.batCode}
               onPress={() => {
-                onPress && onPress(tip)
+                detail(tip)
               }}
               icon={theme.assets.images.icons.topic.paper}
               textStyle={[{color: theme.colors.secondary}]}

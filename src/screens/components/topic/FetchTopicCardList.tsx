@@ -13,6 +13,7 @@ import {RefreshControl, StyleProp, ViewStyle} from 'react-native'
 import {NeedLogin} from '../common'
 import TopicCardList from './TopicCardList'
 import CountDown from "@src/screens/components/topic/CountDown";
+import SearchIntent from "@src/screens/components/topic/SearchIntent";
 
 export interface FetchTopicCardListProps {
   /**
@@ -26,8 +27,6 @@ export interface FetchTopicCardListProps {
    * Display Style
    */
   displayStyle?: 'simple' | 'full' | 'auto'
-  tag: string,
-  fea: string
 }
 
 const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
@@ -35,30 +34,34 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
                                                                  v2API = false,
                                                                  containerStyle,
                                                                  displayStyle,
-                                                                 tag,
-                                                                 fea
                                                                }: FetchTopicCardListProps) => {
 
   const {theme} = useTheme()
   const {logined} = useSession()
   const {showMessage} = useToast()
   const [page, setPage] = useState(1)
-  const [mounted, setMounted] = useState<boolean>(false)
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const [list, setList] = useState<AppObject.Topic[] | undefined>(undefined)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [loadMore, setLoadMore] = useState<boolean>(false)
   const specialNode = useMemo(() => [NODE_TABS.LATEST, NODE_TABS.HOT].includes(nodeName), [nodeName])
 
+  const [searchData, setSearchData] = useState<{ qTag: string, qFeat: string }>({
+    qTag: '',
+    qFeat: ''
+  })
+
+
+  const onSearchDataChange = (newData: { qTag: string, qFeat: string }) => {
+    setSearchData(newData)
+  }
+
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    fetchTopics(page, searchData.qTag, searchData.qFeat)
+  }, [page, nodeName,JSON.stringify(searchData)])
 
   const fetchTopics = useCallback(
-    (pageNum: number) => {
-      if (v2API && !logined) {
-        return
-      }
+    (pageNum: number, qTag: string, qFeat:string) => {
 
       if (pageNum > 1 && (!v2API || specialNode)) {
         setHasMore(false)
@@ -72,7 +75,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
       setLoadMore(pageNum > 1)
       ;(nodeName != NODE_TABS.HOT
           ? ApiLib.topic.pager(nodeName, pageNum)
-          : ApiLib.topic.intent(pageNum, tag, fea)
+          : ApiLib.topic.intent(pageNum, qTag, qFeat)
       )
         .then((rlt: AppObject.Topic[]) => {
           if (rlt.length === 0 || specialNode || !v2API) {
@@ -88,18 +91,15 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
           showMessage(err.message)
         })
     },
-    [nodeName, showMessage, page, v2API, logined] // eslint-disable-line react-hooks/exhaustive-deps
+    [nodeName, showMessage, page, v2API, logined, JSON.stringify(searchData)]
   )
 
   const onRefresh = () => {
     setList(undefined)
     setPage(1)
-    fetchTopics(1)
+    fetchTopics(1, searchData.qTag, searchData.qFeat)
   }
 
-  useEffect(() => {
-    fetchTopics(page)
-  }, [page, nodeName])
 
   const onReached = () => {
     if (hasMore && !loadMore && !refreshing) {
@@ -112,7 +112,9 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
       onMount={() => {
       }}
       placeholderBackground={theme.colors.surface}>
-      {nodeName == NODE_TABS.LATEST && <CountDown refreshData={fetchTopics}/>}
+      {nodeName == NODE_TABS.LATEST && <CountDown/>}
+      {nodeName == NODE_TABS.HOT &&
+      <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange}/>}
       <TopicCardList
         containerStyle={containerStyle}
         topics={list}

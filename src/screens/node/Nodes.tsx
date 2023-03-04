@@ -3,10 +3,7 @@
  */
 
 
-import {
-  NODE_TABS,
-  NodesScreenProps as ScreenProps,
-} from '@src/navigation'
+import {NODE_TABS, NodesScreenProps as ScreenProps,} from '@src/navigation'
 import {SylCommon, useTheme} from '@src/theme'
 import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
@@ -54,7 +51,7 @@ const Node = ({route, navigation}: ScreenProps) => {
 
   return (
     <View style={SylCommon.Layout.fill}>
-      <FetchTopicCardList tag={tag} fea={fea} displayStyle="simple"
+      <FetchTopicCardList  displayStyle="simple"
                           nodeName={NODE_TABS.HOT}/>
     </View>
   )

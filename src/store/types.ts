@@ -107,7 +107,6 @@ export namespace IState {
     export interface UIState {
         login: {
             tokenGeneratedLink: string
-
             error: string | null
             success: string | null
             loading: boolean

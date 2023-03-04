@@ -1,115 +1,87 @@
 import {StyleProp, TextStyle, View, ViewStyle} from "react-native";
-import React, {useCallback, useEffect, useRef, useState} from "react";
-import {TextWithIconPress} from "@src/screens/components";
+import React, {useCallback, useEffect, useState} from "react";
 import {ITheme, useTheme} from "@src/theme";
-import {Button, useToast} from "@src/components";
+import {Button} from "@src/components";
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
 import {Picker} from "@react-native-picker/picker";
 import {defaultDictMeta} from "@src/helper/defaultDictMeta";
 
-export interface CountDownProps {
+export interface SearchIntentProps {
   /**
    * container style
    */
   containerStyle?: StyleProp<ViewStyle>
-
-  refreshData?: any
-
+  refreshData: { qTag: string, qFeat: string },
+  onDataChange: ({}: { qTag: string, qFeat: string }) => void
 }
 
-const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
-  const [counter, setCounter] = useState(0);
-  let cd = useRef<number>(counter);
-  const timer = useRef<any>(null);
-  const [time, setTime] = useState<string>(`倒计时: 0时0分0秒`);
-  const decrease = () => {
-    timer.current = setInterval(() => {
-      if (cd.current <= 0) {
-        timer.current && clearInterval(timer.current)
-        return
-      }
-      cd.current--
-      const h = parseInt(((cd.current / (60 * 60)) % 24) + '');
-      const m = parseInt(((cd.current / 60) % 60) + '');
-      const s = parseInt((cd.current % 60) + '');
-      setTime(`倒计时: ${h}时${m}分${s}秒`)
-    }, 1000)
-  }
-
-  useEffect(() => {
-    cd.current = counter
-    decrease()
-    return () => {
-      timer.current && clearInterval(timer.current)
-    };
-
-  }, [counter]);
+const SearchIntent: React.FC<SearchIntentProps> = ({
+                                                     refreshData,
+                                                     onDataChange
+                                                   }: SearchIntentProps) => {
 
   const {theme} = useTheme()
-  const {showMessage} = useToast();
-
   const [allNode, setAllNode] = useState<AppObject.DictMeta[]>([]);
+  const [features, setFeatures] = useState<AppObject.DictMeta[]>([]);
 
   const initTags = useCallback(() => {
     ApiLib.dict.dict('cms_ctm_tag').then(res => {
       res.unshift(defaultDictMeta)
       setAllNode(res)
     })
+    ApiLib.dict.dict('cms_feature').then(res => {
+      res.unshift(defaultDictMeta)
+      setFeatures(res)
+    })
   }, [])
 
-  const initializedRef = useRef(false);
 
   useEffect(() => {
     initTags()
   }, []);
 
+  const [qTag, setQTag] = useState('');
+  const [qFeat, setQFeat] = useState('');
 
-  const pressTag = (labelValue: string) => {
-    ApiLib.topic.grab(labelValue).then((data) => {
-      showMessage("认领成功！")
-      if (data.delayTime) {
-        setCounter(data.delayTime)
-      }
-      refreshData()
-    }).catch((res) => {
-      showMessage({text1: res.msg, type: 'error'})
-      if (res.data && res.data.delayTime) {
-        setCounter(res.data.delayTime)
-      }
-    });
-  }
   return (
     (<View style={styles.refreshContainer(theme)}>
       <View
         style={[styles.refreshLeft(theme), styles.refreshBox()]}>
-        <TextWithIconPress
-          containerStyle={{
-            height: 30,
-            paddingLeft: 10,
-            borderColor: '#9a9a9a',
-            borderWidth: 1,
-            borderRadius: 5
-          }}
-          textStyle={{fontSize: 13, lineHeight: 28}}
-          text={`${time}`}
-        />
-      </View>
-      <View style={[styles.refreshRight(theme), styles.refreshBox()]}>
-        <Button disabled={cd.current > 0} onPress={() => {
-        }} type={"small"} style={{height: 30}}>刷新</Button>
+        <Button onPress={() => {
+        }} type={"small"}
+                style={{height: 30}}>标签-{allNode.find(s => s.dictValue == qTag)?.dictLabel}</Button>
         <Picker
           style={styles.picker()}
-          enabled={cd.current <= 0}
-          selectedValue={undefined}
+          selectedValue={qTag}
           onValueChange={(itemValue: string) => {
-            initializedRef.current && pressTag(itemValue)
-            initializedRef.current = true
+            setQTag(itemValue)
+            onDataChange({...refreshData, qTag: itemValue})
           }
           }>
           {allNode?.map(intent => {
             return <Picker.Item key={intent.dictCode} label={intent.dictLabel}
                                 value={intent.dictValue}/>
+          })}
+        </Picker>
+      </View>
+      <View style={[styles.refreshRight(theme), styles.refreshBox()]}>
+        <Button onPress={() => {
+        }} type={"small"} style={{
+          height: 30,
+          width: '100%'
+        }}>属性-{features.find(s => s.dictValue == qFeat)?.dictLabel}</Button>
+        <Picker
+          style={styles.picker()}
+          selectedValue={qFeat}
+          onValueChange={(itemValue: string) => {
+            setQFeat(itemValue)
+            onDataChange({...refreshData, qFeat: itemValue})
+          }
+          }>
+          {features?.map(feature => {
+            return <Picker.Item key={feature.dictCode} label={feature.dictLabel}
+                                value={feature.dictValue}/>
           })}
         </Picker>
       </View>
@@ -123,7 +95,6 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
  */
 const styles = {
   container: (theme: ITheme): ViewStyle => ({
-    paddingBottom: theme.spacing.extraLarge,
     maxHeight: theme.dimens.WINDOW_HEIGHT / 2,
     minHeight: theme.dimens.WINDOW_HEIGHT / 6,
     width: '100%',
@@ -144,8 +115,8 @@ const styles = {
   refreshBox: (): ViewStyle => ({
     flex: 1,
     justifyContent: 'space-between',
-    height: 48,
-    padding: 10
+    height: 36,
+    padding: 1
   }),
   refreshLeft: (theme: ITheme): ViewStyle => ({}),
   refreshRight: (theme: ITheme): ViewStyle => ({}),
@@ -192,4 +163,4 @@ const styles = {
 
 }
 
-export default CountDown
+export default SearchIntent

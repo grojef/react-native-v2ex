@@ -2,30 +2,30 @@
  * Created by leon<silenceace@gmail.com> on 22/2/22.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { MEMBER_TOKEN_KEY } from '@src/config/constants'
-import { logError } from '@src/helper/logger'
+import {MEMBER_TOKEN_KEY} from '@src/config/constants'
+import {logError} from '@src/helper/logger'
 import NavigationService from '@src/navigation/NavigationService'
-import { RootState } from '@src/store'
-import { ApiLib } from '@src/api'
-import { Dispatch } from 'redux'
+import {RootState} from '@src/store'
+import {ApiLib} from '@src/api'
+import {Dispatch} from 'redux'
 import {
   APP_AUTH,
   APP_AUTH_ERROR,
   APP_AUTH_LOADING,
   APP_AUTH_SUCCESS,
   APP_LOGOUT,
+  AppObject,
+  MEMBER_FOLLOW_PEOPLE,
   MEMBER_INSEREST_NODE,
+  MEMBER_LIKE_TOPICS,
   MEMBER_PROFILE,
   MEMBER_SATE_SETTING,
   MEMBER_TOPICS,
-  MEMBER_UNINTEREST_NODE,
-  MEMBER_FOLLOW_PEOPLE,
   MEMBER_UNFOLLOW_PEOPLE,
-  MEMBER_LIKE_TOPICS,
-  MEMBER_UNLIKE_TOPICS,
-  AppObject
+  MEMBER_UNINTEREST_NODE,
+  MEMBER_UNLIKE_TOPICS
 } from '../types'
-import { cacheMemberFollowing, cacheMemberInterestNodes, cacheMemberLikeTopicss } from './CacheAction'
+import {cacheMemberFollowing, cacheMemberInterestNodes, cacheMemberLikeTopicss} from './CacheAction'
 
 export const myProfile = () => async (dispatch: Dispatch, getState: () => RootState) => {
   const _member = await ApiLib.member.myProfile()
@@ -147,6 +147,5 @@ export const logout = () => (dispatch: Dispatch) => {
   ApiLib.setToken(undefined)
   ApiLib.member.logout().then(r => null)
   dispatch({ type: APP_LOGOUT })
-
   NavigationService.navigate('SignIn')
 }

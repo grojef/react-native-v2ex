@@ -1,19 +1,18 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
-import {Input, Spinner, Text, useToast} from '@src/components'
+import {Input, Spinner, useToast} from '@src/components'
 import {translate} from '@src/i18n'
-import {NavigationService, ROUTES, TopicDetailScreenProps as ScreenProps} from '@src/navigation'
+import {TopicDetailScreenProps as ScreenProps} from '@src/navigation'
 import {ITheme, SylCommon, useTheme} from '@src/theme'
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react'
-import {Linking, ScrollView, TextStyle, View, ViewStyle} from 'react-native'
+import React, {useEffect, useLayoutEffect, useState} from 'react'
+import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
 import {SetStatusBar, TableChildren, TableList, TableRow, TopicInfo} from '../components'
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
 import {EditTopicHeaderButton} from "@src/screens/components/button";
 import {Picker} from "@react-native-picker/picker";
-import Toast from "react-native-toast-message";
-import hide = Toast.hide;
+import {defaultDictMeta} from "@src/helper/defaultDictMeta";
 
 const TopicDetail = ({route, navigation}: ScreenProps) => {
   const {theme} = useTheme()
@@ -50,12 +49,15 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
     })
 
     ApiLib.dict.dict('sys_user_sex').then(res => {
+      res.unshift(defaultDictMeta)
       setDictSex(res)
     })
     ApiLib.dict.dict('cms_feature').then(res => {
+      res.unshift(defaultDictMeta)
       setDictFeatures(res)
     })
     ApiLib.dict.dict('call_intent_type').then(res => {
+      res.unshift(defaultDictMeta)
       setDictIntent(res)
     })
   }, [topicId, navigation]);
