@@ -187,6 +187,15 @@ export const ROUTES = {
      * 话题详情
      */
     TopicEdit: 'TopicEdit',
+
+
+
+    /**
+     * 中心
+     */
+    Center: 'Center',
+
+
     /**
      * 我的
      */

@@ -126,7 +126,8 @@
   "router": {
     "HomeTabs": "主页",
     "Hot": "热门",
-    "Latest": "工作台",
+    "Center": "工作台",
+    "Latest": "认领客户",
     "Nodes": "意向客户",
     "Notifications": "通知",
     "NotificationInfo": "通知详情",

@@ -36,6 +36,10 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
   }, [navigation, topic])
 
 
+  const [xFeat, setXFeat] = useState('');
+  const [xSex, setXSex] = useState('');
+  const [xInt, setXInt] = useState('');
+
   const [dictIntent, setDictIntent] = useState<AppObject.DictMeta[]>([])
   const [dictFeatures, setDictFeatures] = useState<AppObject.DictMeta[]>([])
   const [dictSex, setDictSex] = useState<AppObject.DictMeta[]>([])
@@ -101,7 +105,9 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
             >
               <Picker
                 style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                selectedValue={xSex}
                 onValueChange={(itemValue: string, itemIndex) => {
+                  setXSex(itemValue)
                   setTopic({...topic, sex: itemValue})
                 }
                 }>
@@ -119,7 +125,9 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
             >
               <Picker
                 style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                selectedValue={xInt}
                 onValueChange={(itemValue: string, itemIndex) => {
+                  setXInt(itemValue)
                   setTopic({...topic, intentFlag: itemValue})
                 }
                 }>
@@ -137,8 +145,10 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               rightText={findDict(dictFeatures, topic.feature)}
             >
               <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                style={{position: 'absolute', width: '100%', height: 0, transform: [{scaleX: 0}]}}
+                selectedValue={xFeat}
                 onValueChange={(itemValue: string, itemIndex) => {
+                  setXFeat(itemValue)
                   setTopic({...topic, feature: itemValue})
                 }
                 }>

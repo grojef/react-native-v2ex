@@ -211,6 +211,8 @@ const rowStyles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    width:'60%',
+    justifyContent:'flex-end',
     marginRight: theme.spacing.medium
   }),
   rightText: (theme: ITheme): TextStyle => ({

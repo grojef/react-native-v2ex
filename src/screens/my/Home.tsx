@@ -1,7 +1,7 @@
 import {logout as logoutAction} from '@src/actions'
 import {useToast} from '@src/components/toast'
 import {translate} from '@src/i18n'
-import {MyScreenProps as ScreenProps} from '@src/navigation'
+import {MyScreenProps as ScreenProps, NavigationService, ROUTES} from '@src/navigation'
 import {SylCommon, useTheme} from '@src/theme'
 import {AppObject, IState} from '@src/types'
 import React, {useEffect} from 'react'
@@ -35,6 +35,9 @@ const My = ({
       headerRight: () => (
         <HeaderButton  source={theme.assets.images.icons.bottomTab.notifications.inActive}
                       containerStyle={[{marginRight: theme.dimens.layoutContainerHorizontalMargin}]}
+                       onPress={()=>{
+                         NavigationService.navigate(ROUTES.Notifications)
+                       }}
         />
       )
     })

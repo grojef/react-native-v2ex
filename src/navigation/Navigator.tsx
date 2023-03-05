@@ -105,7 +105,7 @@ const badgeStyles = {
 const bottomTabBarIconSize = 30
 const renderBottomIcon = (focused: boolean, activeIcon: any, inactiveIcon: any): ReactNode => {
   const icon = focused ? activeIcon : inactiveIcon
-  return <Image source={icon} style={{ width: bottomTabBarIconSize, height: bottomTabBarIconSize }} />
+  return <Image source={icon} style={{width: bottomTabBarIconSize, height: bottomTabBarIconSize}}/>
 }
 
 const defaultTabBarSetting = (theme: ITheme, insets: EdgeInsets): BottomTabNavigationOptions => {
@@ -134,9 +134,9 @@ const defaultTabBarSetting = (theme: ITheme, insets: EdgeInsets): BottomTabNavig
 const MainBottomTabNavigator = createBottomTabNavigator()
 const MainAppNavigator = () => {
   const insets = useSafeAreaInsets()
-  const { unread } = useUnRead()
-  const { languageTag } = useAppSelector((state: RootState) => state.setting)
-  const { theme } = useTheme()
+  const {unread} = useUnRead()
+  const {languageTag} = useAppSelector((state: RootState) => state.setting)
+  const {theme} = useTheme()
 
   useEffect(() => {
     resetLocales(languageTag)
@@ -150,7 +150,7 @@ const MainAppNavigator = () => {
         options={{
           title: translate(`router.${ROUTES.Latest}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({ focused }) =>
+          tabBarIcon: ({focused}) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.home.active,
@@ -164,7 +164,7 @@ const MainAppNavigator = () => {
         options={{
           title: translate(`router.${ROUTES.Nodes}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({ focused }) =>
+          tabBarIcon: ({focused}) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.like.active,
@@ -173,12 +173,12 @@ const MainAppNavigator = () => {
         }}
       />
       <MainBottomTabNavigator.Screen
-        name={ROUTES.Notifications}
-        component={Screens.NotificationsScreen}
+        name={ROUTES.Center}
+        component={Screens.WorkCenterScreen}
         options={{
-          title: translate(`router.${ROUTES.Notifications}`),
+          title: translate(`router.${ROUTES.Center}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({ focused }) =>
+          tabBarIcon: ({focused}) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.nodes.active,
@@ -194,7 +194,7 @@ const MainAppNavigator = () => {
         options={{
           title: translate(`router.${ROUTES.My}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({ focused }) =>
+          tabBarIcon: ({focused}) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.my.active,
@@ -209,12 +209,12 @@ const MainAppNavigator = () => {
 const StackNavigator = createNativeStackNavigator<RootStackParamList>()
 
 export const AppNavigationContainer = () => {
-  const { token } = useAppSelector((state: RootState) => state.member)
+  const {token} = useAppSelector((state: RootState) => state.member)
   const {
-    login: { tokenGeneratedLink }
+    login: {tokenGeneratedLink}
   } = useAppSelector((state: RootState) => state.ui)
-  const { languageTag } = useAppSelector((state: RootState) => state.setting)
-  const { theme } = useTheme()
+  const {languageTag} = useAppSelector((state: RootState) => state.setting)
+  const {theme} = useTheme()
   const [mounted, setMounted] = useState<boolean>(false)
 
   if (!mounted) {
@@ -233,7 +233,7 @@ export const AppNavigationContainer = () => {
   }, [languageTag])
 
   return (
-    <SafeAreaProvider style={{ backgroundColor: theme.colors.background }}>
+    <SafeAreaProvider style={{backgroundColor: theme.colors.background}}>
       <ToastProvider>
         <SheetProvider>
           <NavigationContainer
@@ -255,8 +255,8 @@ export const AppNavigationContainer = () => {
                 Platform.OS === 'ios'
                   ? 'default'
                   : theme.name === 'dark'
-                  ? theme.colors.primaryDark
-                  : theme.colors.primary
+                    ? theme.colors.primaryDark
+                    : theme.colors.primary
               }
               barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
             />
@@ -268,7 +268,7 @@ export const AppNavigationContainer = () => {
                   ...defaultScreenOptions,
                   headerBackground: () => null,
                   title: translate(`router.${ROUTES.SignIn}`),
-                  headerTitleStyle: { color: theme.colors.transparent },
+                  headerTitleStyle: {color: theme.colors.transparent},
                   headerBackTitleVisible: false,
                   headerShown: true,
                 }}
@@ -276,7 +276,7 @@ export const AppNavigationContainer = () => {
               <StackNavigator.Screen
                 name={ROUTES.Main}
                 component={MainAppNavigator}
-                options={({ route, navigation }) => ({
+                options={({route, navigation}) => ({
                   ...defaultScreenOptions(theme),
                   headerBackground: undefined,
                   headerShown: false
@@ -326,6 +326,15 @@ export const AppNavigationContainer = () => {
                 component={Screens.NotificationInfoScreen}
                 options={{
                   title: translate(`router.${ROUTES.NotificationInfo}`),
+                  ...defaultScreenOptions(theme),
+                  headerShown: true
+                }}
+              />
+              <StackNavigator.Screen
+                name={ROUTES.Notifications}
+                component={Screens.NotificationsScreen}
+                options={{
+                  title: translate(`router.${ROUTES.Notifications}`),
                   ...defaultScreenOptions(theme),
                   headerShown: true
                 }}
@@ -495,7 +504,7 @@ export const AppNavigationContainer = () => {
               <StackNavigator.Screen
                 name={ROUTES.WebViewer}
                 component={Screens.WebLinkScreen}
-                options={({ route }) => ({
+                options={({route}) => ({
                   title: route?.params?.title ?? translate('brand.name'),
                   ...defaultScreenOptions(theme),
                   headerShown: true
