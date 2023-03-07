@@ -1,6 +1,6 @@
 import {StyleProp, TextStyle, View, ViewStyle} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
-import {ITheme, useTheme} from "@src/theme";
+import {ITheme, SylCommon, useTheme} from "@src/theme";
 import {Button} from "@src/components";
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
@@ -45,7 +45,7 @@ const SearchIntent: React.FC<SearchIntentProps> = ({
   const [qFeat, setQFeat] = useState('');
 
   return (
-    (<View style={styles.refreshContainer(theme)}>
+    (<View style={[styles.refreshContainer(theme),SylCommon.Card.container(theme)]}>
       <View
         style={[styles.refreshLeft(theme), styles.refreshBox()]}>
         <Button onPress={() => {
@@ -115,7 +115,7 @@ const styles = {
   refreshBox: (): ViewStyle => ({
     flex: 1,
     justifyContent: 'space-between',
-    height: 36,
+    height: 38,
     padding: 1
   }),
   refreshLeft: (theme: ITheme): ViewStyle => ({}),

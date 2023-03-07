@@ -162,7 +162,7 @@ const styles = {
     if (displayStyle == 'simple') {
       tip.callTime
       return {
-        backgroundColor: '#ADD8E6'
+        backgroundColor: '#FFF'
       }
     }
     return {}

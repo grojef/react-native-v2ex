@@ -10,7 +10,7 @@ import {AppObject} from '@src/types'
 import {ApiLib} from '@src/api'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {RefreshControl, StyleProp, ViewStyle} from 'react-native'
-import {NeedLogin} from '../common'
+import {BorderLine, NeedLogin} from '../common'
 import TopicCardList from './TopicCardList'
 import CountDown from "@src/screens/components/topic/CountDown";
 import SearchIntent from "@src/screens/components/topic/SearchIntent";
@@ -115,6 +115,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
       {nodeName == NODE_TABS.LATEST && <CountDown/>}
       {nodeName == NODE_TABS.HOT &&
       <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange}/>}
+      <BorderLine/>
       <TopicCardList
         containerStyle={containerStyle}
         topics={list}

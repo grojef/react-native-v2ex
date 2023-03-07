@@ -3,69 +3,94 @@
  */
 import {Input, Spinner, useToast} from '@src/components'
 import {translate} from '@src/i18n'
-import {TopicDetailScreenProps as ScreenProps} from '@src/navigation'
+import {VisitInfoScreenProps as ScreenProps} from '@src/navigation'
 import {ITheme, SylCommon, useTheme} from '@src/theme'
 import React, {useEffect, useLayoutEffect, useState} from 'react'
 import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableChildren, TableList, TableRow, TopicInfo} from '../components'
+import {SetStatusBar, TableChildren, TableList, TableRow} from '../components'
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
 import {EditTopicHeaderButton} from "@src/screens/components/button";
 import {Picker} from "@react-native-picker/picker";
 import {defaultDictMeta} from "@src/helper/defaultDictMeta";
+import dayjs from "dayjs";
 
-const TopicDetail = ({route, navigation}: ScreenProps) => {
+const VisitInfo = ({route, navigation}: ScreenProps) => {
   const {theme} = useTheme()
-  const {topicId} = route.params
-  const [topic, setTopic] = useState<AppObject.Topic>();
+  const {visitId} = route.params
+  // @ts-ignore
+  const [visitInfo, setVisitInfo] = useState<AppObject.VisitInfo>({});
   const {showMessage} = useToast()
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: topic ? () =>
+      headerRight: visitInfo ? () =>
         (
           <EditTopicHeaderButton onPress={() => {
-            ApiLib.topic.update(topic).then((res) => {
-              showMessage("更新成功")
-              navigation.goBack()
-            }).catch((error) => {
-              showMessage(error.msg)
-            })
+            if (visitInfo.id == '') {
+              ApiLib.visit.save(visitInfo).then((res) => {
+                showMessage("更新成功")
+                navigation.goBack()
+              }).catch((error) => {
+                showMessage(error.msg)
+              })
+            } else {
+              ApiLib.visit.add(visitInfo).then((res) => {
+                showMessage("保存成功")
+                navigation.goBack()
+              }).catch((error) => {
+                showMessage(error.msg)
+              })
+            }
           }}/>
         ) : undefined
     })
-  }, [navigation, topic])
+  }, [navigation, visitInfo])
+
+  const [dictAddress, setDictAddress] = useState<AppObject.DictMeta[]>([])
+
+  const [dictRefund, setDictRefund] = useState<AppObject.DictMeta[]>([])
 
 
-  const [xFeat, setXFeat] = useState('');
-  const [xSex, setXSex] = useState('');
-  const [xInt, setXInt] = useState('');
+  const [xAdr, setXAdr] = useState('');
 
-  const [dictIntent, setDictIntent] = useState<AppObject.DictMeta[]>([])
-  const [dictFeatures, setDictFeatures] = useState<AppObject.DictMeta[]>([])
-  const [dictSex, setDictSex] = useState<AppObject.DictMeta[]>([])
+
+  const [xFund, setXFund] = useState('');
 
   useEffect(() => {
 
-    ApiLib.topic.topic(route.params.topicId).then(res => {
-      return setTopic(res)
-    }).catch((err) => {
-      console.error(err)
-    })
+    if (visitId) {
+      ApiLib.visit.info(route.params.visitId).then(res => {
+        return setVisitInfo(res)
+      }).catch((err) => {
+      })
+    } else {
+      setVisitInfo({
+        address: "",
+        createBy: "",
+        createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        deptId: 0,
+        id: undefined,
+        remark: "",
+        userId: 0,
+        userName: "",
+        visitTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        visitType1: "",
+        visitType2: 0,
+        visitType3: 0,
+        visitor: ""
+      })
+    }
 
-    ApiLib.dict.dict('sys_user_sex').then(res => {
+    ApiLib.dict.dict('oa_address').then(res => {
       res.unshift(defaultDictMeta)
-      setDictSex(res)
+      setDictAddress(res)
     })
-    ApiLib.dict.dict('cms_feature').then(res => {
+    ApiLib.dict.dict('oa_visit_type1').then(res => {
       res.unshift(defaultDictMeta)
-      setDictFeatures(res)
+      setDictRefund(res)
     })
-    ApiLib.dict.dict('call_intent_type').then(res => {
-      res.unshift(defaultDictMeta)
-      setDictIntent(res)
-    })
-  }, [topicId, navigation]);
+  }, [visitId, navigation]);
 
   const findDict = (dict: AppObject.DictMeta[], dictValue: any) => {
     if (dictValue) {
@@ -76,7 +101,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
   }
 
   const renderContent = () => {
-    if (!topic) {
+    if (!VisitInfo) {
       return <Spinner style={{marginTop: 50}}/>
     }
 
@@ -84,82 +109,53 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
       <>
         <SetStatusBar/>
         <ScrollView>
-          <TopicInfo info={topic}/>
           <TableList title={translate('common.customerInfo')}>
             <TableRow
-              title={translate(`common.createTime`)}
+              title={translate(`common.visitTime`)}
               leftIcon={theme.assets.images.icons.table.urlschme}
               withArrow={false}
-              rightText={`${topic.createTime}`}
-            />
-            <TableRow
-              title={translate(`common.phone`)}
-              leftIcon={theme.assets.images.icons.table.email}
-              withArrow={false}
-              rightText={`${topic.phoneNumber}`}
+              rightText={`${visitInfo?.visitTime}`}
             />
             <TableChildren
-              title={translate(`common.sex`)}
+              title={translate(`common.address`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={findDict(dictSex, topic.sex)}
+              rightText={findDict(dictAddress, visitInfo?.address)}
             >
               <Picker
                 style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
-                selectedValue={xSex}
+                selectedValue={xAdr}
                 onValueChange={(itemValue: string, itemIndex) => {
-                  setXSex(itemValue)
-                  setTopic({...topic, sex: itemValue})
+                  setXAdr(itemValue)
+                  setVisitInfo({...visitInfo, address: itemValue})
                 }
                 }>
-                {dictSex?.map(sex => {
-                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
-                                      value={sex.dictValue}/>
+                {dictAddress?.map(address => {
+                  return <Picker.Item key={address.dictCode} label={address.dictLabel}
+                                      value={address.dictValue}/>
                 })}
               </Picker>
             </TableChildren>
             <TableChildren
-              title={translate(`common.intentFlag`)}
+              title={translate(`common.refund`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={findDict(dictIntent, topic.intentFlag)}
+              rightText={findDict(dictRefund, visitInfo?.visitType1)}
             >
               <Picker
                 style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
-                selectedValue={xInt}
+                selectedValue={xFund}
                 onValueChange={(itemValue: string, itemIndex) => {
-                  setXInt(itemValue)
-                  setTopic({...topic, intentFlag: itemValue})
+                  setXFund(itemValue)
+                  setVisitInfo({...visitInfo, visitType1: itemValue})
                 }
                 }>
-                {dictIntent?.map(intent => {
-                  return <Picker.Item key={intent.dictCode} label={intent.dictLabel}
-                                      value={intent.dictValue}/>
+                {dictRefund?.map(refund => {
+                  return <Picker.Item key={refund.dictCode} label={refund.dictLabel}
+                                      value={refund.dictValue}/>
                 })}
               </Picker>
             </TableChildren>
-
-            <TableChildren
-              title={translate(`common.feature`)}
-              leftIcon={theme.assets.images.icons.table.urlschme}
-              withArrow={true}
-              rightText={findDict(dictFeatures, topic.feature)}
-            >
-              <Picker
-                style={{position: 'absolute', width: '100%', height: 0, transform: [{scaleX: 0}]}}
-                selectedValue={xFeat}
-                onValueChange={(itemValue: string, itemIndex) => {
-                  setXFeat(itemValue)
-                  setTopic({...topic, feature: itemValue})
-                }
-                }>
-                {dictFeatures?.map(fea => {
-                  return <Picker.Item key={fea.dictCode} label={fea.dictLabel}
-                                      value={fea.dictValue}/>
-                })}
-              </Picker>
-            </TableChildren>
-
             <TableChildren
               title={translate(`common.nickName`)}
               leftIcon={theme.assets.images.icons.table.email}
@@ -171,8 +167,8 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
                 keyboardType="default"
                 returnKeyType="next"
                 autoCorrect={false}
-                value={topic.nickName}
-                onChangeText={(text)=>setTopic({...topic,nickName:text})}
+                value={visitInfo?.visitor}
+                onChangeText={(text) => setVisitInfo({...visitInfo, visitor: text})}
                 containerStyle={styles.input(theme)}
                 textContentType="none"
                 inputStyle={styles.inputSingle(theme)}
@@ -183,13 +179,13 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               multiline={true}
               autoCapitalize="none"
               underlineColorAndroid="transparent"
-              placeholder={'请简短描述下客户备注'}
+              placeholder={'请简短描述下备注'}
               keyboardType="default"
               returnKeyType="next"
               autoCorrect={false}
-              value={topic.remark}
+              value={visitInfo?.remark}
               editable={true}
-              onChangeText={(text) => setTopic({...topic, remark: text})}
+              onChangeText={(text) => setVisitInfo({...visitInfo, remark: text})}
               inputStyle={styles.inputStyle(theme)}
               containerStyle={styles.inputContainer(theme)}
             />
@@ -218,11 +214,16 @@ const styles = {
   }),
   input: (theme: ITheme): TextStyle => ({
     alignItems: 'baseline',
-    height: 40, width: 200,borderWidth:0,right:8,position:"absolute", backgroundColor: 'transparent'
+    height: 40,
+    width: 200,
+    borderWidth: 0,
+    right: 8,
+    position: "absolute",
+    backgroundColor: 'transparent'
   }),
   inputSingle: (theme: ITheme): TextStyle => ({
-      textAlign:'right',
-      writingDirection:'rtl',
+    textAlign: 'right',
+    writingDirection: 'rtl',
     ...theme.typography.captionText
   }),
   label: (theme: ITheme): TextStyle => ({
@@ -233,4 +234,4 @@ const styles = {
     maxWidth: 60
   }),
 }
-export default TopicDetail
+export default VisitInfo

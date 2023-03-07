@@ -62,6 +62,7 @@ export declare namespace AppAPI {
         node: NodeAPI
         topic: TopicAPI
         notification: NotificationAPI
+        visit: VisitPI
         member: MemberAPI
         dict: DictAPI
         reply: ReplyAPI
@@ -173,6 +174,27 @@ export declare namespace AppAPI {
          * Remove notification
          */
         remove: (id: string) => Promise<void>
+    }
+
+
+    export interface VisitPI {
+        /**
+         * Get my latest notifications
+         */
+        list: (page: number, searcher: string) => Promise<AppObject.VisitInfo[]>
+
+        /**
+         * get the notification information
+         * @param visitId
+         */
+        info: (visitId: number) => Promise<AppObject.VisitInfo>
+
+        /**
+         * Remove notification
+         */
+        save(visitInfo?: AppObject.VisitInfo): Promise<void>,
+
+        add(visitInfo?: AppObject.VisitInfo): Promise<void>,
     }
 
     export interface TopicAPI {
@@ -375,6 +397,22 @@ export declare namespace AppObject {
         status: string
         updateBy: string
         updateTime: any
+    }
+
+    export interface VisitInfo {
+        id: any,
+        visitor: string,
+        userId: number,
+        userName: string,
+        deptId: number,
+        address: string,
+        visitType1: string,
+        visitType2: number,
+        visitType3: number,
+        visitTime: any,
+        remark: string,
+        createBy: string,
+        createTime: any
     }
 
     export interface DictMeta {

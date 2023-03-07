@@ -3,9 +3,8 @@
  */
 
 import {translate} from '@src/i18n'
-import {NavigationService, ROUTES} from '@src/navigation'
 import {useTheme} from '@src/theme'
-import React, {} from 'react'
+import React from 'react'
 import {StyleProp, ViewStyle} from 'react-native'
 import {HeaderButton} from '../../common'
 
@@ -21,15 +20,17 @@ import {HeaderButton} from '../../common'
 const EditTopicHeaderButton = ({
                                  containerStyle,
                                  onPress,
+                                 text,
                                }: {
   containerStyle?: StyleProp<ViewStyle>
   onPress: () => void
+  text?: string
 }) => {
   const {theme} = useTheme()
 
   return (
     <HeaderButton
-      text={translate(`common.save`)}
+      text={text ? text : translate(`common.save`)}
       textColor={theme.colors.secondary}
       onPress={onPress}
       containerStyle={containerStyle}

@@ -6,6 +6,7 @@ import dict from './lib/dict'
 import notification from './lib/notification'
 import topic from './lib/topic'
 import reply from './lib/reply'
+import visit from './lib/visit'
 import {NavigationService} from '@src/navigation'
 
 import {logError} from '../helper/logger'
@@ -33,6 +34,7 @@ class V2ex {
     reply: AppAPI.ReplyAPI = reply(this)
     member: AppAPI.MemberAPI = member(this)
     dict: AppAPI.DictAPI = dict(this)
+    visit: AppAPI.VisitPI = visit(this)
     node: AppAPI.NodeAPI = node(this)
     topic: AppAPI.TopicAPI = topic(this)
     notification: AppAPI.NotificationAPI = notification(this)
@@ -147,6 +149,7 @@ class V2ex {
             console.log(uri)
             fetch(uri, {method, headers, body: JSON.stringify(data)})
                 .then((response: Response) => {
+
                     if (response.ok) {
                         return response.json()
                     }

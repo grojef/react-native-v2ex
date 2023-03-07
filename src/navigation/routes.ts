@@ -16,6 +16,8 @@ export type RootStackParamList = {
     Nodes: undefined
     Notifications: undefined
     NotificationInfo: { noticeId: number }
+    VisitInfoList: undefined
+    VisitInfo: { visitId: number }
     My: undefined
     SignIn: undefined
     NodeTopics: { nodeName: string; nodeTitle: string }
@@ -71,7 +73,14 @@ export type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'Sign
 }
 
 export type NotificationsScreenProps = NativeStackScreenProps<RootStackParamList, 'Notifications'> & CommonScreenProps
-export type NotificationInfoScreenProps = NativeStackScreenProps<RootStackParamList, 'NotificationInfo'> & CommonScreenProps
+export type NotificationInfoScreenProps =
+    NativeStackScreenProps<RootStackParamList, 'NotificationInfo'>
+    & CommonScreenProps
+
+export type VisitInfoListScreenProps = NativeStackScreenProps<RootStackParamList, 'VisitInfoList'> & CommonScreenProps
+export type VisitInfoScreenProps =
+    NativeStackScreenProps<RootStackParamList, 'VisitInfo'>
+    & CommonScreenProps
 
 export type NodesScreenProps = NativeStackScreenProps<RootStackParamList, 'Nodes'> & CommonScreenProps
 
@@ -188,8 +197,15 @@ export const ROUTES = {
      */
     TopicEdit: 'TopicEdit',
 
+    /**
+     * 到访列表
+     */
+    VisitInfoList: 'VisitInfoList',
 
-
+    /**
+     * 访客详情
+     */
+    VisitInfo: 'VisitInfo',
     /**
      * 中心
      */

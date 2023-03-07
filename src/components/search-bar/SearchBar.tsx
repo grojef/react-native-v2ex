@@ -1,17 +1,14 @@
 /**
  * Created by leon<silenceace@gmail.com> on 2022-11-20.
  */
-import { logInfo } from '@src/helper/logger'
-import { ITheme, useTheme } from '@src/theme'
-import React, { memo, useCallback, useRef, useState } from 'react'
+import {ITheme, useTheme} from '@src/theme'
+import React, {memo, useCallback, useRef, useState} from 'react'
 import {
   ColorValue,
   Keyboard,
-  LayoutChangeEvent,
   NativeSyntheticEvent,
   Pressable,
   StyleProp,
-  Text,
   TextInput,
   TextInputChangeEventData,
   TextInputProps,
@@ -40,22 +37,22 @@ interface SearchBarProps {
 }
 
 const SearchBarComponent = ({
-  searchToolContainerStyle,
-  onActiveSearch,
-  onSubmitSearch,
-  clearButton = true,
-  customIcon,
-  iconStyle,
-  inputProps,
-  inputTextStyle,
-  buttonStyle,
-  buttonText = 'Search',
-  buttonTextStyle,
-  inputContainerStyle,
-  inputActiveColor,
-  inputInactiveColor
-}: SearchBarProps) => {
-  const { theme } = useTheme()
+                              searchToolContainerStyle,
+                              onActiveSearch,
+                              onSubmitSearch,
+                              clearButton = true,
+                              customIcon,
+                              iconStyle,
+                              inputProps,
+                              inputTextStyle,
+                              buttonStyle,
+                              buttonText = 'Search',
+                              buttonTextStyle,
+                              inputContainerStyle,
+                              inputActiveColor,
+                              inputInactiveColor
+                            }: SearchBarProps) => {
+  const {theme} = useTheme()
 
   const [inputTextActive, setInputTextActive] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -63,20 +60,14 @@ const SearchBarComponent = ({
   let shouldClearButtonShow = useRef(false)
 
   const onSubmit = () => {
-    logInfo('onSubmit')
     shouldClearButtonShow.current = false
-
     onSubmitSearch(inputValue)
     // dissmiss keyboard
     Keyboard.dismiss()
     textInputRef.current?.blur()
   }
   const onChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    logInfo('onChange')
     setInputValue(e.nativeEvent.text)
-  }
-  const onLayout = (e: LayoutChangeEvent) => {
-    logInfo('onLayout', e)
   }
   const onFocus = useCallback(() => {
     shouldClearButtonShow.current = true
@@ -124,7 +115,7 @@ const SearchBarComponent = ({
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          placeholder="Please enter your search"
+          placeholder="请输入客户称呼"
           placeholderTextColor={theme.colors.grey}
           ref={(ref: any) => (textInputRef = ref)}
           {...inputProps}
@@ -143,9 +134,6 @@ const SearchBarComponent = ({
           </Pressable>
         )}
       </View>
-      <Pressable onLayout={onLayout} onPress={onSubmit} style={[styles.searchButton(theme), buttonStyle]}>
-        <Text style={[styles.searchButtonText(theme), buttonTextStyle]}>{buttonText}</Text>
-      </Pressable>
     </View>
   )
 }

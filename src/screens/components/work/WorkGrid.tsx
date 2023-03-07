@@ -1,11 +1,11 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/01.
  */
-import {translate} from '@src/i18n'
 import {NavigationService, ROUTES} from '@src/navigation'
 import React, {useMemo} from 'react'
 import {StyleProp, View, ViewStyle} from 'react-native'
-import {TextGrid} from '../common'
+import {Text} from "@src/components";
+import {SylCommon, useTheme} from "@src/theme";
 
 /**
  * ProfileGrid props
@@ -22,41 +22,133 @@ export interface WorkGridProps {
 }
 
 const WorkGrid: React.FC<WorkGridProps> = ({
-  containerStyle,
-  topics,
-  favorites,
-  following,
-  history
-}: WorkGridProps) => {
+                                             containerStyle,
+                                             topics,
+                                             favorites,
+                                             following,
+                                             history
+                                           }: WorkGridProps) => {
   const list = useMemo(
     () => [
       {
-        text: translate('router.MyTopics'),
+        text: '报备记录',
         count: topics,
-        press: () => NavigationService.navigate(ROUTES.MyTopics)
+        press: () => NavigationService.navigate(ROUTES.VisitInfoList)
       },
       {
-        text: translate('router.FavoriteTopics'),
+        text: '公告通知',
         count: favorites,
-        press: () => NavigationService.navigate(ROUTES.FavoriteTopics)
-      },
-      {
-        text: translate('router.Following'),
-        count: following,
-        press: () => NavigationService.navigate(ROUTES.Following)
-      },
-      {
-        text: translate('router.History'),
-        count: history,
-        press: () => NavigationService.navigate(ROUTES.History)
+        press: () => NavigationService.navigate(ROUTES.Notifications)
       }
     ],
     [topics, favorites, following, history]
   )
+
+  const {theme} = useTheme();
+
   const renderContent = () => {
+    // return (
+    //   <View style={containerStyle}>
+    //     <TextGrid list={list} columnNum={9}/>
+    //   </View>
+    // )
+
     return (
-      <View style={containerStyle}>
-        <TextGrid list={list} columnNum={9} />
+      <View style={[SylCommon.Card.container(theme), {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap'
+      }]}>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Text>你好</Text>
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* 子元素 2 */}
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* 子元素 3 */}
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Text>你好</Text>
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* 子元素 2 */}
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* 子元素 3 */}
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Text>你好</Text>
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* 子元素 2 */}
+        </View>
+        <View style={{
+          width: '33%',
+          height: 80,
+          borderColor: 'gray',
+          borderWidth: 0.5,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* 子元素 3 */}
+        </View>
       </View>
     )
   }

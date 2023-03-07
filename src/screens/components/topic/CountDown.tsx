@@ -1,7 +1,7 @@
 import {StyleProp, TextStyle, View, ViewStyle} from "react-native";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {TextWithIconPress} from "@src/screens/components";
-import {ITheme, useTheme} from "@src/theme";
+import {ITheme, SylCommon, useTheme} from "@src/theme";
 import {Button, useToast} from "@src/components";
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
@@ -80,13 +80,13 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
     });
   }
   return (
-    (<View style={styles.refreshContainer(theme)}>
+    (<View style={[styles.refreshContainer(theme), SylCommon.Card.container(theme)]}>
       <View
         style={[styles.refreshLeft(theme), styles.refreshBox()]}>
         <TextWithIconPress
           containerStyle={{
             height: 30,
-            paddingLeft: 10,
+            justifyContent: "center",
             borderColor: '#9a9a9a',
             borderWidth: 1,
             borderRadius: 5
@@ -144,8 +144,8 @@ const styles = {
   refreshBox: (): ViewStyle => ({
     flex: 1,
     justifyContent: 'space-between',
-    height: 48,
-    padding: 10
+    height: 38,
+    padding: 1
   }),
   refreshLeft: (theme: ITheme): ViewStyle => ({}),
   refreshRight: (theme: ITheme): ViewStyle => ({}),

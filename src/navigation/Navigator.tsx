@@ -331,6 +331,24 @@ export const AppNavigationContainer = () => {
                 }}
               />
               <StackNavigator.Screen
+                name={ROUTES.VisitInfoList}
+                component={Screens.VisitInfoListScreen}
+                options={{
+                  title: translate(`router.${ROUTES.VisitInfoList}`),
+                  ...defaultScreenOptions(theme),
+                  headerShown: true
+                }}
+              />
+              <StackNavigator.Screen
+                name={ROUTES.VisitInfo}
+                component={Screens.VisitInfoScreen}
+                options={{
+                  title: translate(`router.${ROUTES.VisitInfo}`),
+                  ...defaultScreenOptions(theme),
+                  headerShown: true
+                }}
+              />
+              <StackNavigator.Screen
                 name={ROUTES.Notifications}
                 component={Screens.NotificationsScreen}
                 options={{
