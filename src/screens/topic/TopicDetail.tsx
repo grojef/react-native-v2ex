@@ -94,13 +94,13 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
             />
             <TableRow
               title={translate(`common.phone`)}
-              leftIcon={theme.assets.images.icons.table.email}
+              leftIcon={theme.assets.images.icons.topic.talk}
               withArrow={false}
               rightText={`${topic.phoneNumber}`}
             />
             <TableChildren
               title={translate(`common.sex`)}
-              leftIcon={theme.assets.images.icons.table.email}
+              leftIcon={theme.assets.images.icons.table.opensource}
               withArrow={true}
               rightText={findDict(dictSex, topic.sex)}
             >
@@ -120,7 +120,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
             </TableChildren>
             <TableChildren
               title={translate(`common.intentFlag`)}
-              leftIcon={theme.assets.images.icons.table.email}
+              leftIcon={theme.assets.images.icons.table.score}
               withArrow={true}
               rightText={findDict(dictIntent, topic.intentFlag)}
             >
@@ -141,7 +141,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
 
             <TableChildren
               title={translate(`common.feature`)}
-              leftIcon={theme.assets.images.icons.table.urlschme}
+              leftIcon={theme.assets.images.icons.table.theme}
               withArrow={true}
               rightText={findDict(dictFeatures, topic.feature)}
             >
@@ -162,7 +162,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
 
             <TableChildren
               title={translate(`common.nickName`)}
-              leftIcon={theme.assets.images.icons.table.email}
+              leftIcon={theme.assets.images.icons.table.group}
               withArrow={true}
             >
               <Input

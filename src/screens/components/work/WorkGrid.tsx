@@ -77,26 +77,6 @@ const WorkGrid: React.FC<WorkGridProps> = ({
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          {/* 子元素 2 */}
-        </View>
-        <View style={{
-          width: '33%',
-          height: 80,
-          borderColor: 'gray',
-          borderWidth: 0.5,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {/* 子元素 3 */}
-        </View>
-        <View style={{
-          width: '33%',
-          height: 80,
-          borderColor: 'gray',
-          borderWidth: 0.5,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
           <Text>你好</Text>
         </View>
         <View style={{
@@ -107,47 +87,7 @@ const WorkGrid: React.FC<WorkGridProps> = ({
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          {/* 子元素 2 */}
-        </View>
-        <View style={{
-          width: '33%',
-          height: 80,
-          borderColor: 'gray',
-          borderWidth: 0.5,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {/* 子元素 3 */}
-        </View>
-        <View style={{
-          width: '33%',
-          height: 80,
-          borderColor: 'gray',
-          borderWidth: 0.5,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
           <Text>你好</Text>
-        </View>
-        <View style={{
-          width: '33%',
-          height: 80,
-          borderColor: 'gray',
-          borderWidth: 0.5,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {/* 子元素 2 */}
-        </View>
-        <View style={{
-          width: '33%',
-          height: 80,
-          borderColor: 'gray',
-          borderWidth: 0.5,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {/* 子元素 3 */}
         </View>
       </View>
     )

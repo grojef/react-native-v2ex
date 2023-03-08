@@ -1,8 +1,8 @@
-import { NavigationService, ROUTES } from '@src/navigation'
-import { ITheme, useTheme } from '@src/theme'
-import React, { useCallback, useRef } from 'react'
-import { Animated, Image, Pressable, ViewStyle } from 'react-native'
-import FastImage, { Source } from 'react-native-fast-image'
+import {NavigationService, ROUTES} from '@src/navigation'
+import {ITheme, useTheme} from '@src/theme'
+import React, {useCallback, useRef} from 'react'
+import {Animated, Image, Pressable, ViewStyle} from 'react-native'
+import FastImage, {Source} from 'react-native-fast-image'
 
 interface IProps {
   style?: ViewStyle
@@ -51,7 +51,7 @@ const AvatarComponent = ({ username, size = 24, source, onPress, style }: IProps
           />
         </Animated.View>
       ) : (
-        <Image source={theme.assets.images.icons.profile.avatar} style={styles.avatar(theme, size)} />
+        <Image source={theme.assets.images.icons.topic.talk} style={styles.avatar(theme, size)} />
       )}
     </Pressable>
   )
@@ -63,10 +63,6 @@ const styles = {
   avatar: (theme: ITheme, size: number) => ({
     width: size,
     height: size,
-    borderWidth: 0.3,
-    backgroundColor: theme.colors.border,
-    borderColor: theme.colors.border,
-    borderRadius: size * 0.12
   })
 }
 

@@ -6,12 +6,13 @@ import * as React from 'react'
 import {useState} from 'react'
 import {StyleProp, TextStyle, TouchableOpacity, View, ViewStyle,} from 'react-native'
 import {AppObject, ITheme} from '@src/types'
-import {useTheme} from '@src/theme'
+import {SylCommon, useTheme} from '@src/theme'
 import {Avatar, Text} from '@src/components'
 import {BorderLine, TextWithIconPress} from '../common'
 import {ApiLib} from "@src/api";
 import Dialer from "@src/components/dialer"
 import {NavigationService, ROUTES} from "@src/navigation";
+import dayjs from "dayjs";
 
 
 export interface TopicCardItemProps {
@@ -73,7 +74,8 @@ const TopicCardTip = ({
   }
 
   return (
-    <View style={[styles.container(theme), containerStyle, styles.expired(displayStyle, tip)]}>
+    <View
+      style={[styles.container(theme), SylCommon.Card.container(theme), containerStyle, styles.callBackground(displayStyle, tip)]}>
       <View style={styles.infoContainer(theme)}>
         <Avatar
           size={30}
@@ -88,7 +90,7 @@ const TopicCardTip = ({
               displayStyle == 'full' ? fetchPhoneData(tip) : detail(tip)
             }}>
             <Text type="body"
-                  style={[styles.title(theme), displayStyle == 'full' && tip.callFlag == '1' && styles.called()]}>
+                  style={[styles.title(theme, tip), styles.callDay(theme,tip), displayStyle == 'full' && tip.callFlag == '1' && styles.called()]}>
               {tip.phoneNumber}
             </Text>
             {renderCall(tip)}
@@ -101,8 +103,7 @@ const TopicCardTip = ({
               onPress={() => {
                 detail(tip)
               }}
-              icon={theme.assets.images.icons.topic.paper}
-              textStyle={[{color: theme.colors.secondary}]}
+              textStyle={[styles.callDayTag(theme,tip)]}
             />
           ) : undefined}
         </View>
@@ -142,9 +143,10 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'flex-start'
   }),
-  title: (theme: ITheme): TextStyle => ({
+  title: (theme: ITheme, tip: AppObject.Topic): TextStyle => ({
     ...theme.typography.bodyText,
-    paddingLeft: 10
+    paddingLeft: 10,
+
   }),
   calledItem: (): ViewStyle => ({
     backgroundColor: 'rgba(255,0,0,0.78)',
@@ -158,14 +160,48 @@ const styles = {
   called: (): TextStyle => ({
     color: 'rgba(255,0,0,0.78)'
   }),
-  expired: (displayStyle: "simple" | "full" | "auto" | undefined, tip: AppObject.Topic): ViewStyle => {
-    if (displayStyle == 'simple') {
-      tip.callTime
+
+  callDay: ((theme: ITheme, tip: AppObject.Topic): TextStyle => {
+    if (dayjs().diff(dayjs((tip.callTime)), 'day') >= 7) {
       return {
-        backgroundColor: '#FFF'
+        color: '#fff'
       }
     }
-    return {}
+    return {
+      color:'#111010',
+    }
+  }),
+
+  callDayTag: ((theme: ITheme, tip: AppObject.Topic): TextStyle => {
+    if (dayjs().diff(dayjs((tip.callTime)), 'day') >= 7) {
+      return {
+        color: '#fff'
+      }
+    }
+    return {
+      color:theme.colors.secondary,
+    }
+  }),
+
+  callBackground: (displayStyle: "simple" | "full" | "auto" | undefined, tip: AppObject.Topic): TextStyle => {
+    if (displayStyle == 'simple') {
+      console.log(tip.callTime)
+      if (dayjs().diff(dayjs((tip.callTime)), 'day') > 14) {
+        return {
+          backgroundColor: '#586e58',
+          color: '#fff'
+        }
+      } else if (dayjs().diff(dayjs((tip.callTime)), 'day') > 7) {
+        return {
+          backgroundColor: '#9d845c',
+          color: '#fff'
+        }
+      }
+    }
+    return {
+      backgroundColor: '#fff',
+      color: '#111010'
+    }
   }
 
 }
