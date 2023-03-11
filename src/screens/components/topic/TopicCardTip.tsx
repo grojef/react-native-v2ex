@@ -7,7 +7,7 @@ import {useState} from 'react'
 import {StyleProp, TextStyle, TouchableOpacity, View, ViewStyle,} from 'react-native'
 import {AppObject, ITheme} from '@src/types'
 import {SylCommon, useTheme} from '@src/theme'
-import {Avatar, Text} from '@src/components'
+import {Avatar, Text, useToast} from '@src/components'
 import {BorderLine, TextWithIconPress} from '../common'
 import {ApiLib} from "@src/api";
 import Dialer from "@src/components/dialer"
@@ -49,7 +49,7 @@ const TopicCardTip = ({
                         onPress
                       }: TopicCardItemProps) => {
   const {theme} = useTheme()
-
+  const {showMessage} = useToast()
   const renderCall = (tip: any) => {
     return (tip.callFlag == '1' && displayStyle == 'full' &&
       <View style={[styles.calledItem()]}><Text style={[styles.calledTag()]}>已拨打</Text></View>)
@@ -66,6 +66,8 @@ const TopicCardTip = ({
           }, 3000)
         })
       })
+    }).catch(res=>{
+      showMessage({text1:"温馨提示",text2: res.msg, type: 'error'})
     })
   }
 

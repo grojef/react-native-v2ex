@@ -119,9 +119,6 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
   const renderRefreshControl = () => <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
 
   const renderContent = () => {
-    if (!list) {
-      return <Spinner style={{marginTop: 50}}/>
-    }
     return (
       <FlatList
         refreshControl={renderRefreshControl()}

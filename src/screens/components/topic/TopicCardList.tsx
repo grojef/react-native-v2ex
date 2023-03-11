@@ -81,29 +81,24 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
       return <Spinner style={{marginTop: 50}}/>
     }
 
-    if (topics.length > 0) {
-      return useFlatList ? (
-        <FlatList
-          refreshControl={refreshControl}
-          style={styles.container(theme)}
-          data={topics}
-          renderItem={renderItemRow}
-          keyExtractor={(item, index) => index.toString()}
-          onEndReached={onEndReached}
-          onEndReachedThreshold={0.1}
-          ListFooterComponent={renderFooter}
-          numColumns={1}
-          horizontal={false}
-          key={'ONE COLUMN'}
-          maxToRenderPerBatch={10}
-          initialNumToRender={10}
-          ItemSeparatorComponent={renderItemSeparator}
-        />
-      ) : (
-        <View
-          style={[styles.container(theme), containerStyle]}>{topics.map((v) => renderItemRow({item: v}))}</View>
-      )
-    }
+    return (
+      <FlatList
+        refreshControl={refreshControl}
+        style={styles.container(theme)}
+        data={topics}
+        renderItem={renderItemRow}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={renderFooter}
+        numColumns={1}
+        horizontal={false}
+        key={'ONE COLUMN'}
+        maxToRenderPerBatch={10}
+        initialNumToRender={10}
+        ItemSeparatorComponent={renderItemSeparator}
+      />
+    )
   }
 
   return <View style={[styles.container(theme), containerStyle]}>

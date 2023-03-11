@@ -50,7 +50,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
     ApiLib.topic.topic(route.params.topicId).then(res => {
       return setTopic(res)
     }).catch((err) => {
-      console.error(err)
+      showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
     })
 
     ApiLib.dict.dict('sys_user_sex').then(res => {
