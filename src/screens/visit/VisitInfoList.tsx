@@ -6,7 +6,7 @@ import NavigationService from "@src/navigation/NavigationService";
 import {ROUTES, TopicDetailScreenProps as ScreenProps} from "@src/navigation";
 import {translate} from "@src/i18n";
 
-const VisitInfoList = ({route, navigation}: ScreenProps) => {
+const VisitInfoList = ({navigation}: ScreenProps) => {
   const {theme} = useTheme()
 
   useLayoutEffect(() => {
@@ -14,7 +14,7 @@ const VisitInfoList = ({route, navigation}: ScreenProps) => {
       headerRight: () =>
         (
           <EditTopicHeaderButton text={translate(`common.add`)} onPress={() => {
-            NavigationService.navigate(ROUTES.VisitInfo, {visitId: undefined})
+            NavigationService.navigate(ROUTES.VisitInfo, {})
           }}/>
         )
     })

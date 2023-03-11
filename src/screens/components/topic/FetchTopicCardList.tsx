@@ -88,7 +88,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
           setList(rlt)
         })
         .catch((err) => {
-          showMessage(err.message)
+          showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
         })
     },
     [nodeName, showMessage, page, v2API, logined, JSON.stringify(searchData)]

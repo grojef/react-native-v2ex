@@ -67,7 +67,7 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
           setList(rlt)
         })
         .catch((err) => {
-          showMessage(err.message)
+          showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
         })
     },
     [showMessage, page, logined, searcher]
@@ -107,7 +107,7 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
     }
   }
 
-  const renderItemRow = (item: any, index: number) => {
+  const renderItemRow = (item: any) => {
     if (!item) return null
     return (
       <View style={[styles.itemContainer(theme)]}>
@@ -173,7 +173,7 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
         refreshControl={renderRefreshControl()}
         data={list}
         renderItem={({item, index}) => {
-          return renderItemRow(item, index)
+          return renderItemRow(item)
         }}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={onReached}

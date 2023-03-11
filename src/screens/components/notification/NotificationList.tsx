@@ -1,12 +1,11 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/05/21.
  */
-import {Avatar, Placeholder, Spinner, useToast} from '@src/components'
-import {useMember} from '@src/hooks/useMember'
+import {Placeholder, Spinner, Text, useToast} from '@src/components'
 import {useSession} from '@src/hooks/useSession'
 import {translate} from '@src/i18n'
 import {SylCommon, useTheme} from '@src/theme'
-import {ITheme, AppObject} from '@src/types'
+import {AppObject, ITheme} from '@src/types'
 import {ApiLib} from '@src/api'
 import dayjs from 'dayjs'
 import React, {useCallback, useState} from 'react'
@@ -21,7 +20,6 @@ import {
 } from 'react-native'
 import {NeedLogin} from '../'
 import {BorderLine, TextWithIconPress} from '../common'
-import {Text} from "@src/components"
 import NavigationService from "@src/navigation/NavigationService";
 import {ROUTES} from "@src/navigation";
 
@@ -65,7 +63,7 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
           setList(rlt)
         })
         .catch((err) => {
-          showMessage(err.message)
+          showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
         })
     },
     [showMessage, page, logined]

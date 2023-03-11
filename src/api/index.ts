@@ -161,6 +161,7 @@ class V2ex {
                     })
                 })
                 .then((responseData) => {
+                    console.log(responseData)
                     if (responseData) {
                         if (responseData.code == 401) {
                             AsyncStorage.setItem(MEMBER_TOKEN_KEY, '')
@@ -169,6 +170,10 @@ class V2ex {
                             return
                         }
                         if (responseData.code == 500) {
+                            const res = responseData as AppAPI.Response<T>
+                            reject(res)
+                        }
+                        if (responseData.code == 403) {
                             const res = responseData as AppAPI.Response<T>
                             reject(res)
                         }

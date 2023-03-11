@@ -73,7 +73,7 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
       }
       refreshData()
     }).catch((res) => {
-      showMessage({text1: res.msg, type: 'error'})
+      showMessage({text1:"温馨提示",text2: res.msg, type: 'error'})
       if (res.data && res.data.delayTime) {
         setCounter(res.data.delayTime)
       }
