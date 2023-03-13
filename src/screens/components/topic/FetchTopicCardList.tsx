@@ -41,7 +41,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
   const {showMessage} = useToast()
   const [page, setPage] = useState(1)
   const [refreshing, setRefreshing] = useState<boolean>(false)
-  const [list, setList] = useState<AppObject.Topic[] | undefined>(undefined)
+  const [list, setList] = useState<AppObject.Topic[]>([])
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [loadMore, setLoadMore] = useState<boolean>(false)
   const specialNode = useMemo(() => [NODE_TABS.LATEST, NODE_TABS.HOT].includes(nodeName), [nodeName])
@@ -58,10 +58,10 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
 
   useEffect(() => {
     fetchTopics(page, searchData.qTag, searchData.qFeat)
-  }, [page, nodeName,JSON.stringify(searchData)])
+  }, [page, nodeName, JSON.stringify(searchData)])
 
   const fetchTopics = useCallback(
-    (pageNum: number, qTag: string, qFeat:string) => {
+    (pageNum: number, qTag: string, qFeat: string) => {
 
       if (pageNum > 1 && (!v2API || specialNode)) {
         setHasMore(false)
@@ -69,7 +69,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
       }
 
       if (pageNum === 1) {
-        setList(undefined)
+        setList([])
       }
       setRefreshing(pageNum === 1)
       setLoadMore(pageNum > 1)
@@ -81,21 +81,19 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
           if (rlt.length === 0 || specialNode || !v2API) {
             setHasMore(false)
           }
-
           setRefreshing(false)
           setLoadMore(false)
-
           setList(rlt)
         })
         .catch((err) => {
-          showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
+          showMessage({text1: "温馨提示", text2: err.msg, type: 'error'})
         })
     },
     [nodeName, showMessage, page, v2API, logined, JSON.stringify(searchData)]
   )
 
   const onRefresh = () => {
-    setList(undefined)
+    setList([])
     setPage(1)
     fetchTopics(1, searchData.qTag, searchData.qFeat)
   }
@@ -107,12 +105,16 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
     }
   }
 
+  const memoCountDown = useMemo(() => {
+    return (<CountDown refreshData={() => fetchTopics(page, searchData.qTag, searchData.qFeat)}/>)
+  }, [])
+
   return (
     <NeedLogin
       onMount={() => {
       }}
       placeholderBackground={theme.colors.surface}>
-      {nodeName == NODE_TABS.LATEST && <CountDown/>}
+      {nodeName == NODE_TABS.LATEST && memoCountDown}
       {nodeName == NODE_TABS.HOT &&
       <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange}/>}
       <BorderLine/>

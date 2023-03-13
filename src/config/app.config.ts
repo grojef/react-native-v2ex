@@ -4,13 +4,13 @@
 export const AppApiOptions = {
   url: 'http://43.136.117.70:8080',
   store: 'api',
-  userAgent: 'V2ex App API Library',
+  userAgent: 'SanHe',
   authentication: {
     token: 'hello world'
   }
 }
 
-export const brandName = 'SH'
+export const brandName = 'SanHe'
 
 export const aboutUs = {
   author: 'leon',

@@ -161,7 +161,6 @@ class V2ex {
                     })
                 })
                 .then((responseData) => {
-                    console.log(responseData)
                     if (responseData) {
                         if (responseData.code == 401) {
                             AsyncStorage.setItem(MEMBER_TOKEN_KEY, '')

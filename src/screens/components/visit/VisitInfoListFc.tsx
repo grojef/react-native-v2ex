@@ -38,7 +38,7 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
   const {showMessage} = useToast()
   const [page, setPage] = useState(1)
   const [refreshing, setRefreshing] = useState<boolean>(false)
-  const [list, setList] = useState<AppObject.VisitInfo[] | undefined>(undefined)
+  const [list, setList] = useState<AppObject.VisitInfo[]>([])
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [loadMore, setLoadMore] = useState<boolean>(false)
 
@@ -51,7 +51,7 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
       }
 
       if (pageNum === 1) {
-        setList(undefined)
+        setList([])
       }
       setRefreshing(pageNum === 1)
       setLoadMore(pageNum > 1)
@@ -63,11 +63,10 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
           }
           setRefreshing(false)
           setLoadMore(false)
-
           setList(rlt)
         })
         .catch((err) => {
-          showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
+          showMessage({text1: "温馨提示", text2: err.msg, type: 'error'})
         })
     },
     [showMessage, page, logined, searcher]
@@ -135,10 +134,15 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
           </TouchableOpacity>
           <View style={[styles.itemRightItem(theme), styles.itemAction(theme)]}>
             <TextWithIconPress
+              onPress={() => {
+                NavigationService.navigate(ROUTES.VisitInfo, {visitId: item?.id})
+              }}
               icon={theme.assets.images.icons.notification.time}
               text={item.visitTime}
             />
-            <TextWithIconPress icon={theme.assets.images.icons.notification.action}/>
+            <TextWithIconPress onPress={() => {
+              NavigationService.navigate(ROUTES.VisitInfo, {visitId: item?.id})
+            }} icon={theme.assets.images.icons.notification.action}/>
           </View>
         </View>
       </View>
@@ -177,6 +181,7 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({
         }}
         keyExtractor={(item, index) => index.toString()}
         onEndReached={onReached}
+        showsVerticalScrollIndicator={false}
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         numColumns={1}

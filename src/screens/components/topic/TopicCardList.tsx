@@ -4,7 +4,7 @@ import {SylCommon, useTheme} from '@src/theme'
 import {AppObject, IState, ITheme} from '@src/types'
 import React from 'react'
 import {FlatList, StyleProp, View, ViewStyle} from 'react-native'
-import Animated, {LightSpeedInLeft} from 'react-native-reanimated'
+import Animated, {FadeInDown} from 'react-native-reanimated'
 import TopicCardTip from './TopicCardTip'
 import {connect} from "react-redux";
 
@@ -50,7 +50,7 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
 
   const renderItemRow = ({item}: { item: AppObject.Topic }) =>
     !item || false ? null : (
-      <Animated.View key={item.id} entering={LightSpeedInLeft}>
+      <Animated.View key={item.id} entering={FadeInDown}>
         <TopicCardTip
           displayStyle={displayStyle}
           containerStyle={[styles.topicItemContainer(theme), itemContainerStyle]}
@@ -92,7 +92,7 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         numColumns={1}
-        horizontal={false}
+        showsVerticalScrollIndicator={false}
         key={'ONE COLUMN'}
         maxToRenderPerBatch={10}
         initialNumToRender={10}

@@ -66,8 +66,8 @@ const TopicCardTip = ({
           }, 3000)
         })
       })
-    }).catch(res=>{
-      showMessage({text1:"温馨提示",text2: res.msg, type: 'error'})
+    }).catch(res => {
+      showMessage({text1: "温馨提示", text2: res.msg, type: 'error'})
     })
   }
 
@@ -92,9 +92,13 @@ const TopicCardTip = ({
               displayStyle == 'full' ? fetchPhoneData(tip) : detail(tip)
             }}>
             <Text type="body"
-                  style={[styles.title(theme, tip), styles.callDay(theme,tip), displayStyle == 'full' && tip.callFlag == '1' && styles.called()]}>
+                  style={[styles.title(theme, tip), styles.callDay(theme, tip), displayStyle == 'full' && tip.callFlag == '1' && styles.called()]}>
               {tip.phoneNumber}
             </Text>
+            {displayStyle == 'simple' && <Text type="caption"
+                                               style={[styles.nickName(theme, tip), styles.callDay(theme, tip)]}>
+              {tip.nickName}
+            </Text>}
             {renderCall(tip)}
           </TouchableOpacity>
         </View>
@@ -105,7 +109,7 @@ const TopicCardTip = ({
               onPress={() => {
                 detail(tip)
               }}
-              textStyle={[styles.callDayTag(theme,tip)]}
+              textStyle={[styles.callDayTag(displayStyle, theme, tip)]}
             />
           ) : undefined}
         </View>
@@ -148,7 +152,10 @@ const styles = {
   title: (theme: ITheme, tip: AppObject.Topic): TextStyle => ({
     ...theme.typography.bodyText,
     paddingLeft: 10,
-
+  }),
+  nickName: (theme: ITheme, tip: AppObject.Topic): TextStyle => ({
+    ...theme.typography.bodyText,
+    paddingLeft: 30,
   }),
   calledItem: (): ViewStyle => ({
     backgroundColor: 'rgba(255,0,0,0.78)',
@@ -170,24 +177,25 @@ const styles = {
       }
     }
     return {
-      color:'#111010',
+      color: '#111010',
     }
   }),
 
-  callDayTag: ((theme: ITheme, tip: AppObject.Topic): TextStyle => {
-    if (dayjs().diff(dayjs((tip.callTime)), 'day') >= 7) {
+  callDayTag: ((displayStyle: "simple" | "full" | "auto" | undefined, theme: ITheme, tip: AppObject.Topic): TextStyle => {
+
+
+    if (displayStyle == 'simple' && dayjs().diff(dayjs((tip.callTime)), 'day') >= 7) {
       return {
         color: '#fff'
       }
     }
     return {
-      color:theme.colors.secondary,
+      color: theme.colors.secondary,
     }
   }),
 
   callBackground: (displayStyle: "simple" | "full" | "auto" | undefined, tip: AppObject.Topic): TextStyle => {
     if (displayStyle == 'simple') {
-      console.log(tip.callTime)
       if (dayjs().diff(dayjs((tip.callTime)), 'day') > 14) {
         return {
           backgroundColor: '#586e58',

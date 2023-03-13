@@ -17,7 +17,7 @@ export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
     },
 
     intent: (page: number, batCode: string, feature: string) =>
-        v2ex.get<AppObject.Topic[]>(`/cms/claimInfo/intent?batCode=${batCode}&feature=${feature}&pageNum=${page}&pageSize=100`, undefined, {}, undefined,),
+        v2ex.get<AppObject.Topic[]>(`/cms/claimInfo/intent?batCode=${batCode}&feature=${feature}&pageNum=${page}&pageSize=200`, undefined, {}, undefined,),
 
     grab: (label) => {
         return v2ex.send<AppObject.Grab>(`/cms/claimInfo/grab`, 'post', undefined, undefined, {'batCode': label})
