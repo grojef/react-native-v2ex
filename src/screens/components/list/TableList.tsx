@@ -63,6 +63,8 @@ export interface TableRowProps {
    */
   rightText?: string
 
+  extra?:string
+
   /**
    * press callback
    */
@@ -96,6 +98,7 @@ const TableRow: React.FC<TableRowProps> = (data: TableRowProps) => {
       </View>
       <View style={rowStyles.right(theme)}>
         {data.rightText && <Text style={rowStyles.rightText(theme)}>{data.rightText}</Text>}
+        {data.extra && <Text style={rowStyles.rightText(theme)}>{data.extra}</Text>}
         {data.withArrow && (
           <Image source={theme.assets.images.icons.table.rightArrow}
                  style={rowStyles.rightIcon(theme)}/>

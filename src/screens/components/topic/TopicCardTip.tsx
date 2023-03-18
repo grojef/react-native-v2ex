@@ -61,9 +61,7 @@ const TopicCardTip = ({
     ApiLib.topic.topic(tip.id).then((res) => {
       new Dialer().callPhone(res.phoneNumber, () => {
         ApiLib.topic.call(res.id).then(() => {
-          setTimeout(() => {
-            setTip({...tip, callFlag: '1'})
-          }, 3000)
+          setTip({...tip, callFlag: '1'})
         })
       })
     }).catch(res => {

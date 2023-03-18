@@ -7,12 +7,12 @@ import {TopicDetailScreenProps as ScreenProps} from '@src/navigation'
 import {ITheme, SylCommon, useTheme} from '@src/theme'
 import React, {useEffect, useLayoutEffect, useState} from 'react'
 import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableChildren, TableList, TableRow, TopicInfo} from '../components'
+import {SetStatusBar, TableList, TableRow, TopicInfo} from '../components'
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
 import {EditTopicHeaderButton} from "@src/screens/components/button";
-import {Picker} from "@react-native-picker/picker";
 import {defaultDictMeta} from "@src/helper/defaultDictMeta";
+import Picker from '@ant-design/react-native/lib/picker'
 
 const TopicDetail = ({route, navigation}: ScreenProps) => {
   const {theme} = useTheme()
@@ -50,7 +50,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
     ApiLib.topic.topic(route.params.topicId).then(res => {
       return setTopic(res)
     }).catch((err) => {
-      showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
+      showMessage({text1: "温馨提示", text2: err.msg, type: 'error'})
     })
 
     ApiLib.dict.dict('sys_user_sex').then(res => {
@@ -98,86 +98,25 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               withArrow={false}
               rightText={`${topic.phoneNumber}`}
             />
-            <TableChildren
-              title={translate(`common.sex`)}
-              leftIcon={theme.assets.images.icons.table.opensource}
-              withArrow={true}
-              rightText={findDict(dictSex, topic.sex)}
-            >
-              <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
-                selectedValue={xSex}
-                onValueChange={(itemValue: string, itemIndex) => {
-                  setXSex(itemValue)
-                  setTopic({...topic, sex: itemValue})
-                }
-                }>
-                {dictSex?.map(sex => {
-                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
-                                      value={sex.dictValue}/>
-                })}
-              </Picker>
-            </TableChildren>
-            <TableChildren
-              title={translate(`common.intentFlag`)}
-              leftIcon={theme.assets.images.icons.table.score}
-              withArrow={true}
-              rightText={findDict(dictIntent, topic.intentFlag)}
-            >
-              <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
-                selectedValue={xInt}
-                onValueChange={(itemValue: string, itemIndex) => {
-                  setXInt(itemValue)
-                  setTopic({...topic, intentFlag: itemValue})
-                }
-                }>
-                {dictIntent?.map(intent => {
-                  return <Picker.Item key={intent.dictCode} label={intent.dictLabel}
-                                      value={intent.dictValue}/>
-                })}
-              </Picker>
-            </TableChildren>
-
-            <TableChildren
-              title={translate(`common.feature`)}
-              leftIcon={theme.assets.images.icons.table.theme}
-              withArrow={true}
-              rightText={findDict(dictFeatures, topic.feature)}
-            >
-              <Picker
-                style={{position: 'absolute', width: '100%', height: 0, transform: [{scaleX: 0}]}}
-                selectedValue={xFeat}
-                onValueChange={(itemValue: string, itemIndex) => {
-                  setXFeat(itemValue)
-                  setTopic({...topic, feature: itemValue})
-                }
-                }>
-                {dictFeatures?.map(fea => {
-                  return <Picker.Item key={fea.dictCode} label={fea.dictLabel}
-                                      value={fea.dictValue}/>
-                })}
-              </Picker>
-            </TableChildren>
-
-            <TableChildren
-              title={translate(`common.nickName`)}
-              leftIcon={theme.assets.images.icons.table.group}
-              withArrow={true}
-            >
-              <Input
-                autoCapitalize="none"
-                underlineColorAndroid="transparent"
-                keyboardType="default"
-                returnKeyType="next"
-                autoCorrect={false}
-                value={topic.nickName}
-                onChangeText={(text)=>setTopic({...topic,nickName:text})}
-                containerStyle={styles.input(theme)}
-                textContentType="none"
-                inputStyle={styles.inputSingle(theme)}
+            <Picker
+              title="选择性别"
+              data={[{'value': '1', 'label': '男'}, {'value': '2', 'label': '女'}]}
+              cols={1}
+              value={[...xSex]}
+              onChange={(v: any) => {
+                setXSex(v)
+                setTopic({...topic, sex: v})
+              }}
+              onOk={(v: any) => {
+                setXSex(v)
+                setTopic({...topic, sex: v})
+              }}>
+              <TableRow
+                title={translate(`common.phone`)}
+                leftIcon={theme.assets.images.icons.topic.talk}
+                withArrow={true}
               />
-            </TableChildren>
+            </Picker>
             <Input
               labelStyle={styles.label(theme)}
               multiline={true}
@@ -218,11 +157,16 @@ const styles = {
   }),
   input: (theme: ITheme): TextStyle => ({
     alignItems: 'baseline',
-    height: 40, width: 200,borderWidth:0,right:8,position:"absolute", backgroundColor: 'transparent'
+    height: 40,
+    width: 200,
+    borderWidth: 0,
+    right: 8,
+    position: "absolute",
+    backgroundColor: 'transparent'
   }),
   inputSingle: (theme: ITheme): TextStyle => ({
-      textAlign:'right',
-      writingDirection:'rtl',
+    textAlign: 'right',
+    writingDirection: 'rtl',
     ...theme.typography.captionText
   }),
   label: (theme: ITheme): TextStyle => ({
