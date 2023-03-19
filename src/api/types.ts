@@ -429,6 +429,8 @@ export declare namespace AppObject {
         listClass: string
         remark: string
         status: string
+        value: string
+        label: string
     }
 
     export interface Dict {

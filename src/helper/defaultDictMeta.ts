@@ -11,5 +11,7 @@ export let defaultDictMeta = {
     isDefault: "",
     listClass: "",
     remark: "",
-    status: ""
+    status: "",
+    value: "",
+    label: ""
 }
