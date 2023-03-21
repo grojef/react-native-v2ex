@@ -194,12 +194,13 @@ const styles = {
 
   callBackground: (displayStyle: "simple" | "full" | "auto" | undefined, tip: AppObject.Topic): TextStyle => {
     if (displayStyle == 'simple') {
-      if (dayjs().diff(dayjs((tip.callTime)), 'day') > 14) {
+      console.log(tip.callTime);
+      if (dayjs().diff(dayjs((tip.callTime)), 'day') >= 14) {
         return {
           backgroundColor: '#586e58',
           color: '#fff'
         }
-      } else if (dayjs().diff(dayjs((tip.callTime)), 'day') > 7) {
+      } else if (dayjs().diff(dayjs((tip.callTime)), 'day') >= 7) {
         return {
           backgroundColor: '#9d845c',
           color: '#fff'
