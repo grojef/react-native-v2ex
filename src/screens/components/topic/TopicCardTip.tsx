@@ -61,9 +61,7 @@ const TopicCardTip = ({
     ApiLib.topic.topic(tip.id).then((res) => {
       new Dialer().callPhone(res.phoneNumber, () => {
         ApiLib.topic.call(res.id).then(() => {
-          setTimeout(() => {
-            setTip({...tip, callFlag: '1'})
-          }, 3000)
+          setTip({...tip, callFlag: '1'})
         })
       })
     }).catch(res => {
@@ -196,12 +194,13 @@ const styles = {
 
   callBackground: (displayStyle: "simple" | "full" | "auto" | undefined, tip: AppObject.Topic): TextStyle => {
     if (displayStyle == 'simple') {
-      if (dayjs().diff(dayjs((tip.callTime)), 'day') > 14) {
+      console.log(tip.callTime);
+      if (dayjs().diff(dayjs((tip.callTime)), 'day') >= 14) {
         return {
           backgroundColor: '#586e58',
           color: '#fff'
         }
-      } else if (dayjs().diff(dayjs((tip.callTime)), 'day') > 7) {
+      } else if (dayjs().diff(dayjs((tip.callTime)), 'day') >= 7) {
         return {
           backgroundColor: '#9d845c',
           color: '#fff'

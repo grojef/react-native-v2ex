@@ -3,15 +3,12 @@
  */
 
 import * as React from 'react'
-import {View, TouchableOpacity, ViewStyle, TextStyle, StyleProp, Linking} from 'react-native'
-import {ITheme, AppObject} from '@src/types'
-import {SylCommon, useTheme} from '@src/theme'
+import {StyleProp, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
+import {AppObject, ITheme} from '@src/types'
+import {useTheme} from '@src/theme'
 import {Avatar, Text} from '@src/components'
 import dayjs from 'dayjs'
-import {NavigationService, ROUTES} from '@src/navigation'
 import {BorderLine, TextWithIconPress} from '../common'
-import {useMemo} from 'react'
-import {translate} from '@src/i18n'
 
 export interface TopicCardItemProps {
   /**
@@ -77,9 +74,10 @@ const TopicCardItem = ({
                 icon={theme.assets.images.icons.topic.comment}
               />
               <TextWithIconPress
-                text={dayjs(topic.createTime, 'yyyy-MM-dd HH:mm:ss').fromNow()}
+                text={topic.callTime ? dayjs(topic.callTime, 'yyyy-MM-dd HH:mm:ss').fromNow() : '未拨打'}
                 icon={theme.assets.images.icons.topic.time}
               />
+
             </View>
             {topic.batCode ? (
               <TextWithIconPress

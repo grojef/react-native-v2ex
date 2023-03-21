@@ -50,7 +50,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
     ApiLib.topic.topic(route.params.topicId).then(res => {
       return setTopic(res)
     }).catch((err) => {
-      showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
+      showMessage({text1: "温馨提示", text2: err.msg, type: 'error'})
     })
 
     ApiLib.dict.dict('sys_user_sex').then(res => {
@@ -102,8 +102,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               title={translate(`common.sex`)}
               leftIcon={theme.assets.images.icons.table.opensource}
               withArrow={true}
-              rightText={findDict(dictSex, topic.sex)}
-            >
+              rightText={findDict(dictSex, topic.sex)}>
               <Picker
                 style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
                 selectedValue={xSex}
@@ -172,7 +171,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
                 returnKeyType="next"
                 autoCorrect={false}
                 value={topic.nickName}
-                onChangeText={(text)=>setTopic({...topic,nickName:text})}
+                onChangeText={(text) => setTopic({...topic, nickName: text})}
                 containerStyle={styles.input(theme)}
                 textContentType="none"
                 inputStyle={styles.inputSingle(theme)}
@@ -218,11 +217,16 @@ const styles = {
   }),
   input: (theme: ITheme): TextStyle => ({
     alignItems: 'baseline',
-    height: 40, width: 200,borderWidth:0,right:8,position:"absolute", backgroundColor: 'transparent'
+    height: 40,
+    width: 200,
+    borderWidth: 0,
+    right: 8,
+    position: "absolute",
+    backgroundColor: 'transparent'
   }),
   inputSingle: (theme: ITheme): TextStyle => ({
-      textAlign:'right',
-      writingDirection:'rtl',
+    textAlign: 'right',
+    writingDirection: 'rtl',
     ...theme.typography.captionText
   }),
   label: (theme: ITheme): TextStyle => ({
