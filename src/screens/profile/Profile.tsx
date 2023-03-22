@@ -7,13 +7,12 @@ import {useMember} from '@src/hooks/useMember'
 import {translate} from '@src/i18n'
 import {ProfileScreenProps as ScreenProps, ROUTES} from '@src/navigation'
 import {SylCommon, useTheme} from '@src/theme'
-import {IState, AppObject} from '@src/types'
+import {AppObject, IState} from '@src/types'
 import React, {useEffect, useLayoutEffect, useMemo} from 'react'
 import {ScrollView} from 'react-native-gesture-handler'
 import {connect} from 'react-redux'
-import {ProfileDetail} from '../components'
+import {ProfileDetail, TableList, TableRow} from '../components'
 import {LogoutHeaderButton} from '../components/button'
-import {Footer, HeaderButton, ProfileCard, SetStatusBar, TableList, TableRow} from '../components'
 
 const Profile = ({
                    route,
@@ -50,23 +49,23 @@ const Profile = ({
         <TableRow
           title={translate(`router.${ROUTES.ThemeSetting}`)}
           leftIcon={theme.assets.images.icons.table.theme}
-          withArrow={true}
+          withArrow={false}
           onPress={() => {
-            navigation.navigate(ROUTES.ThemeSetting)
+           // navigation.navigate(ROUTES.ThemeSetting)
           }}
         />
         <TableRow
           title={translate(`router.${ROUTES.Language}`)}
           leftIcon={theme.assets.images.icons.table.language}
-          withArrow={true}
+          withArrow={false}
           onPress={() => {
-            navigation.navigate(ROUTES.Language)
+            //navigation.navigate(ROUTES.Language)
           }}
         />
         <TableRow
           title={translate(`router.${ROUTES.CacheSetting}`)}
           leftIcon={theme.assets.images.icons.table.cached}
-          withArrow={true}
+          withArrow={false}
           onPress={() => {
             navigation.navigate(ROUTES.CacheSetting)
           }}
