@@ -202,7 +202,7 @@ const styles = {
     width: 150 * 0.9,
     height: 128 * 0.9,
     alignSelf: 'center',
-    marginBottom: 100
+    marginBottom: 40
   }),
   actionContainer: (theme: ITheme): ViewStyle => ({
     flexDirection: 'column',
