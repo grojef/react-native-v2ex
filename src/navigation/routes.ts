@@ -69,7 +69,7 @@ export type HomeTabsScreenProps = NativeStackScreenProps<RootStackParamList, 'Ho
 
 export type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'> &
     CommonScreenProps & {
-    auth: (loginId: string, password: string) => void
+    auth: (loginId: string, password: string, uuid: string, code: string) => void
 }
 
 export type NotificationsScreenProps = NativeStackScreenProps<RootStackParamList, 'Notifications'> & CommonScreenProps

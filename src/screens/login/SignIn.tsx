@@ -16,17 +16,20 @@ import {useAppDispatch} from "@src/hooks";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {ApiLib} from "@src/api";
 import {MEMBER_TOKEN_KEY} from "@config/constants";
+import {Verification} from "@src/screens/components/verification";
 
 const Screen = ({
                   navigation,
                   loading = false,
                   error,
                   success,
-                  auth: _auth = (loginId: string, password: string) => {
+                  auth: _auth = (loginId: string, password: string, uuid: string, code: string) => {
                     utils.Alert.alert({message: 'token: ' + loginId})
                   }
                 }: ScreenProps) => {
   const [userId, setUserId] = useState('')
+  const [uuid, setUuid] = useState('')
+  const [code, setCode] = useState('')
   const [pwd, setPwd] = useState('')
   const {theme} = useTheme()
   const dispatch = useAppDispatch()
@@ -54,7 +57,6 @@ const Screen = ({
     })
   }
 
-
   useEffect(() => {
     if (success && ApiLib.token) {
       AsyncStorage.setItem('sessionUserId', userId)
@@ -73,11 +75,17 @@ const Screen = ({
     if (error) {
       showMessage({type: 'error', text2: error})
       dispatch({type: APP_AUTH_RESET, payLoad: {}})
+
     }
   }, [error]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onLoginPress = () => {
-    _auth(userId, pwd)
+    _auth(userId, pwd, uuid, code)
+  }
+
+  const dataChange = (uuid: string, code: string) => {
+    setUuid(uuid)
+    setCode(code)
   }
 
   const renderButtons = () => {
@@ -143,6 +151,7 @@ const Screen = ({
           containerStyle={styles.input(theme)}
           textContentType="none"
         />
+        <Verification key={error} dataChange={dataChange}/>
         {renderButtons()}
       </View>
       <View style={styles.footer(theme)}>

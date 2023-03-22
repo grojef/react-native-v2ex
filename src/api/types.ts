@@ -136,12 +136,18 @@ export declare namespace AppAPI {
         /**
          * check user token
          */
-        token: (loginId: string, password: string) => Promise<AppObject.MemberToken>
+        token: (loginId: string, password: string, uuid: string, code: string) => Promise<AppObject.MemberToken>
 
         /**
          * logout
          */
         logout: () => Promise<AppObject.MemberToken>
+
+        /**
+         * 验证码
+         */
+        captcha: () => Promise<AppObject.Captcha>
+
     }
 
     export interface NodeAPI {
@@ -280,6 +286,12 @@ export declare namespace AppObject {
      */
     export interface MemberToken {
         token: string
+    }
+
+    export interface Captcha {
+        captchaEnabled: boolean,
+        uuid: string,
+        img: string
     }
 
     /**

@@ -146,7 +146,6 @@ class V2ex {
 
         headers = _.merge(_headers, headers)
         return new Promise<T>((resolve, reject) => {
-            console.log(uri)
             fetch(uri, {method, headers, body: JSON.stringify(data)})
                 .then((response: Response) => {
 
