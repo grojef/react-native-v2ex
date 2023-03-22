@@ -14,18 +14,25 @@ export default (v2ex: AppAPI.APP): AppAPI.MemberAPI => ({
             undefined
         ),
 
-    token: (loginId: string, password) =>
+    token: (loginId: string, password, uuid: string, code: string) =>
         v2ex.send<AppObject.MemberToken>(
             `/login`,
             'post',
             undefined,
             undefined,
-            {'username': loginId, "password": password}
+            {'username': loginId, "password": password, "uuid": uuid, "code": code}
         ),
     logout: () =>
         v2ex.send<AppObject.MemberToken>(
             `/logout`,
             'post',
+            undefined,
+            undefined,
+        ),
+    captcha: () =>
+        v2ex.send<AppObject.Captcha>(
+            `/captchaImage`,
+            'get',
             undefined,
             undefined,
         )

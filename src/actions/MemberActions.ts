@@ -109,10 +109,10 @@ export const setCurrentToken = (token?: AppObject.MemberToken) => ({
   payload: token
 })
 
-export const loginByToken = (loginId: string,password: string) => async (dispatch: Dispatch) => {
+export const loginByToken = (loginId: string,password: string,uuid:string,code:string) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: APP_AUTH_LOADING })
-    const token_info = await ApiLib.member.token(loginId,password)
+    const token_info = await ApiLib.member.token(loginId,password,uuid,code)
     dispatch(loginByTokenSuccess(token_info) as any)
   } catch (e: any) {
     logError(e)
