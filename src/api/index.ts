@@ -137,7 +137,8 @@ class V2ex {
         }
         let _headers: { [name: string]: string } = {
             'User-Agent': this.configuration.userAgent || 'Starter App Api Library',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Content-language': 'zh_CN'
         }
 
         if (this.token) {
