@@ -1,11 +1,10 @@
-import {Platform, StyleProp, TextStyle, View, ViewStyle} from "react-native";
+import {StyleProp, TextStyle, View, ViewStyle} from "react-native";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {TextWithIconPress} from "@src/screens/components";
 import {ITheme, SylCommon, useTheme} from "@src/theme";
 import {Button, useToast} from "@src/components";
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
-import {Picker} from "@react-native-picker/picker";
 import {defaultDictMeta} from "@src/helper/defaultDictMeta";
 import {Picker as IosPicker} from "@ant-design/react-native";
 
@@ -55,6 +54,10 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
   const initTags = useCallback(() => {
     ApiLib.dict.dict('cms_ctm_tag').then(res => {
       res.unshift(defaultDictMeta)
+      res.forEach(s => {
+        s.label = s.dictLabel
+        s.value = s.dictValue
+      })
       setAllNode(res)
     })
   }, [])
@@ -97,7 +100,7 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
         />
       </View>
       <View style={[styles.refreshRight(theme), styles.refreshBox()]}>
-        {Platform.OS == 'ios' && <IosPicker
+        <IosPicker
           title="选择标签"
           data={allNode}
           cols={1}
@@ -113,24 +116,6 @@ const CountDown: React.FC<CountDownProps> = ({refreshData}: CountDownProps) => {
           <Button disabled={cd.current > 0} onPress={() => {
           }} type={"small"} style={{height: 30}}>刷新</Button>
         </IosPicker>
-        }
-
-        {Platform.OS == 'android' && <><Button disabled={cd.current > 0} onPress={() => {
-        }} type={"small"} style={{height: 30}}>刷新</Button>
-          <Picker
-            style={styles.picker()}
-            enabled={cd.current <= 0}
-            selectedValue={undefined}
-            onValueChange={(itemValue: string) => {
-              initializedRef.current && pressTag(itemValue)
-              initializedRef.current = true
-            }
-            }>
-            {allNode?.map(intent => {
-              return <Picker.Item key={intent.dictCode} label={intent.dictLabel}
-                                  value={intent.dictValue}/>
-            })}
-          </Picker></>}
       </View>
     </View>)
   );

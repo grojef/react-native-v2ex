@@ -6,21 +6,32 @@ import {translate} from '@src/i18n'
 import {VisitInfoScreenProps as ScreenProps} from '@src/navigation'
 import {ITheme, SylCommon, useTheme} from '@src/theme'
 import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {Platform, ScrollView, TextStyle, View, ViewStyle} from 'react-native'
+import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
 import {SetStatusBar, TableChildren, TableList, TableRow} from '../components'
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
 import {EditTopicHeaderButton} from "@src/screens/components/button";
-import {Picker} from "@react-native-picker/picker";
-import {defaultDictMeta} from "@src/helper/defaultDictMeta";
 import dayjs from "dayjs";
 import {Picker as IosPicker} from "@ant-design/react-native";
 
 const VisitInfo = ({route, navigation}: ScreenProps) => {
   const {theme} = useTheme()
   const {visitId} = route.params
-  // @ts-ignore
-  const [visitInfo, setVisitInfo] = useState<AppObject.VisitInfo>({});
+  const [visitInfo, setVisitInfo] = useState<AppObject.VisitInfo>({
+    address: "",
+    createBy: "",
+    createTime: undefined,
+    deptId: 0,
+    id: undefined,
+    remark: "",
+    userId: 0,
+    userName: "",
+    visitTime: undefined,
+    visitType1: "",
+    visitType2: 0,
+    visitType3: 0,
+    visitor: ""
+  });
   const {showMessage} = useToast()
 
   useLayoutEffect(() => {
@@ -36,6 +47,7 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
                 showMessage(error.msg)
               })
             } else {
+              console.log(visitInfo)
               ApiLib.visit.add(visitInfo).then((res) => {
                 showMessage("保存成功")
                 navigation.goBack()
@@ -53,14 +65,16 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
   const [dictRefund, setDictRefund] = useState<AppObject.DictMeta[]>([])
 
 
-  const [xAdr, setXAdr] = useState('');
+  const [xAdr, setXAdr] = useState<Array<string>>([]);
 
 
-  const [xFund, setXFund] = useState('');
+  const [xFund, setXFund] = useState<Array<string>>([]);
 
   useEffect(() => {
     if (visitId) {
       ApiLib.visit.info(route.params.visitId).then(res => {
+        setXAdr(['' + res.address])
+        setXFund(['' + res.visitType1])
         return setVisitInfo(res)
       }).catch((err) => {
       })
@@ -83,22 +97,12 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
     }
 
     ApiLib.dict.dict('oa_address').then(res => {
-      res.unshift(defaultDictMeta)
       setDictAddress(pathDict(res))
     })
     ApiLib.dict.dict('oa_visit_type1').then(res => {
-      res.unshift(defaultDictMeta)
       setDictRefund(pathDict(res))
     })
   }, [visitId, navigation]);
-
-  const findDict = (dict: AppObject.DictMeta[], dictValue: any) => {
-    if (dictValue) {
-      return dict ? dict.find(s => s.dictValue == dictValue)?.dictLabel : '';
-    } else {
-      return ''
-    }
-  }
 
   const pathDict = (res: AppObject.DictMeta[]) => {
     res.forEach(s => {
@@ -124,91 +128,44 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
               withArrow={false}
               rightText={`${visitInfo?.visitTime}`}
             />
-
-            {Platform.OS == 'ios' && <>
-              <TableChildren
+            <IosPicker
+              title="选择地址"
+              data={dictAddress}
+              cols={1}
+              value={xAdr}
+              onChange={(itemValue: any) => {
+                setXAdr(itemValue)
+                setVisitInfo({...visitInfo, address: itemValue})
+              }}
+              onOk={(itemValue: any) => {
+                setXAdr(itemValue)
+                setVisitInfo({...visitInfo, address: itemValue})
+              }}>
+              <TableRow
                 title={translate(`common.address`)}
                 leftIcon={theme.assets.images.icons.table.email}
                 withArrow={true}
-                rightText={findDict(dictAddress, visitInfo?.address)}
-              >
-                <Picker
-                  style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
-                  selectedValue={xAdr}
-                  onValueChange={(itemValue: string, itemIndex) => {
-                    setXAdr(itemValue)
-                    setVisitInfo({...visitInfo, address: itemValue})
-                  }
-                  }>
-                  {dictAddress?.map(address => {
-                    return <Picker.Item key={address.dictCode} label={address.dictLabel}
-                                        value={address.dictValue}/>
-                  })}
-                </Picker>
-              </TableChildren>
-              <TableChildren
+              />
+            </IosPicker>
+            <IosPicker
+              title="请选择"
+              data={dictRefund}
+              cols={1}
+              value={xFund}
+              onChange={(itemValue: any) => {
+                setXFund(itemValue)
+                setVisitInfo({...visitInfo, visitType1: itemValue})
+              }}
+              onOk={(itemValue: any) => {
+                setXFund(itemValue)
+                setVisitInfo({...visitInfo, visitType1: itemValue})
+              }}>
+              <TableRow
                 title={translate(`common.refund`)}
                 leftIcon={theme.assets.images.icons.table.email}
                 withArrow={true}
-                rightText={findDict(dictRefund, visitInfo?.visitType1)}
-              >
-                <Picker
-                  style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
-                  selectedValue={xFund}
-                  onValueChange={(itemValue: string, itemIndex) => {
-                    setXFund(itemValue)
-                    setVisitInfo({...visitInfo, visitType1: itemValue})
-                  }
-                  }>
-                  {dictRefund?.map(refund => {
-                    return <Picker.Item key={refund.dictCode} label={refund.dictLabel}
-                                        value={refund.dictValue}/>
-                  })}
-                </Picker>
-              </TableChildren>
-            </>}
-            {
-              Platform.OS == 'android' && <>
-                <IosPicker
-                  title="选择地址"
-                  data={dictAddress}
-                  cols={1}
-                  value={[...xAdr]}
-                  onChange={(itemValue: any) => {
-                    setXAdr(itemValue)
-                    setVisitInfo({...visitInfo, address: itemValue})
-                  }}
-                  onOk={(itemValue: any) => {
-                    setXAdr(itemValue)
-                    setVisitInfo({...visitInfo, address: itemValue})
-                  }}>
-                  <TableRow
-                    title={translate(`common.address`)}
-                    leftIcon={theme.assets.images.icons.table.email}
-                    withArrow={true}
-                  />
-                </IosPicker>
-                <IosPicker
-                  title="请选择"
-                  data={dictRefund}
-                  cols={1}
-                  value={[...xFund]}
-                  onChange={(itemValue: any) => {
-                    setXFund(itemValue)
-                    setVisitInfo({...visitInfo, visitType1: itemValue})
-                  }}
-                  onOk={(itemValue: any) => {
-                    setXFund(itemValue)
-                    setVisitInfo({...visitInfo, visitType1: itemValue})
-                  }}>
-                  <TableRow
-                    title={translate(`common.refund`)}
-                    leftIcon={theme.assets.images.icons.table.email}
-                    withArrow={true}
-                  />
-                </IosPicker>
-              </>
-            }
+              />
+            </IosPicker>
             <TableChildren
               title={translate(`common.nickName`)}
               leftIcon={theme.assets.images.icons.table.email}

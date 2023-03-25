@@ -7,11 +7,10 @@ import {TopicDetailScreenProps as ScreenProps} from '@src/navigation'
 import {ITheme, SylCommon, useTheme} from '@src/theme'
 import React, {useEffect, useLayoutEffect, useState} from 'react'
 import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableList, TableRow, TopicInfo} from '../components'
+import {SetStatusBar, TableChildren, TableList, TableRow, TopicInfo} from '../components'
 import {ApiLib} from "@src/api";
 import {AppObject} from "@src/api/types";
 import {EditTopicHeaderButton} from "@src/screens/components/button";
-import {defaultDictMeta} from "@src/helper/defaultDictMeta";
 import Picker from '@ant-design/react-native/lib/picker'
 
 const TopicDetail = ({route, navigation}: ScreenProps) => {
@@ -37,9 +36,9 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
   }, [navigation, topic])
 
 
-  const [xFeat, setXFeat] = useState('');
-  const [xSex, setXSex] = useState('');
-  const [xInt, setXInt] = useState('');
+  const [xFeat, setXFeat] = useState<Array<string>>([]);
+  const [xSex, setXSex] = useState<Array<string>>([]);
+  const [xInt, setXInt] = useState<Array<string>>([]);
 
   const [dictIntent, setDictIntent] = useState<AppObject.DictMeta[]>([])
   const [dictFeatures, setDictFeatures] = useState<AppObject.DictMeta[]>([])
@@ -48,31 +47,31 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
   useEffect(() => {
 
     ApiLib.topic.topic(route.params.topicId).then(res => {
+      setXFeat(['' + res.feature])
+      setXSex(['' + res.sex])
+      setXInt(['' + res.intentFlag])
       return setTopic(res)
     }).catch((err) => {
       showMessage({text1: "温馨提示", text2: err.msg, type: 'error'})
     })
 
     ApiLib.dict.dict('sys_user_sex').then(res => {
-      res.unshift(defaultDictMeta)
-      setDictSex(res)
+      setDictSex(pathDict(res))
     })
     ApiLib.dict.dict('cms_feature').then(res => {
-      res.unshift(defaultDictMeta)
-      setDictFeatures(res)
+      setDictFeatures(pathDict(res))
     })
     ApiLib.dict.dict('call_intent_type').then(res => {
-      res.unshift(defaultDictMeta)
-      setDictIntent(res)
+      setDictIntent(pathDict(res))
     })
   }, [topicId, navigation]);
 
-  const findDict = (dict: AppObject.DictMeta[], dictValue: any) => {
-    if (dictValue) {
-      return dict ? dict.find(s => s.dictValue == dictValue)?.dictLabel : '';
-    } else {
-      return ''
-    }
+  const pathDict = (res: AppObject.DictMeta[]) => {
+    res.forEach(s => {
+      s.label = s.dictLabel
+      s.value = s.dictValue
+    })
+    return res
   }
 
   const renderContent = () => {
@@ -100,7 +99,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
             />
             <Picker
               title="选择性别"
-              data={[{'value': '1', 'label': '男'}, {'value': '2', 'label': '女'}]}
+              data={dictSex}
               cols={1}
               value={[...xSex]}
               onChange={(v: any) => {
@@ -112,11 +111,67 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
                 setTopic({...topic, sex: v})
               }}>
               <TableRow
-                title={translate(`common.phone`)}
-                leftIcon={theme.assets.images.icons.topic.talk}
+                title={translate(`common.sex`)}
+                leftIcon={theme.assets.images.icons.table.score}
                 withArrow={true}
               />
             </Picker>
+            <Picker
+              title="选择意愿"
+              data={dictIntent}
+              cols={1}
+              value={[...xInt]}
+              onChange={(v: any) => {
+                setXInt(v)
+                setTopic({...topic, intentFlag: v})
+              }}
+              onOk={(v: any) => {
+                setXInt(v)
+                setTopic({...topic, intentFlag: v})
+              }}>
+              <TableRow
+                title={translate(`common.intentFlag`)}
+                leftIcon={theme.assets.images.icons.table.email}
+                withArrow={true}
+              />
+            </Picker>
+            <Picker
+              title="选择属性"
+              data={dictFeatures}
+              cols={1}
+              value={[...xFeat]}
+              onChange={(v: any) => {
+                setXFeat(v)
+                setTopic({...topic, feature: v})
+              }}
+              onOk={(v: any) => {
+                setXFeat(v)
+                setTopic({...topic, feature: v})
+              }}>
+              <TableRow
+                title={translate(`common.feature`)}
+                leftIcon={theme.assets.images.icons.table.urlschme}
+                withArrow={true}
+              />
+            </Picker>
+            <TableChildren
+              title={translate(`common.nickName`)}
+              leftIcon={theme.assets.images.icons.table.group}
+              withArrow={true}
+            >
+              <Input
+                autoCapitalize="none"
+                underlineColorAndroid="transparent"
+                keyboardType="default"
+                returnKeyType="next"
+                autoCorrect={false}
+                value={topic.nickName}
+                onChangeText={(text)=>setTopic({...topic,nickName:text})}
+                containerStyle={styles.input(theme)}
+                textContentType="none"
+                inputStyle={styles.inputSingle(theme)}
+              />
+            </TableChildren>
             <Input
               labelStyle={styles.label(theme)}
               multiline={true}
