@@ -9,7 +9,13 @@ import { useAppDispatch, useAppSelector } from '.'
 import { cacheMember } from '../actions'
 import { AppObject } from '../types'
 
-export const useMember = ({ userName: userName, forcePull = true }: { userName: string | number; forcePull?: boolean }) => {
+export const useMember = ({
+  userName: userName,
+  forcePull = true
+}: {
+  userName: string | number
+  forcePull?: boolean
+}) => {
   const members = useAppSelector((_state: RootState) => _state.cache.members)
   const [info, setInfo] = useState<AppObject.Member | undefined>(memberFromCache(userName, members))
 

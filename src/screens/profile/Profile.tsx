@@ -1,57 +1,50 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/03/4.
  */
-import {logout as actionLogout} from '@src/actions'
-import {Spinner} from '@src/components'
-import {useMember} from '@src/hooks/useMember'
-import {translate} from '@src/i18n'
-import {ProfileScreenProps as ScreenProps, ROUTES} from '@src/navigation'
-import {SylCommon, useTheme} from '@src/theme'
-import {AppObject, IState} from '@src/types'
-import React, {useEffect, useLayoutEffect, useMemo} from 'react'
-import {ScrollView} from 'react-native-gesture-handler'
-import {connect} from 'react-redux'
-import {ProfileDetail, TableList, TableRow} from '../components'
-import {LogoutHeaderButton} from '../components/button'
+import { logout as actionLogout } from '@src/actions'
+import { Spinner } from '@src/components'
+import { useMember } from '@src/hooks/useMember'
+import { translate } from '@src/i18n'
+import { ProfileScreenProps as ScreenProps, ROUTES } from '@src/navigation'
+import { SylCommon, useTheme } from '@src/theme'
+import { AppObject, IState } from '@src/types'
+import React, { useEffect, useLayoutEffect, useMemo } from 'react'
+import { ScrollView } from 'react-native-gesture-handler'
+import { connect } from 'react-redux'
+import { ProfileDetail, TableList, TableRow } from '../components'
+import { LogoutHeaderButton } from '../components/button'
 
 const Profile = ({
-                   route,
-                   navigation,
-                   authMember,
-                   logout
-                 }: ScreenProps & {
+  route,
+  navigation,
+  authMember,
+  logout
+}: ScreenProps & {
   authMember?: AppObject.Member
   logout: () => void
 }) => {
-  const {theme} = useTheme()
+  const { theme } = useTheme()
   const username = useMemo(() => route.params.userName, [route])
-  const {member} = useMember({userName: username})
+  const { member } = useMember({ userName: username })
   useEffect(() => {
-    navigation.setOptions({title: authMember?.user.userName})
+    navigation.setOptions({ title: authMember?.user.userName })
   }, [username, member])
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: authMember
-        ? () =>
-          (
-            <LogoutHeaderButton member={authMember}/>
-          )
-        : undefined
+      headerRight: authMember ? () => <LogoutHeaderButton member={authMember} /> : undefined
     })
   }, [navigation, authMember])
 
-
-  const renderProfile
-    = (user: AppObject.User) => {
-
-    return (<TableList title={translate('common.setting')}>
+  const renderProfile = (user: AppObject.User) => {
+    return (
+      <TableList title={translate('common.setting')}>
         <TableRow
           title={translate(`router.${ROUTES.ThemeSetting}`)}
           leftIcon={theme.assets.images.icons.table.theme}
           withArrow={false}
           onPress={() => {
-           // navigation.navigate(ROUTES.ThemeSetting)
+            // navigation.navigate(ROUTES.ThemeSetting)
           }}
         />
         <TableRow
@@ -77,21 +70,20 @@ const Profile = ({
   return (
     <ScrollView style={SylCommon.Layout.fill}>
       {authMember ? (
-        <><ProfileDetail profile={authMember}/>
+        <>
+          <ProfileDetail profile={authMember} />
           {renderProfile(authMember.user)}
         </>
       ) : (
-        <Spinner style={{height: theme.dimens.WINDOW_HEIGHT}}
-                 text={translate('placeholder.loading')}/>
+        <Spinner style={{ height: theme.dimens.WINDOW_HEIGHT }} text={translate('placeholder.loading')} />
       )}
-
     </ScrollView>
   )
 }
 
-const mapStateToProps = ({member}: { member: IState.MemberState }) => {
-  const {profile: authMember} = member
-  return {authMember}
+const mapStateToProps = ({ member }: { member: IState.MemberState }) => {
+  const { profile: authMember } = member
+  return { authMember }
 }
 
 export default connect(mapStateToProps, {

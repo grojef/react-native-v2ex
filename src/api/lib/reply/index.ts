@@ -7,7 +7,7 @@ export default (v2ex: AppAPI.APP): AppAPI.ReplyAPI => ({
    * @param page : page num
    */
   pager: (topic_id: number, page: number): Promise<AppObject.TopicReply[]> =>
-    v2ex.get<AppObject.TopicReply[]>(`/topics/${topic_id}/replies?p=${page}`, undefined, undefined, undefined, ),
+    v2ex.get<AppObject.TopicReply[]>(`/topics/${topic_id}/replies?p=${page}`, undefined, undefined, undefined),
 
   /**
    * Get topic replies

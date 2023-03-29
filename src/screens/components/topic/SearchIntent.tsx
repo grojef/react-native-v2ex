@@ -1,43 +1,39 @@
-import {StyleProp, TextStyle, View, ViewStyle} from "react-native";
-import React, {useCallback, useEffect, useState} from "react";
-import {ITheme, SylCommon, useTheme} from "@src/theme";
-import {Button} from "@src/components";
-import {ApiLib} from "@src/api";
-import {AppObject} from "@src/api/types";
-import {defaultDictMeta} from "@src/helper/defaultDictMeta";
-import {Picker as IosPicker} from "@ant-design/react-native";
+import { StyleProp, TextStyle, View, ViewStyle } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { ITheme, SylCommon, useTheme } from '@src/theme'
+import { Button } from '@src/components'
+import { ApiLib } from '@src/api'
+import { AppObject } from '@src/api/types'
+import { defaultDictMeta } from '@src/helper/defaultDictMeta'
+import { Picker as IosPicker } from '@ant-design/react-native'
 
 export interface SearchIntentProps {
   /**
    * container style
    */
   containerStyle?: StyleProp<ViewStyle>
-  refreshData: { qTag: string, qFeat: string },
-  onDataChange: ({}: { qTag: string, qFeat: string }) => void
+  refreshData: { qTag: string; qFeat: string }
+  onDataChange: ({}: { qTag: string; qFeat: string }) => void
 }
 
-const SearchIntent: React.FC<SearchIntentProps> = ({
-                                                     refreshData,
-                                                     onDataChange
-                                                   }: SearchIntentProps) => {
-
-  const {theme} = useTheme()
-  const [allNode, setAllNode] = useState<AppObject.DictMeta[]>([]);
-  const [features, setFeatures] = useState<AppObject.DictMeta[]>([]);
+const SearchIntent: React.FC<SearchIntentProps> = ({ refreshData, onDataChange }: SearchIntentProps) => {
+  const { theme } = useTheme()
+  const [allNode, setAllNode] = useState<AppObject.DictMeta[]>([])
+  const [features, setFeatures] = useState<AppObject.DictMeta[]>([])
 
   const initTags = useCallback(() => {
-    ApiLib.dict.dict('cms_ctm_tag').then(res => {
+    ApiLib.dict.dict('cms_ctm_tag').then((res) => {
       res.unshift(defaultDictMeta)
       setAllNode(pathDict(res))
     })
-    ApiLib.dict.dict('cms_feature').then(res => {
+    ApiLib.dict.dict('cms_feature').then((res) => {
       res.unshift(defaultDictMeta)
       setFeatures(pathDict(res))
     })
   }, [])
 
   const pathDict = (res: AppObject.DictMeta[]) => {
-    res.forEach(s => {
+    res.forEach((s) => {
       s.label = s.dictLabel
       s.value = s.dictValue
     })
@@ -45,15 +41,14 @@ const SearchIntent: React.FC<SearchIntentProps> = ({
   }
   useEffect(() => {
     initTags()
-  }, []);
+  }, [])
 
-  const [qTag, setQTag] = useState('');
-  const [qFeat, setQFeat] = useState('');
+  const [qTag, setQTag] = useState('')
+  const [qFeat, setQFeat] = useState('')
 
   return (
-    (<View style={[styles.refreshContainer(theme), SylCommon.Card.container(theme)]}>
-      <View
-        style={[styles.refreshLeft(theme), styles.refreshBox()]}>
+    <View style={[styles.refreshContainer(theme), SylCommon.Card.container(theme)]}>
+      <View style={[styles.refreshLeft(theme), styles.refreshBox()]}>
         <IosPicker
           title="选择标签"
           data={allNode}
@@ -61,19 +56,18 @@ const SearchIntent: React.FC<SearchIntentProps> = ({
           value={[...qTag]}
           onChange={(v: any) => {
             setQTag(v)
-            onDataChange({...refreshData, qTag: v})
+            onDataChange({ ...refreshData, qTag: v })
           }}
           onOk={(v: any) => {
             setQTag(v)
-            onDataChange({...refreshData, qTag: v})
+            onDataChange({ ...refreshData, qTag: v })
           }}>
-          <Button onPress={() => {
-          }} type={"small"}
-                  style={{height: 30}}>标签-{allNode.find(s => s.dictValue == qTag)?.dictLabel}</Button>
+          <Button onPress={() => {}} type={'small'} style={{ height: 30 }}>
+            标签-{allNode.find((s) => s.dictValue == qTag)?.dictLabel}
+          </Button>
         </IosPicker>
       </View>
       <View style={[styles.refreshRight(theme), styles.refreshBox()]}>
-
         <IosPicker
           title="选择标签"
           data={features}
@@ -81,20 +75,19 @@ const SearchIntent: React.FC<SearchIntentProps> = ({
           value={[...qFeat]}
           onChange={(v: any) => {
             setQFeat(v)
-            onDataChange({...refreshData, qFeat: v})
+            onDataChange({ ...refreshData, qFeat: v })
           }}
           onOk={(v: any) => {
             setQFeat(v)
-            onDataChange({...refreshData, qFeat: v})
+            onDataChange({ ...refreshData, qFeat: v })
           }}>
-          <Button onPress={() => {
-          }} type={"small"}
-                  style={{height: 30}}>标签-{features.find(s => s.dictValue == qFeat)?.dictLabel}</Button>
+          <Button onPress={() => {}} type={'small'} style={{ height: 30 }}>
+            标签-{features.find((s) => s.dictValue == qFeat)?.dictLabel}
+          </Button>
         </IosPicker>
       </View>
-    </View>)
-  );
-
+    </View>
+  )
 }
 
 /**
@@ -117,7 +110,7 @@ const styles = {
   }),
   refreshContainer: (theme: ITheme): ViewStyle => ({
     backgroundColor: '#fff',
-    flexDirection: "row",
+    flexDirection: 'row'
   }),
   refreshBox: (): ViewStyle => ({
     flex: 1,
@@ -134,7 +127,7 @@ const styles = {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surface
   }),
 
   label: (theme: ITheme): TextStyle => ({
@@ -161,13 +154,12 @@ const styles = {
     paddingVertical: theme.spacing.small
   }),
   picker: (): TextStyle => ({
-    position: "absolute",
+    position: 'absolute',
     height: 0,
     width: '100%',
-    transform: [{scaleX: 0}],
+    transform: [{ scaleX: 0 }],
     color: '#9a9a9a'
   })
-
 }
 
 export default SearchIntent

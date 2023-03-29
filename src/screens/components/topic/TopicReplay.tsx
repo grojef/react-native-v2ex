@@ -28,10 +28,7 @@ const TopicReplay: React.FC<TopicReplayProps> = ({ containerStyle, info }: Topic
   }
 
   const renderContent = () => {
-    return (
-      <>
-      </>
-    )
+    return <></>
   }
 
   return renderContent()

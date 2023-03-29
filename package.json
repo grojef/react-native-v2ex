@@ -30,6 +30,11 @@
     "type": "git",
     "url": "git@github.com:funnyzak/react-native-v2ex.git"
   },
+  "config": {
+    "electron": {
+      "mirror": "https://registry.npmmirror.com/-/binary/electron/"
+    }
+  },
   "keywords": [
     "react",
     "react-native",

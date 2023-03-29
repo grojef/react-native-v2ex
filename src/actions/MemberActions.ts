@@ -2,12 +2,12 @@
  * Created by leon<silenceace@gmail.com> on 22/2/22.
  */
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {MEMBER_TOKEN_KEY} from '@src/config/constants'
-import {logError} from '@src/helper/logger'
+import { MEMBER_TOKEN_KEY } from '@src/config/constants'
+import { logError } from '@src/helper/logger'
 import NavigationService from '@src/navigation/NavigationService'
-import {RootState} from '@src/store'
-import {ApiLib} from '@src/api'
-import {Dispatch} from 'redux'
+import { RootState } from '@src/store'
+import { ApiLib } from '@src/api'
+import { Dispatch } from 'redux'
 import {
   APP_AUTH,
   APP_AUTH_ERROR,
@@ -25,7 +25,7 @@ import {
   MEMBER_UNINTEREST_NODE,
   MEMBER_UNLIKE_TOPICS
 } from '../types'
-import {cacheMemberFollowing, cacheMemberInterestNodes, cacheMemberLikeTopicss} from './CacheAction'
+import { cacheMemberFollowing, cacheMemberInterestNodes, cacheMemberLikeTopicss } from './CacheAction'
 
 export const myProfile = () => async (dispatch: Dispatch, getState: () => RootState) => {
   const _member = await ApiLib.member.myProfile()
@@ -109,16 +109,17 @@ export const setCurrentToken = (token?: AppObject.MemberToken) => ({
   payload: token
 })
 
-export const loginByToken = (loginId: string,password: string,uuid:string,code:string) => async (dispatch: Dispatch) => {
-  try {
-    dispatch({ type: APP_AUTH_LOADING })
-    const token_info = await ApiLib.member.token(loginId,password,uuid,code)
-    dispatch(loginByTokenSuccess(token_info) as any)
-  } catch (e: any) {
-    logError(e)
-    loginByTokenFail(dispatch, e.msg)
+export const loginByToken =
+  (loginId: string, password: string, uuid: string, code: string) => async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: APP_AUTH_LOADING })
+      const token_info = await ApiLib.member.token(loginId, password, uuid, code)
+      dispatch(loginByTokenSuccess(token_info) as any)
+    } catch (e: any) {
+      logError(e)
+      loginByTokenFail(dispatch, e.msg)
+    }
   }
-}
 
 const loginByTokenSuccess = (token: AppObject.MemberToken) => async (dispatch: Dispatch, getState: () => RootState) => {
   await AsyncStorage.setItem(MEMBER_TOKEN_KEY, token.token)
@@ -145,7 +146,7 @@ export const errorMessage = (error: string) => ({
 export const logout = () => (dispatch: Dispatch) => {
   AsyncStorage.setItem(MEMBER_TOKEN_KEY, '')
   ApiLib.setToken(undefined)
-  ApiLib.member.logout().then(r => null)
+  ApiLib.member.logout().then((r) => null)
   dispatch({ type: APP_LOGOUT })
   NavigationService.navigate('SignIn')
 }

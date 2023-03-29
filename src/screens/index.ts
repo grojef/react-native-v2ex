@@ -1,5 +1,5 @@
-export {default as SignInScreen} from './login/SignIn'
-export {default as DrawScreen} from './catalog/Draw'
+export { default as SignInScreen } from './login/SignIn'
+export { default as DrawScreen } from './catalog/Draw'
 
 export * from './node'
 export * from './notification'

@@ -1,15 +1,15 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/06.
  */
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
-import {Placeholder, Text} from '@src/components'
-import {useAppSelector} from '@src/hooks'
-import {useSession} from '@src/hooks/useSession'
-import {translate} from '@src/i18n'
-import {NavigationService, ROUTES} from '@src/navigation'
-import {RootState} from '@src/store'
-import {ITheme, useTheme} from '@src/theme'
-import React, {ComponentType, useEffect} from 'react'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { Placeholder, Text } from '@src/components'
+import { useAppSelector } from '@src/hooks'
+import { useSession } from '@src/hooks/useSession'
+import { translate } from '@src/i18n'
+import { NavigationService, ROUTES } from '@src/navigation'
+import { RootState } from '@src/store'
+import { ITheme, useTheme } from '@src/theme'
+import React, { ComponentType, useEffect } from 'react'
 import {
   Image,
   ImageSourcePropType,
@@ -120,8 +120,7 @@ const Footer = () => {
   const app = useAppSelector((_state: RootState) => _state.app)
 
   return (
-    <TouchableOpacity
-      style={styles.footer(theme)}>
+    <TouchableOpacity style={styles.footer(theme)}>
       <Text style={styles.footerItem(theme)}>
         {translate('brand.name')} {app.version.version}({app.version.buildId})
       </Text>

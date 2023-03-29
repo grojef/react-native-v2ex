@@ -120,7 +120,7 @@ const typographys: IThemeTypography = {
   captionText: {
     fontFamily,
     color: captionTextColor,
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 16,
     fontStyle: 'normal',
     fontWeight: fontWeightRegular
@@ -128,7 +128,7 @@ const typographys: IThemeTypography = {
   captionTextBold: {
     fontFamily,
     color: captionTextColor,
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 16,
     fontStyle: 'normal',
     fontWeight: fontWeightBold

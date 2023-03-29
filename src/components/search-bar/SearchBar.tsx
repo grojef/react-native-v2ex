@@ -1,8 +1,8 @@
 /**
  * Created by leon<silenceace@gmail.com> on 2022-11-20.
  */
-import {ITheme, useTheme} from '@src/theme'
-import React, {memo, useCallback, useRef, useState} from 'react'
+import { ITheme, useTheme } from '@src/theme'
+import React, { memo, useCallback, useRef, useState } from 'react'
 import {
   ColorValue,
   Keyboard,
@@ -37,22 +37,22 @@ interface SearchBarProps {
 }
 
 const SearchBarComponent = ({
-                              searchToolContainerStyle,
-                              onActiveSearch,
-                              onSubmitSearch,
-                              clearButton = true,
-                              customIcon,
-                              iconStyle,
-                              inputProps,
-                              inputTextStyle,
-                              buttonStyle,
-                              buttonText = 'Search',
-                              buttonTextStyle,
-                              inputContainerStyle,
-                              inputActiveColor,
-                              inputInactiveColor
-                            }: SearchBarProps) => {
-  const {theme} = useTheme()
+  searchToolContainerStyle,
+  onActiveSearch,
+  onSubmitSearch,
+  clearButton = true,
+  customIcon,
+  iconStyle,
+  inputProps,
+  inputTextStyle,
+  buttonStyle,
+  buttonText = 'Search',
+  buttonTextStyle,
+  inputContainerStyle,
+  inputActiveColor,
+  inputInactiveColor
+}: SearchBarProps) => {
+  const { theme } = useTheme()
 
   const [inputTextActive, setInputTextActive] = useState(false)
   const [inputValue, setInputValue] = useState('')

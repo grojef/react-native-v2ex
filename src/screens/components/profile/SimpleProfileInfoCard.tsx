@@ -68,8 +68,8 @@ const SimpleProfileInfoCard: React.FC<SimpleProfileInfoCardProps> = ({
                     ProfileInfoStyle.baseRightItem(theme),
                     styles.baseRightItem(theme),
                     theme.typography.bodyText
-                  ]}>
-                </Text>
+                  ]}
+                />
               ) : null}
               {info ? (
                 <Text

@@ -1,73 +1,80 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
-import {Input, Spinner, useToast} from '@src/components'
-import {translate} from '@src/i18n'
-import {TopicDetailScreenProps as ScreenProps} from '@src/navigation'
-import {ITheme, SylCommon, useTheme} from '@src/theme'
-import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableChildren, TableList, TableRow, TopicInfo} from '../components'
-import {ApiLib} from "@src/api";
-import {AppObject} from "@src/api/types";
-import {EditTopicHeaderButton} from "@src/screens/components/button";
+import { Input, Spinner, useToast } from '@src/components'
+import { translate } from '@src/i18n'
+import { TopicDetailScreenProps as ScreenProps } from '@src/navigation'
+import { ITheme, SylCommon, useTheme } from '@src/theme'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { ScrollView, TextStyle, View, ViewStyle } from 'react-native'
+import { SetStatusBar, TableChildren, TableList, TableRow, TopicInfo } from '../components'
+import { ApiLib } from '@src/api'
+import { AppObject } from '@src/api/types'
+import { EditTopicHeaderButton } from '@src/screens/components/button'
 import Picker from '@ant-design/react-native/lib/picker'
 
-const TopicDetail = ({route, navigation}: ScreenProps) => {
-  const {theme} = useTheme()
-  const {topicId} = route.params
-  const [topic, setTopic] = useState<AppObject.Topic>();
-  const {showMessage} = useToast()
+const TopicDetail = ({ route, navigation }: ScreenProps) => {
+  const { theme } = useTheme()
+  const { topicId } = route.params
+  const [topic, setTopic] = useState<AppObject.Topic>()
+  const { showMessage } = useToast()
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: topic ? () =>
-        (
-          <EditTopicHeaderButton onPress={() => {
-            ApiLib.topic.update(topic).then((res) => {
-              showMessage("更新成功")
-              navigation.goBack()
-            }).catch((error) => {
-              showMessage(error.msg)
-            })
-          }}/>
-        ) : undefined
+      headerRight: topic
+        ? () => (
+            <EditTopicHeaderButton
+              onPress={() => {
+                ApiLib.topic
+                  .update(topic)
+                  .then((res) => {
+                    showMessage('更新成功')
+                    navigation.goBack()
+                  })
+                  .catch((error) => {
+                    showMessage(error.msg)
+                  })
+              }}
+            />
+          )
+        : undefined
     })
   }, [navigation, topic])
 
-
-  const [xFeat, setXFeat] = useState<Array<string>>([]);
-  const [xSex, setXSex] = useState<Array<string>>([]);
-  const [xInt, setXInt] = useState<Array<string>>([]);
+  const [xFeat, setXFeat] = useState<Array<string>>([])
+  const [xSex, setXSex] = useState<Array<string>>([])
+  const [xInt, setXInt] = useState<Array<string>>([])
 
   const [dictIntent, setDictIntent] = useState<AppObject.DictMeta[]>([])
   const [dictFeatures, setDictFeatures] = useState<AppObject.DictMeta[]>([])
   const [dictSex, setDictSex] = useState<AppObject.DictMeta[]>([])
 
   useEffect(() => {
+    ApiLib.topic
+      .topic(route.params.topicId)
+      .then((res) => {
+        setXFeat(['' + res.feature])
+        setXSex(['' + res.sex])
+        setXInt(['' + res.intentFlag])
+        return setTopic(res)
+      })
+      .catch((err) => {
+        showMessage({ text1: '温馨提示', text2: err.msg, type: 'error' })
+      })
 
-    ApiLib.topic.topic(route.params.topicId).then(res => {
-      setXFeat(['' + res.feature])
-      setXSex(['' + res.sex])
-      setXInt(['' + res.intentFlag])
-      return setTopic(res)
-    }).catch((err) => {
-      showMessage({text1: "温馨提示", text2: err.msg, type: 'error'})
-    })
-
-    ApiLib.dict.dict('sys_user_sex').then(res => {
+    ApiLib.dict.dict('sys_user_sex').then((res) => {
       setDictSex(pathDict(res))
     })
-    ApiLib.dict.dict('cms_feature').then(res => {
+    ApiLib.dict.dict('cms_feature').then((res) => {
       setDictFeatures(pathDict(res))
     })
-    ApiLib.dict.dict('call_intent_type').then(res => {
+    ApiLib.dict.dict('call_intent_type').then((res) => {
       setDictIntent(pathDict(res))
     })
-  }, [topicId, navigation]);
+  }, [topicId, navigation])
 
   const pathDict = (res: AppObject.DictMeta[]) => {
-    res.forEach(s => {
+    res.forEach((s) => {
       s.label = s.dictLabel
       s.value = s.dictValue
     })
@@ -76,14 +83,14 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
 
   const renderContent = () => {
     if (!topic) {
-      return <Spinner style={{marginTop: 50}}/>
+      return <Spinner style={{ marginTop: 50 }} />
     }
 
     return (
       <>
-        <SetStatusBar/>
+        <SetStatusBar />
         <ScrollView>
-          <TopicInfo info={topic}/>
+          <TopicInfo info={topic} />
           <TableList title={translate('common.customerInfo')}>
             <TableRow
               title={translate(`common.createTime`)}
@@ -104,11 +111,11 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               value={[...xSex]}
               onChange={(v: any) => {
                 setXSex(v)
-                setTopic({...topic, sex: v})
+                setTopic({ ...topic, sex: v })
               }}
               onOk={(v: any) => {
                 setXSex(v)
-                setTopic({...topic, sex: v})
+                setTopic({ ...topic, sex: v })
               }}>
               <TableRow
                 title={translate(`common.sex`)}
@@ -123,11 +130,11 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               value={[...xInt]}
               onChange={(v: any) => {
                 setXInt(v)
-                setTopic({...topic, intentFlag: v})
+                setTopic({ ...topic, intentFlag: v })
               }}
               onOk={(v: any) => {
                 setXInt(v)
-                setTopic({...topic, intentFlag: v})
+                setTopic({ ...topic, intentFlag: v })
               }}>
               <TableRow
                 title={translate(`common.intentFlag`)}
@@ -142,11 +149,11 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               value={[...xFeat]}
               onChange={(v: any) => {
                 setXFeat(v)
-                setTopic({...topic, feature: v})
+                setTopic({ ...topic, feature: v })
               }}
               onOk={(v: any) => {
                 setXFeat(v)
-                setTopic({...topic, feature: v})
+                setTopic({ ...topic, feature: v })
               }}>
               <TableRow
                 title={translate(`common.feature`)}
@@ -157,8 +164,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
             <TableChildren
               title={translate(`common.nickName`)}
               leftIcon={theme.assets.images.icons.table.group}
-              withArrow={true}
-            >
+              withArrow={true}>
               <Input
                 autoCapitalize="none"
                 underlineColorAndroid="transparent"
@@ -166,7 +172,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
                 returnKeyType="next"
                 autoCorrect={false}
                 value={topic.nickName}
-                onChangeText={(text)=>setTopic({...topic,nickName:text})}
+                onChangeText={(text) => setTopic({ ...topic, nickName: text })}
                 containerStyle={styles.input(theme)}
                 textContentType="none"
                 inputStyle={styles.inputSingle(theme)}
@@ -183,7 +189,7 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
               autoCorrect={false}
               value={topic.remark}
               editable={true}
-              onChangeText={(text) => setTopic({...topic, remark: text})}
+              onChangeText={(text) => setTopic({ ...topic, remark: text })}
               inputStyle={styles.inputStyle(theme)}
               containerStyle={styles.inputContainer(theme)}
             />
@@ -193,10 +199,8 @@ const TopicDetail = ({route, navigation}: ScreenProps) => {
     )
   }
 
-  return <View
-    style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{renderContent()}</View>
+  return <View style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{renderContent()}</View>
 }
-
 
 const styles = {
   inputContainer: (theme: ITheme): ViewStyle => ({
@@ -208,28 +212,26 @@ const styles = {
   inputStyle: (theme: ITheme): ViewStyle => ({
     width: '100%',
     height: 100,
-    alignItems: 'baseline'
+    alignItems: 'center'
   }),
   input: (theme: ITheme): TextStyle => ({
-    alignItems: 'baseline',
-    height: 40,
+    alignItems: 'center',
     width: 200,
     borderWidth: 0,
-    right: 8,
-    position: "absolute",
+    marginRight: -8,
     backgroundColor: 'transparent'
   }),
   inputSingle: (theme: ITheme): TextStyle => ({
     textAlign: 'right',
-    writingDirection: 'rtl',
+    writingDirection: 'ltr',
     ...theme.typography.captionText
   }),
   label: (theme: ITheme): TextStyle => ({
     paddingLeft: 10,
     paddingRight: 0,
-    textAlign: "right",
+    textAlign: 'right',
     fontSize: 14,
     maxWidth: 60
-  }),
+  })
 }
 export default TopicDetail

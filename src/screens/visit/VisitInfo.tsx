@@ -1,62 +1,71 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
-import {Input, Spinner, useToast} from '@src/components'
-import {translate} from '@src/i18n'
-import {VisitInfoScreenProps as ScreenProps} from '@src/navigation'
-import {ITheme, SylCommon, useTheme} from '@src/theme'
-import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableChildren, TableList, TableRow} from '../components'
-import {ApiLib} from "@src/api";
-import {AppObject} from "@src/api/types";
-import {EditTopicHeaderButton} from "@src/screens/components/button";
-import dayjs from "dayjs";
-import {Picker as IosPicker} from "@ant-design/react-native";
+import { Input, Spinner, useToast } from '@src/components'
+import { translate } from '@src/i18n'
+import { VisitInfoScreenProps as ScreenProps } from '@src/navigation'
+import { ITheme, SylCommon, useTheme } from '@src/theme'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { ScrollView, TextStyle, View, ViewStyle } from 'react-native'
+import { SetStatusBar, TableChildren, TableList, TableRow } from '../components'
+import { ApiLib } from '@src/api'
+import { AppObject } from '@src/api/types'
+import { EditTopicHeaderButton } from '@src/screens/components/button'
+import dayjs from 'dayjs'
+import { Picker as IosPicker } from '@ant-design/react-native'
 
-const VisitInfo = ({route, navigation}: ScreenProps) => {
-  const {theme} = useTheme()
-  const {visitId} = route.params
+const VisitInfo = ({ route, navigation }: ScreenProps) => {
+  const { theme } = useTheme()
+  const { visitId } = route.params
   const [visitInfo, setVisitInfo] = useState<AppObject.VisitInfo>({
-    address: "",
-    createBy: "",
+    address: '',
+    createBy: '',
     createTime: undefined,
     deptId: 0,
     id: undefined,
-    remark: "",
+    remark: '',
     userId: 0,
-    userName: "",
+    userName: '',
     visitTime: undefined,
-    visitType1: "",
+    visitType1: '',
     visitType2: 0,
     visitType3: 0,
-    visitor: ""
-  });
-  const {showMessage} = useToast()
+    visitor: ''
+  })
+  const { showMessage } = useToast()
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: visitInfo ? () =>
-        (
-          <EditTopicHeaderButton onPress={() => {
-            if (visitInfo.id == '') {
-              ApiLib.visit.save(visitInfo).then((res) => {
-                showMessage("更新成功")
-                navigation.goBack()
-              }).catch((error) => {
-                showMessage(error.msg)
-              })
-            } else {
-              console.log(visitInfo)
-              ApiLib.visit.add(visitInfo).then((res) => {
-                showMessage("保存成功")
-                navigation.goBack()
-              }).catch((error) => {
-                showMessage(error.msg)
-              })
-            }
-          }}/>
-        ) : undefined
+      headerRight: visitInfo
+        ? () => (
+            <EditTopicHeaderButton
+              onPress={() => {
+                if (visitInfo.id == '') {
+                  ApiLib.visit
+                    .save(visitInfo)
+                    .then((res) => {
+                      showMessage('更新成功')
+                      navigation.goBack()
+                    })
+                    .catch((error) => {
+                      showMessage(error.msg)
+                    })
+                } else {
+                  console.log(visitInfo)
+                  ApiLib.visit
+                    .add(visitInfo)
+                    .then((res) => {
+                      showMessage('保存成功')
+                      navigation.goBack()
+                    })
+                    .catch((error) => {
+                      showMessage(error.msg)
+                    })
+                }
+              }}
+            />
+          )
+        : undefined
     })
   }, [navigation, visitInfo])
 
@@ -64,48 +73,48 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
 
   const [dictRefund, setDictRefund] = useState<AppObject.DictMeta[]>([])
 
+  const [xAdr, setXAdr] = useState<Array<string>>([])
 
-  const [xAdr, setXAdr] = useState<Array<string>>([]);
-
-
-  const [xFund, setXFund] = useState<Array<string>>([]);
+  const [xFund, setXFund] = useState<Array<string>>([])
 
   useEffect(() => {
     if (visitId) {
-      ApiLib.visit.info(route.params.visitId).then(res => {
-        setXAdr(['' + res.address])
-        setXFund(['' + res.visitType1])
-        return setVisitInfo(res)
-      }).catch((err) => {
-      })
+      ApiLib.visit
+        .info(route.params.visitId)
+        .then((res) => {
+          setXAdr(['' + res.address])
+          setXFund(['' + res.visitType1])
+          return setVisitInfo(res)
+        })
+        .catch((err) => {})
     } else {
       setVisitInfo({
-        address: "",
-        createBy: "",
+        address: '',
+        createBy: '',
         createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         deptId: 0,
         id: undefined,
-        remark: "",
+        remark: '',
         userId: 0,
-        userName: "",
+        userName: '',
         visitTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-        visitType1: "",
+        visitType1: '',
         visitType2: 0,
         visitType3: 0,
-        visitor: ""
+        visitor: ''
       })
     }
 
-    ApiLib.dict.dict('oa_address').then(res => {
+    ApiLib.dict.dict('oa_address').then((res) => {
       setDictAddress(pathDict(res))
     })
-    ApiLib.dict.dict('oa_visit_type1').then(res => {
+    ApiLib.dict.dict('oa_visit_type1').then((res) => {
       setDictRefund(pathDict(res))
     })
-  }, [visitId, navigation]);
+  }, [visitId, navigation])
 
   const pathDict = (res: AppObject.DictMeta[]) => {
-    res.forEach(s => {
+    res.forEach((s) => {
       s.label = s.dictLabel
       s.value = s.dictValue
     })
@@ -114,12 +123,12 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
 
   const renderContent = () => {
     if (!VisitInfo) {
-      return <Spinner style={{marginTop: 50}}/>
+      return <Spinner style={{ marginTop: 50 }} />
     }
 
     return (
       <>
-        <SetStatusBar/>
+        <SetStatusBar />
         <ScrollView>
           <TableList title={translate('common.customerInfo')}>
             <TableRow
@@ -135,11 +144,11 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
               value={xAdr}
               onChange={(itemValue: any) => {
                 setXAdr(itemValue)
-                setVisitInfo({...visitInfo, address: itemValue})
+                setVisitInfo({ ...visitInfo, address: itemValue })
               }}
               onOk={(itemValue: any) => {
                 setXAdr(itemValue)
-                setVisitInfo({...visitInfo, address: itemValue})
+                setVisitInfo({ ...visitInfo, address: itemValue })
               }}>
               <TableRow
                 title={translate(`common.address`)}
@@ -154,11 +163,11 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
               value={xFund}
               onChange={(itemValue: any) => {
                 setXFund(itemValue)
-                setVisitInfo({...visitInfo, visitType1: itemValue})
+                setVisitInfo({ ...visitInfo, visitType1: itemValue })
               }}
               onOk={(itemValue: any) => {
                 setXFund(itemValue)
-                setVisitInfo({...visitInfo, visitType1: itemValue})
+                setVisitInfo({ ...visitInfo, visitType1: itemValue })
               }}>
               <TableRow
                 title={translate(`common.refund`)}
@@ -169,8 +178,7 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
             <TableChildren
               title={translate(`common.nickName`)}
               leftIcon={theme.assets.images.icons.table.email}
-              withArrow={true}
-            >
+              withArrow={true}>
               <Input
                 autoCapitalize="none"
                 underlineColorAndroid="transparent"
@@ -178,7 +186,7 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
                 returnKeyType="next"
                 autoCorrect={false}
                 value={visitInfo?.visitor}
-                onChangeText={(text) => setVisitInfo({...visitInfo, visitor: text})}
+                onChangeText={(text) => setVisitInfo({ ...visitInfo, visitor: text })}
                 containerStyle={styles.input(theme)}
                 textContentType="none"
                 inputStyle={styles.inputSingle(theme)}
@@ -195,7 +203,7 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
               autoCorrect={false}
               value={visitInfo?.remark}
               editable={true}
-              onChangeText={(text) => setVisitInfo({...visitInfo, remark: text})}
+              onChangeText={(text) => setVisitInfo({ ...visitInfo, remark: text })}
               inputStyle={styles.inputStyle(theme)}
               containerStyle={styles.inputContainer(theme)}
             />
@@ -205,10 +213,8 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
     )
   }
 
-  return <View
-    style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{renderContent()}</View>
+  return <View style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{renderContent()}</View>
 }
-
 
 const styles = {
   inputContainer: (theme: ITheme): ViewStyle => ({
@@ -220,28 +226,27 @@ const styles = {
   inputStyle: (theme: ITheme): ViewStyle => ({
     width: '100%',
     height: 100,
-    alignItems: 'baseline'
+    alignItems: 'center'
   }),
   input: (theme: ITheme): TextStyle => ({
-    alignItems: 'baseline',
+    alignItems: 'center',
     height: 40,
     width: 200,
     borderWidth: 0,
-    right: 8,
-    position: "absolute",
+    marginRight: -8,
     backgroundColor: 'transparent'
   }),
   inputSingle: (theme: ITheme): TextStyle => ({
     textAlign: 'right',
-    writingDirection: 'rtl',
+    writingDirection: 'ltr',
     ...theme.typography.captionText
   }),
   label: (theme: ITheme): TextStyle => ({
     paddingLeft: 10,
     paddingRight: 0,
-    textAlign: "right",
+    textAlign: 'right',
     fontSize: 14,
     maxWidth: 60
-  }),
+  })
 }
 export default VisitInfo

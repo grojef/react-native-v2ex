@@ -1,14 +1,14 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/01.
  */
-import {ITheme, SylCommon, useTheme} from '@src/theme'
-import {AppObject} from '@src/types'
+import { ITheme, SylCommon, useTheme } from '@src/theme'
+import { AppObject } from '@src/types'
 import React from 'react'
-import {StyleProp, View, ViewStyle} from 'react-native'
-import {RenderHTML} from '../common'
+import { StyleProp, View, ViewStyle } from 'react-native'
+import { RenderHTML } from '../common'
 import TopicCardItem from './TopicCardItem'
-import {ApiLib} from "@src/api";
-import Dialer from "@src/components/dialer";
+import { ApiLib } from '@src/api'
+import Dialer from '@src/components/dialer'
 
 /**
  * TopicInfo props
@@ -25,8 +25,8 @@ export interface TopicInfoProps {
   info: AppObject.Topic
 }
 
-const TopicInfo: React.FC<TopicInfoProps> = ({containerStyle, info}: TopicInfoProps) => {
-  const {theme} = useTheme()
+const TopicInfo: React.FC<TopicInfoProps> = ({ containerStyle, info }: TopicInfoProps) => {
+  const { theme } = useTheme()
 
   const renderContent = () => {
     return (
@@ -36,7 +36,7 @@ const TopicInfo: React.FC<TopicInfoProps> = ({containerStyle, info}: TopicInfoPr
           displayStyle={'full'}
           onPress={() => {
             new Dialer().callPhone(info.phoneNumber, () => {
-              ApiLib.topic.call(info.id);
+              ApiLib.topic.call(info.id)
             })
           }}
         />

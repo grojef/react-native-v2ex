@@ -24,9 +24,7 @@ const TopicReplayItem: React.FC<TopicReplayItemProps> = ({ containerStyle, info 
   const { theme } = useTheme()
   return (
     <View style={[styles.container(theme), containerStyle]}>
-      <View style={styles.infoContainer(theme)}>
-
-      </View>
+      <View style={styles.infoContainer(theme)} />
       <BorderLine width={0.4} />
     </View>
   )

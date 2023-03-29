@@ -1,32 +1,34 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
-import {Input, Spinner} from '@src/components'
-import {translate} from '@src/i18n'
-import {TopicDetailScreenProps as ScreenProps} from '@src/navigation'
-import {ITheme, SylCommon, useTheme} from '@src/theme'
-import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableChildren, TableList, TableRow} from '../components'
-import {ApiLib} from "@src/api";
-import {AppObject} from "@src/api/types";
-import {Picker} from "@react-native-picker/picker";
-import {EditTopicHeaderButton} from "@src/screens/components/button";
+import { Input, Spinner } from '@src/components'
+import { translate } from '@src/i18n'
+import { TopicDetailScreenProps as ScreenProps } from '@src/navigation'
+import { ITheme, SylCommon, useTheme } from '@src/theme'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { ScrollView, TextStyle, View, ViewStyle } from 'react-native'
+import { SetStatusBar, TableChildren, TableList, TableRow } from '../components'
+import { ApiLib } from '@src/api'
+import { AppObject } from '@src/api/types'
+import { Picker } from '@react-native-picker/picker'
+import { EditTopicHeaderButton } from '@src/screens/components/button'
 
-const TopicEdit = ({route, navigation}: ScreenProps) => {
-  const {theme} = useTheme()
-  const {topicId} = route.params
-  const [topic, setTopic] = useState<AppObject.Topic>();
+const TopicEdit = ({ route, navigation }: ScreenProps) => {
+  const { theme } = useTheme()
+  const { topicId } = route.params
+  const [topic, setTopic] = useState<AppObject.Topic>()
   const [keyboardRaise, setKeyboardRaise] = useState(false)
   const [token, setToken] = useState('')
 
   useEffect(() => {
-    ApiLib.topic.topic(topicId).then(res => {
-      return setTopic(res)
-    }).catch((err) => {
-      console.error(err)
-    })
-
+    ApiLib.topic
+      .topic(topicId)
+      .then((res) => {
+        return setTopic(res)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }, [topicId, navigation])
 
   const [dictIntent, setDictIntent] = useState<AppObject.DictMeta[]>([])
@@ -34,48 +36,45 @@ const TopicEdit = ({route, navigation}: ScreenProps) => {
   const [dictSex, setDictSex] = useState<AppObject.DictMeta[]>([])
 
   useEffect(() => {
-    ApiLib.dict.dict('sys_user_sex').then(res => {
+    ApiLib.dict.dict('sys_user_sex').then((res) => {
       setDictSex(res)
     })
-    ApiLib.dict.dict('cms_feature').then(res => {
+    ApiLib.dict.dict('cms_feature').then((res) => {
       setDictFeatures(res)
     })
-    ApiLib.dict.dict('call_intent_type').then(res => {
+    ApiLib.dict.dict('call_intent_type').then((res) => {
       setDictIntent(res)
     })
-  }, []);
-
+  }, [])
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () =>
-        (
-          <EditTopicHeaderButton onPress={()=>{
+      headerRight: () => (
+        <EditTopicHeaderButton
+          onPress={() => {
             ApiLib.topic.update(topic).then()
-          }}/>
-        )
+          }}
+        />
+      )
     })
   }, [navigation])
 
-
   const findDict = (dict: AppObject.DictMeta[], dictValue: any) => {
     if (dictValue) {
-      return dict ? dict.find(s => s.dictValue == dictValue)?.dictLabel : '';
-    } else {
-      return ''
+      return dict ? dict.find((s) => s.dictValue == dictValue)?.dictLabel : ''
     }
+    return ''
   }
-
 
   const reanderContent = () => {
     if (!topic) {
-      return <Spinner style={{marginTop: 50}}/>
+      return <Spinner style={{ marginTop: 50 }} />
     }
 
     // @ts-ignore
     return (
       <>
-        <SetStatusBar/>
+        <SetStatusBar />
 
         <ScrollView>
           <TableList title={translate('common.customerInfo')}>
@@ -95,17 +94,14 @@ const TopicEdit = ({route, navigation}: ScreenProps) => {
               title={translate(`common.sex`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={findDict(dictSex, topic.sex)}
-            >
+              rightText={findDict(dictSex, topic.sex)}>
               <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                style={{ position: 'absolute', width: 160, height: 0, transform: [{ scaleX: 0 }] }}
                 onValueChange={(itemValue: string, itemIndex) => {
-                  setTopic({...topic, sex: itemValue})
-                }
-                }>
-                {dictSex?.map(sex => {
-                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
-                                      value={sex.dictValue}/>
+                  setTopic({ ...topic, sex: itemValue })
+                }}>
+                {dictSex?.map((sex) => {
+                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel} value={sex.dictValue} />
                 })}
               </Picker>
             </TableChildren>
@@ -113,17 +109,14 @@ const TopicEdit = ({route, navigation}: ScreenProps) => {
               title={translate(`common.intentFlag`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={findDict(dictIntent, topic.intentFlag)}
-            >
+              rightText={findDict(dictIntent, topic.intentFlag)}>
               <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                style={{ position: 'absolute', width: 160, height: 0, transform: [{ scaleX: 0 }] }}
                 onValueChange={(itemValue: string, itemIndex) => {
-                  setTopic({...topic, intentFlag: itemValue})
-                }
-                }>
-                {dictIntent?.map(sex => {
-                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
-                                      value={sex.dictValue}/>
+                  setTopic({ ...topic, intentFlag: itemValue })
+                }}>
+                {dictIntent?.map((sex) => {
+                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel} value={sex.dictValue} />
                 })}
               </Picker>
             </TableChildren>
@@ -132,17 +125,14 @@ const TopicEdit = ({route, navigation}: ScreenProps) => {
               title={translate(`common.feature`)}
               leftIcon={theme.assets.images.icons.table.urlschme}
               withArrow={true}
-              rightText={findDict(dictFeatures, topic.feature)}
-            >
+              rightText={findDict(dictFeatures, topic.feature)}>
               <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                style={{ position: 'absolute', width: 160, height: 0, transform: [{ scaleX: 0 }] }}
                 onValueChange={(itemValue: string, itemIndex) => {
-                  setTopic({...topic, feature: itemValue})
-                }
-                }>
-                {dictFeatures?.map(sex => {
-                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel}
-                                      value={sex.dictValue}/>
+                  setTopic({ ...topic, feature: itemValue })
+                }}>
+                {dictFeatures?.map((sex) => {
+                  return <Picker.Item key={sex.dictCode} label={sex.dictLabel} value={sex.dictValue} />
                 })}
               </Picker>
             </TableChildren>
@@ -169,8 +159,7 @@ const TopicEdit = ({route, navigation}: ScreenProps) => {
     )
   }
 
-  return <View
-    style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{reanderContent()}</View>
+  return <View style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{reanderContent()}</View>
 }
 
 const styles = {
@@ -188,9 +177,9 @@ const styles = {
   label: (theme: ITheme): TextStyle => ({
     paddingLeft: 10,
     paddingRight: 0,
-    textAlign: "right",
+    textAlign: 'right',
     fontSize: 14,
     maxWidth: 60
-  }),
+  })
 }
 export default TopicEdit

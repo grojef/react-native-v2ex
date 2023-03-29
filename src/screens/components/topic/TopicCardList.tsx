@@ -1,12 +1,12 @@
-import {Placeholder, Spinner} from '@src/components'
-import {translate} from '@src/i18n'
-import {SylCommon, useTheme} from '@src/theme'
-import {AppObject, IState, ITheme} from '@src/types'
+import { Placeholder, Spinner } from '@src/components'
+import { translate } from '@src/i18n'
+import { SylCommon, useTheme } from '@src/theme'
+import { AppObject, IState, ITheme } from '@src/types'
 import React from 'react'
-import {FlatList, StyleProp, View, ViewStyle} from 'react-native'
-import Animated, {FadeInDown} from 'react-native-reanimated'
+import { FlatList, StyleProp, View, ViewStyle } from 'react-native'
+import Animated, { FadeInDown } from 'react-native-reanimated'
 import TopicCardTip from './TopicCardTip'
-import {connect} from "react-redux";
+import { connect } from 'react-redux'
 
 export interface TopicCardListProps {
   /**
@@ -27,28 +27,27 @@ export interface TopicCardListProps {
    * Display Style
    */
   displayStyle?: 'simple' | 'full' | 'auto'
-  app: IState.AppState,
+  app: IState.AppState
   useFlatList?: boolean
 }
 
 const TopicCardList: React.FC<TopicCardListProps> = ({
-                                                       app,
-                                                       useFlatList = true,
-                                                       containerStyle,
-                                                       onRowPress,
-                                                       itemContainerStyle,
-                                                       canLoadMoreContent,
-                                                       displayStyle,
-                                                       topics,
-                                                       onEndReached,
-                                                       refreshControl,
-                                                       searchIndicator,
-                                                       refreshCallback
-                                                     }: TopicCardListProps) => {
-  const {theme} = useTheme()
+  app,
+  useFlatList = true,
+  containerStyle,
+  onRowPress,
+  itemContainerStyle,
+  canLoadMoreContent,
+  displayStyle,
+  topics,
+  onEndReached,
+  refreshControl,
+  searchIndicator,
+  refreshCallback
+}: TopicCardListProps) => {
+  const { theme } = useTheme()
 
-
-  const renderItemRow = ({item}: { item: AppObject.Topic }) =>
+  const renderItemRow = ({ item }: { item: AppObject.Topic }) =>
     !item || false ? null : (
       <Animated.View key={item.id} entering={FadeInDown}>
         <TopicCardTip
@@ -61,11 +60,11 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
 
   const renderFooter = () => {
     if (canLoadMoreContent) {
-      return <Spinner style={{padding: theme.spacing.large}}/>
+      return <Spinner style={{ padding: theme.spacing.large }} />
     } else if (topics && topics.length > 0) {
       return (
         <Placeholder
-          containerStyle={[{backgroundColor: theme.colors.background}]}
+          containerStyle={[{ backgroundColor: theme.colors.background }]}
           placeholderText={translate('tips.noMore')}
         />
       )
@@ -73,12 +72,11 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
     return null
   }
 
-
-  const renderItemSeparator = () => <View style={styles.itemSeparator(theme)}/>
+  const renderItemSeparator = () => <View style={styles.itemSeparator(theme)} />
 
   const renderContent = () => {
     if (!topics) {
-      return <Spinner style={{marginTop: 50}}/>
+      return <Spinner style={{ marginTop: 50 }} />
     }
 
     return (
@@ -101,9 +99,7 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
     )
   }
 
-  return <View style={[styles.container(theme), containerStyle]}>
-    {renderContent()}
-  </View>
+  return <View style={[styles.container(theme), containerStyle]}>{renderContent()}</View>
 }
 
 /**
@@ -123,18 +119,18 @@ const styles = {
     marginTop: theme.spacing.small,
     marginBottom: theme.spacing.small,
     backgroundColor: '#fff',
-    flexDirection: "row",
+    flexDirection: 'row'
   }),
   refreshBox: (): ViewStyle => ({
     flex: 1,
     justifyContent: 'space-between',
     height: 50,
     padding: 10
-  }),
+  })
 }
 
-const mapStateToProps = ({app}: { app: IState.AppState }) => {
-  return {app}
+const mapStateToProps = ({ app }: { app: IState.AppState }) => {
+  return { app }
 }
 
 export default connect(mapStateToProps)(TopicCardList)
