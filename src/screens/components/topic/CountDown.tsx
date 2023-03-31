@@ -51,7 +51,6 @@ const CountDown: React.FC<CountDownProps> = ({ refreshData }: CountDownProps) =>
 
   const initTags = useCallback(() => {
     ApiLib.dict.dict('cms_ctm_tag').then((res) => {
-      res.unshift(defaultDictMeta)
       res.forEach((s) => {
         s.label = s.dictLabel
         s.value = s.dictValue
@@ -66,9 +65,9 @@ const CountDown: React.FC<CountDownProps> = ({ refreshData }: CountDownProps) =>
     initTags()
   }, [])
 
-  const pressTag = (labelValue: string) => {
+  const pressTag = (labelValue: Array<string>) => {
     ApiLib.topic
-      .grab(labelValue)
+      .grab(labelValue[0])
       .then((data) => {
         showMessage('认领成功！')
         if (data.delayTime) {
