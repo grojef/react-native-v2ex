@@ -6,12 +6,13 @@ import { translate } from '@src/i18n'
 import { TopicDetailScreenProps as ScreenProps } from '@src/navigation'
 import { ITheme, SylCommon, useTheme } from '@src/theme'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { ScrollView, TextStyle, View, ViewStyle } from 'react-native'
+import { TextStyle, View, ViewStyle } from 'react-native'
 import { SetStatusBar, TableChildren, TableList, TableRow, TopicInfo } from '../components'
 import { ApiLib } from '@src/api'
 import { AppObject } from '@src/api/types'
 import { EditTopicHeaderButton } from '@src/screens/components/button'
 import Picker from '@ant-design/react-native/lib/picker'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const TopicDetail = ({ route, navigation }: ScreenProps) => {
   const { theme } = useTheme()
@@ -89,7 +90,7 @@ const TopicDetail = ({ route, navigation }: ScreenProps) => {
     return (
       <>
         <SetStatusBar />
-        <ScrollView>
+        <KeyboardAwareScrollView extraScrollHeight={20}>
           <TopicInfo info={topic} />
           <TableList title={translate('common.customerInfo')}>
             <TableRow
@@ -111,11 +112,11 @@ const TopicDetail = ({ route, navigation }: ScreenProps) => {
               value={[...xSex]}
               onChange={(v: any) => {
                 setXSex(v)
-                setTopic({ ...topic, sex: v })
+                setTopic({ ...topic, sex: v[0] })
               }}
               onOk={(v: any) => {
                 setXSex(v)
-                setTopic({ ...topic, sex: v })
+                setTopic({ ...topic, sex: v[0] })
               }}>
               <TableRow
                 title={translate(`common.sex`)}
@@ -130,11 +131,11 @@ const TopicDetail = ({ route, navigation }: ScreenProps) => {
               value={[...xInt]}
               onChange={(v: any) => {
                 setXInt(v)
-                setTopic({ ...topic, intentFlag: v })
+                setTopic({ ...topic, intentFlag: v[0] })
               }}
               onOk={(v: any) => {
                 setXInt(v)
-                setTopic({ ...topic, intentFlag: v })
+                setTopic({ ...topic, intentFlag: v[0] })
               }}>
               <TableRow
                 title={translate(`common.intentFlag`)}
@@ -149,11 +150,11 @@ const TopicDetail = ({ route, navigation }: ScreenProps) => {
               value={[...xFeat]}
               onChange={(v: any) => {
                 setXFeat(v)
-                setTopic({ ...topic, feature: v })
+                setTopic({ ...topic, feature: v[0] })
               }}
               onOk={(v: any) => {
                 setXFeat(v)
-                setTopic({ ...topic, feature: v })
+                setTopic({ ...topic, feature: v[0] })
               }}>
               <TableRow
                 title={translate(`common.feature`)}
@@ -194,7 +195,7 @@ const TopicDetail = ({ route, navigation }: ScreenProps) => {
               containerStyle={styles.inputContainer(theme)}
             />
           </TableList>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </>
     )
   }

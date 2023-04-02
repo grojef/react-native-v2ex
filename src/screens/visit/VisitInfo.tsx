@@ -144,11 +144,11 @@ const VisitInfo = ({ route, navigation }: ScreenProps) => {
               value={xAdr}
               onChange={(itemValue: any) => {
                 setXAdr(itemValue)
-                setVisitInfo({ ...visitInfo, address: itemValue })
+                setVisitInfo({ ...visitInfo, address: itemValue[0] })
               }}
               onOk={(itemValue: any) => {
                 setXAdr(itemValue)
-                setVisitInfo({ ...visitInfo, address: itemValue })
+                setVisitInfo({ ...visitInfo, address: itemValue[0] })
               }}>
               <TableRow
                 title={translate(`common.address`)}
@@ -163,11 +163,11 @@ const VisitInfo = ({ route, navigation }: ScreenProps) => {
               value={xFund}
               onChange={(itemValue: any) => {
                 setXFund(itemValue)
-                setVisitInfo({ ...visitInfo, visitType1: itemValue })
+                setVisitInfo({ ...visitInfo, visitType1: itemValue[0] })
               }}
               onOk={(itemValue: any) => {
                 setXFund(itemValue)
-                setVisitInfo({ ...visitInfo, visitType1: itemValue })
+                setVisitInfo({ ...visitInfo, visitType1: itemValue[0] })
               }}>
               <TableRow
                 title={translate(`common.refund`)}
