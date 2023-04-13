@@ -1,8 +1,8 @@
-import {NavigationService, ROUTES} from '@src/navigation'
-import {ITheme, useTheme} from '@src/theme'
-import React, {useCallback, useRef} from 'react'
-import {Animated, Image, Pressable, ViewStyle} from 'react-native'
-import FastImage, {Source} from 'react-native-fast-image'
+import { NavigationService, ROUTES } from '@src/navigation'
+import { ITheme, useTheme } from '@src/theme'
+import React, { useCallback, useRef } from 'react'
+import { Animated, Image, Pressable, ViewStyle } from 'react-native'
+import FastImage, { Source } from 'react-native-fast-image'
 
 interface IProps {
   style?: ViewStyle
@@ -62,7 +62,7 @@ const avatar = React.memo(AvatarComponent)
 const styles = {
   avatar: (theme: ITheme, size: number) => ({
     width: size,
-    height: size,
+    height: size
   })
 }
 

@@ -3,12 +3,12 @@
  */
 
 import * as React from 'react'
-import {StyleProp, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
-import {AppObject, ITheme} from '@src/types'
-import {useTheme} from '@src/theme'
-import {Avatar, Text} from '@src/components'
+import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { AppObject, ITheme } from '@src/types'
+import { useTheme } from '@src/theme'
+import { Avatar, Text } from '@src/components'
 import dayjs from 'dayjs'
-import {BorderLine, TextWithIconPress} from '../common'
+import { BorderLine, TextWithIconPress } from '../common'
 
 export interface TopicCardItemProps {
   /**
@@ -37,22 +37,13 @@ export interface TopicCardItemProps {
   onPress?: (topic: AppObject.Topic) => void
 }
 
-const TopicCardItem = ({
-                         containerStyle,
-                         displayStyle,
-                         topic,
-                         onPress
-                       }: TopicCardItemProps) => {
-  const {theme} = useTheme()
+const TopicCardItem = ({ containerStyle, displayStyle, topic, onPress }: TopicCardItemProps) => {
+  const { theme } = useTheme()
 
   return (
     <View style={[styles.container(theme), containerStyle]}>
       <View style={styles.infoContainer(theme)}>
-        <Avatar
-          size={50}
-          source={undefined}
-          style={styles.avatar(theme)}
-        />
+        <Avatar size={50} source={undefined} style={styles.avatar(theme)} />
         <View style={styles.infoMain(theme)}>
           <TouchableOpacity
             activeOpacity={0.8}
@@ -60,8 +51,7 @@ const TopicCardItem = ({
             onPress={() => {
               onPress && onPress(topic)
             }}>
-            <Text type="body"
-                  style={[styles.title(theme)]}>
+            <Text type="body" style={[styles.title(theme)]}>
               {topic.phoneNumber}
             </Text>
           </TouchableOpacity>
@@ -69,7 +59,7 @@ const TopicCardItem = ({
           <View style={styles.infoMainItem(theme)}>
             <View style={styles.summaryContainer(theme)}>
               <TextWithIconPress
-                containerStyle={[{marginRight: theme.spacing.small}]}
+                containerStyle={[{ marginRight: theme.spacing.small }]}
                 text={topic.replies?.toString()}
                 icon={theme.assets.images.icons.topic.comment}
               />
@@ -77,21 +67,22 @@ const TopicCardItem = ({
                 text={topic.callTime ? dayjs(topic.callTime, 'yyyy-MM-dd HH:mm:ss').fromNow() : '未拨打'}
                 icon={theme.assets.images.icons.topic.time}
               />
-
             </View>
             {topic.batCode ? (
               <TextWithIconPress
                 text={topic.batCode}
                 icon={theme.assets.images.icons.topic.paper}
-                textStyle={[{color: theme.colors.secondary}]}
+                textStyle={[{ color: theme.colors.secondary }]}
               />
-            ) : (topic.callFlag == '1' &&
-              <TextWithIconPress text={dayjs(topic.callTime, 'yyyy-MM-dd HH:mm:ss').fromNow()}/>
+            ) : (
+              topic.callFlag == '1' && (
+                <TextWithIconPress text={dayjs(topic.callTime, 'yyyy-MM-dd HH:mm:ss').fromNow()} />
+              )
             )}
           </View>
         </View>
       </View>
-      <BorderLine width={0.4}/>
+      <BorderLine width={0.4} />
     </View>
   )
 }
@@ -120,14 +111,14 @@ const styles = {
   infoMainItem: (theme: ITheme): ViewStyle => ({
     flexDirection: 'row',
     marginBottom: theme.spacing.small,
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   }),
   summaryContainer: (theme: ITheme): ViewStyle => ({
     flexDirection: 'row',
     justifyContent: 'flex-start'
   }),
   title: (theme: ITheme): TextStyle => ({
-    ...theme.typography.bodyText,
+    ...theme.typography.bodyText
   }),
   called: (): TextStyle => ({
     color: '#F00'

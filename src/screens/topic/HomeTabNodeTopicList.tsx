@@ -4,7 +4,7 @@ import { NodeTopicsScreenProps as ScreenProps } from '@src/navigation'
 import { SylCommon, useTheme } from '@src/theme'
 import { IState, AppObject } from '@src/types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import {RefreshControl, TextInput, View} from 'react-native'
+import { RefreshControl, TextInput, View } from 'react-native'
 import { connect } from 'react-redux'
 import { SetStatusBar, TopicCardList } from '../components'
 

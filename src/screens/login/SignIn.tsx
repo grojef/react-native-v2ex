@@ -1,41 +1,40 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/14.
  */
-import {loginByToken} from '@src/actions'
-import {Button, Input, Text, useToast} from '@src/components'
-import {translate} from '@src/i18n'
-import {ROUTES, SignInScreenProps as ScreenProps} from '@src/navigation'
-import {SylCommon, useTheme} from '@src/theme'
-import {APP_AUTH_RESET, APP_LOGOUT, IState, ITheme} from '@src/types'
+import { loginByToken } from '@src/actions'
+import { Button, Input, Text, useToast } from '@src/components'
+import { translate } from '@src/i18n'
+import { ROUTES, SignInScreenProps as ScreenProps } from '@src/navigation'
+import { SylCommon, useTheme } from '@src/theme'
+import { APP_AUTH_RESET, APP_LOGOUT, IState, ITheme } from '@src/types'
 import * as utils from '@src/utils'
-import React, {useEffect, useState} from 'react'
-import {Image, ImageStyle, Pressable, TextStyle, View, ViewStyle} from 'react-native'
-import {connect} from 'react-redux'
-import {SetStatusBar} from '../components'
-import {useAppDispatch} from "@src/hooks";
+import React, { useEffect, useState } from 'react'
+import { Image, ImageStyle, Pressable, TextStyle, View, ViewStyle } from 'react-native'
+import { connect } from 'react-redux'
+import { SetStatusBar } from '../components'
+import { useAppDispatch } from '@src/hooks'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {ApiLib} from "@src/api";
-import {MEMBER_TOKEN_KEY} from "@config/constants";
-import {Verification} from "@src/screens/components/verification";
+import { ApiLib } from '@src/api'
+import { MEMBER_TOKEN_KEY } from '@config/constants'
+import { Verification } from '@src/screens/components/verification'
 
 const Screen = ({
-                  navigation,
-                  loading = false,
-                  error,
-                  success,
-                  auth: _auth = (loginId: string, password: string, uuid: string, code: string) => {
-                    utils.Alert.alert({message: 'token: ' + loginId})
-                  }
-                }: ScreenProps) => {
+  navigation,
+  loading = false,
+  error,
+  success,
+  auth: _auth = (loginId: string, password: string, uuid: string, code: string) => {
+    utils.Alert.alert({ message: 'token: ' + loginId })
+  }
+}: ScreenProps) => {
   const [userId, setUserId] = useState('')
   const [uuid, setUuid] = useState('')
   const [code, setCode] = useState('')
   const [pwd, setPwd] = useState('')
-  const {theme} = useTheme()
+  const { theme } = useTheme()
   const dispatch = useAppDispatch()
-  const {showMessage} = useToast()
+  const { showMessage } = useToast()
   const [keyboardRaise, setKeyboardRaise] = useState(false)
-
 
   const initToken = async () => {
     const sessionUserId = await AsyncStorage.getItem('sessionUserId')
@@ -46,36 +45,33 @@ const Screen = ({
 
   useEffect(() => {
     initToken().then()
-    dispatch({type: APP_AUTH_RESET, payLoad: {}})
+    dispatch({ type: APP_AUTH_RESET, payLoad: {} })
   }, [navigation])
-
 
   const goNextRoute = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: ROUTES.Main}]
+      routes: [{ name: ROUTES.Main }]
     })
   }
 
   useEffect(() => {
     if (success && ApiLib.token) {
       AsyncStorage.setItem('sessionUserId', userId)
-      showMessage({type: 'success', text2: success})
+      showMessage({ type: 'success', text2: success })
       goNextRoute()
     } else {
       //防止死循环登录
       AsyncStorage.setItem(MEMBER_TOKEN_KEY, '')
-      ApiLib.member.logout().then(r => null)
-      dispatch({type: APP_LOGOUT})
+      ApiLib.member.logout().then((r) => null)
+      dispatch({ type: APP_LOGOUT })
     }
-
   }, [success]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (error) {
-      showMessage({type: 'error', text2: error})
-      dispatch({type: APP_AUTH_RESET, payLoad: {}})
-
+      showMessage({ type: 'error', text2: error })
+      dispatch({ type: APP_AUTH_RESET, payLoad: {} })
     }
   }, [error]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -108,9 +104,9 @@ const Screen = ({
       style={[
         SylCommon.Card.container(theme),
         styles.mainContainer(theme, keyboardRaise),
-        {backgroundColor: theme.colors.background}
+        { backgroundColor: theme.colors.background }
       ]}>
-      <SetStatusBar backgroundColor={theme.colors.background}/>
+      <SetStatusBar backgroundColor={theme.colors.background} />
       <View style={styles.columnItem(theme)}>
         <Image
           source={
@@ -151,7 +147,7 @@ const Screen = ({
           containerStyle={styles.input(theme)}
           textContentType="none"
         />
-        <Verification key={error} dataChange={dataChange}/>
+        <Verification key={error} dataChange={dataChange} />
         {renderButtons()}
       </View>
       <View style={styles.footer(theme)}>
@@ -160,7 +156,7 @@ const Screen = ({
           onPress={() => {
             navigation.navigate(ROUTES.PrivacyPolicy)
           }}>
-          <Text style={[styles.footerText(theme), {color: theme.colors.secondary}]}>
+          <Text style={[styles.footerText(theme), { color: theme.colors.secondary }]}>
             {translate('common.privacyPolicy')}
           </Text>
         </Pressable>
@@ -169,7 +165,7 @@ const Screen = ({
           onPress={() => {
             navigation.navigate(ROUTES.TermsOfService)
           }}>
-          <Text style={[styles.footerText(theme), {color: theme.colors.secondary}]}>
+          <Text style={[styles.footerText(theme), { color: theme.colors.secondary }]}>
             {translate('common.termsOfService')}
           </Text>
         </Pressable>
@@ -234,9 +230,9 @@ const styles = {
   })
 }
 
-const mapStateToProps = ({ui: {login}}: { ui: IState.UIState }) => {
-  const {error, success, loading} = login
-  return {error, success, loading}
+const mapStateToProps = ({ ui: { login } }: { ui: IState.UIState }) => {
+  const { error, success, loading } = login
+  return { error, success, loading }
 }
 
-export default connect(mapStateToProps, {auth: loginByToken})(Screen)
+export default connect(mapStateToProps, { auth: loginByToken })(Screen)

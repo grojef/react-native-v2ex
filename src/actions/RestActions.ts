@@ -7,7 +7,7 @@ import { RootState } from '@src/store'
 import DeviceInfo from 'react-native-device-info'
 import { Dispatch } from 'redux'
 import { APP_INIT, APP_INIT_ERROR, APP_SITE_INFO, APP_SITE_STAT } from '../types'
-import {cacheDict} from "@src/actions/CacheAction";
+import { cacheDict } from '@src/actions/CacheAction'
 
 export const initV2ex = () => {
   ApiLib.setOptions(AppApiOptions)

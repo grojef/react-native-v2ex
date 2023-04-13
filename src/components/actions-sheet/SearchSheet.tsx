@@ -1,61 +1,52 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/3/10.
  */
-import {Button} from '@src/components'
-import {translate} from '@src/i18n'
-import {SylCommon, useTheme} from '@src/theme'
-import {AppObject, ITheme} from '@src/types'
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
-import {Text, TextInput, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
-import ActionSheet, {ActionSheetRef, SheetManager, SheetProps} from 'react-native-actions-sheet'
-import {ApiLib} from "@src/api";
-
+import { Button } from '@src/components'
+import { translate } from '@src/i18n'
+import { SylCommon, useTheme } from '@src/theme'
+import { AppObject, ITheme } from '@src/types'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Text, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import ActionSheet, { ActionSheetRef, SheetManager, SheetProps } from 'react-native-actions-sheet'
+import { ApiLib } from '@src/api'
 
 const SearchActionSheet = (props: SheetProps) => {
-  const {theme} = useTheme()
+  const { theme } = useTheme()
   const {
     sheetId,
-    payload: {
-      height,
-      fea,
-      tag,
-      confirmText = translate('common.confirm'),
-      cancelText = translate('common.cancel')
-    }
+    payload: { height, fea, tag, confirmText = translate('common.confirm'), cancelText = translate('common.cancel') }
   } = props
   const actionSheetRef = useRef<ActionSheetRef>(null)
 
-  const [tags, setTags] = useState<AppObject.DictMeta[]>([]);
-  const [features, setFeatures] = useState<AppObject.DictMeta[]>();
+  const [tags, setTags] = useState<AppObject.DictMeta[]>([])
+  const [features, setFeatures] = useState<AppObject.DictMeta[]>()
 
   const initTags = useCallback(() => {
-    ApiLib.dict.dict('cms_ctm_tag').then(res => {
+    ApiLib.dict.dict('cms_ctm_tag').then((res) => {
       setTags(res)
     })
   }, [])
 
   const initFeatures = useCallback(() => {
-    ApiLib.dict.dict('cms_feature').then(res => {
+    ApiLib.dict.dict('cms_feature').then((res) => {
       setFeatures(res)
     })
   }, [])
 
   useEffect(() => {
-      initTags()
-      initFeatures()
-  }, []);
+    initTags()
+    initFeatures()
+  }, [])
 
-
-  const [sTag, setsTag] = useState(tag);
-  const [sFea, setsFea] = useState(fea);
+  const [sTag, setsTag] = useState(tag)
+  const [sFea, setsFea] = useState(fea)
 
   const buttonConfirm = (yes: boolean) => {
     SheetManager.hide(sheetId, {
-      payload: {'bool': yes, 'sTag': sTag, 'sFea': sFea},
+      payload: { bool: yes, sTag: sTag, sFea: sFea },
       context: 'global'
     })
   }
-
 
   return (
     <ActionSheet
@@ -74,23 +65,41 @@ const SearchActionSheet = (props: SheetProps) => {
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20
       }}>
-      <View style={[styles.container(theme), SylCommon.Card.container(theme), {height: height}]}>
-        <View><Text style={styles.label(theme)}>标签:</Text></View>
+      <View style={[styles.container(theme), SylCommon.Card.container(theme), { height: height }]}>
+        <View>
+          <Text style={styles.label(theme)}>标签:</Text>
+        </View>
         <View style={[styles.tagContainer()]}>
-          {tags?.map(tag => {
-            return (<TouchableOpacity key={tag.dictCode} onPress={() => {
-              setsTag(tag.dictValue == sTag ? '' : tag.dictValue)
-            }}><View style={[styles.tagItem(), tag.dictValue == sTag && styles.tagItemHit()]}><Text
-              style={styles.text(theme)}>{tag.dictLabel}</Text></View></TouchableOpacity>)
+          {tags?.map((tag) => {
+            return (
+              <TouchableOpacity
+                key={tag.dictCode}
+                onPress={() => {
+                  setsTag(tag.dictValue == sTag ? '' : tag.dictValue)
+                }}>
+                <View style={[styles.tagItem(), tag.dictValue == sTag && styles.tagItemHit()]}>
+                  <Text style={styles.text(theme)}>{tag.dictLabel}</Text>
+                </View>
+              </TouchableOpacity>
+            )
           })}
         </View>
-        <View><Text style={styles.label(theme)}>属性:</Text></View>
+        <View>
+          <Text style={styles.label(theme)}>属性:</Text>
+        </View>
         <View style={[styles.tagContainer()]}>
-          {features?.map(tag => {
-            return (<TouchableOpacity key={tag.dictCode} onPress={() => {
-              setsFea(tag.dictValue == sFea ? '' : tag.dictValue)
-            }}><View style={[styles.tagItem(), tag.dictValue == sFea && styles.tagItemHit()]}><Text
-              style={styles.text(theme)}>{tag.dictLabel}</Text></View></TouchableOpacity>)
+          {features?.map((tag) => {
+            return (
+              <TouchableOpacity
+                key={tag.dictCode}
+                onPress={() => {
+                  setsFea(tag.dictValue == sFea ? '' : tag.dictValue)
+                }}>
+                <View style={[styles.tagItem(), tag.dictValue == sFea && styles.tagItemHit()]}>
+                  <Text style={styles.text(theme)}>{tag.dictLabel}</Text>
+                </View>
+              </TouchableOpacity>
+            )
           })}
         </View>
         <View style={styles.buttonContainer(theme)}>
@@ -151,9 +160,10 @@ const styles = {
     paddingVertical: theme.spacing.small
   }),
 
-
   tagContainer: (): ViewStyle => ({
-    flex: 1, flexDirection: 'row', flexWrap: 'wrap'
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   }),
 
   tagItem: (): ViewStyle => ({
@@ -164,7 +174,7 @@ const styles = {
     margin: 6
   }),
   tagItemHit: (): ViewStyle => ({
-    backgroundColor: '#898B8B',
+    backgroundColor: '#898B8B'
   }),
   buttonContainer: (theme: ITheme): ViewStyle => ({
     paddingVertical: theme.spacing.small,

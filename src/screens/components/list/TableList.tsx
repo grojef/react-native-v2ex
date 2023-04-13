@@ -1,8 +1,8 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/01.
  */
-import {Text} from '@src/components'
-import {ITheme, useTheme} from '@src/theme'
+import { Text } from '@src/components'
+import { ITheme, useTheme } from '@src/theme'
 import React from 'react'
 import {
   Image,
@@ -72,13 +72,12 @@ export interface TableRowProps {
 }
 
 const TableRow: React.FC<TableRowProps> = (data: TableRowProps) => {
-  const {theme} = useTheme()
+  const { theme } = useTheme()
 
   return (
-    <TouchableOpacity onPress={data.onPress}
-                      style={[data.containerStyle, rowStyles.container(theme)]}>
+    <TouchableOpacity onPress={data.onPress} style={[data.containerStyle, rowStyles.container(theme)]}>
       <View style={rowStyles.left(theme)}>
-        {data.leftIcon && <Image source={data.leftIcon} style={rowStyles.leftIcon(theme)}/>}
+        {data.leftIcon && <Image source={data.leftIcon} style={rowStyles.leftIcon(theme)} />}
         <View style={rowStyles.textBox(theme)}>
           <Text style={rowStyles.title(theme, data.highlightTitle ?? false)}>{data.title}</Text>
           {data.description && <Text style={rowStyles.description(theme)}>{data.description}</Text>}
@@ -97,24 +96,21 @@ const TableRow: React.FC<TableRowProps> = (data: TableRowProps) => {
       <View style={rowStyles.right(theme)}>
         {data.rightText && <Text style={rowStyles.rightText(theme)}>{data.rightText}</Text>}
         {data.withArrow && (
-          <Image source={theme.assets.images.icons.table.rightArrow}
-                 style={rowStyles.rightIcon(theme)}/>
+          <Image source={theme.assets.images.icons.table.rightArrow} style={rowStyles.rightIcon(theme)} />
         )}
-        {data.rightIcon && <Image source={data.rightIcon} style={rowStyles.rightIcon(theme)}/>}
+        {data.rightIcon && <Image source={data.rightIcon} style={rowStyles.rightIcon(theme)} />}
       </View>
     </TouchableOpacity>
   )
 }
 
-
 const TableChildren: React.FC<TableRowProps> = (data: TableRowProps) => {
-  const {theme} = useTheme()
+  const { theme } = useTheme()
 
   return (
-    <TouchableOpacity onPress={data.onPress}
-                      style={[data.containerStyle, rowStyles.container(theme)]}>
+    <TouchableOpacity onPress={data.onPress} style={[data.containerStyle, rowStyles.container(theme)]}>
       <View style={rowStyles.left(theme)}>
-        {data.leftIcon && <Image source={data.leftIcon} style={rowStyles.leftIcon(theme)}/>}
+        {data.leftIcon && <Image source={data.leftIcon} style={rowStyles.leftIcon(theme)} />}
         <View style={rowStyles.textBox(theme)}>
           <Text style={rowStyles.title(theme, data.highlightTitle ?? false)}>{data.title}</Text>
           {data.description && <Text style={rowStyles.description(theme)}>{data.description}</Text>}
@@ -134,10 +130,9 @@ const TableChildren: React.FC<TableRowProps> = (data: TableRowProps) => {
         {data.children && data.children}
         {data.rightText && <Text style={rowStyles.rightText(theme)}>{data.rightText}</Text>}
         {data.withArrow && (
-          <Image source={theme.assets.images.icons.table.rightArrow}
-                 style={rowStyles.rightIcon(theme)}/>
+          <Image source={theme.assets.images.icons.table.rightArrow} style={rowStyles.rightIcon(theme)} />
         )}
-        {data.rightIcon && <Image source={data.rightIcon} style={rowStyles.rightIcon(theme)}/>}
+        {data.rightIcon && <Image source={data.rightIcon} style={rowStyles.rightIcon(theme)} />}
       </View>
     </TouchableOpacity>
   )
@@ -161,7 +156,7 @@ export interface TableListProps {
 }
 
 const TableList: React.FC<TableListProps> = (data: TableListProps) => {
-  const {theme} = useTheme()
+  const { theme } = useTheme()
   const renderContent = () => {
     return (
       <View style={[tableStyles.container(theme), data.containerStyle]}>
@@ -211,8 +206,8 @@ const rowStyles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    width:'60%',
-    justifyContent:'flex-end',
+    width: '60%',
+    justifyContent: 'flex-end',
     marginRight: theme.spacing.medium
   }),
   rightText: (theme: ITheme): TextStyle => ({
@@ -245,4 +240,4 @@ const tableStyles = {
   })
 }
 
-export {TableList, TableRow,TableChildren}
+export { TableList, TableRow, TableChildren }

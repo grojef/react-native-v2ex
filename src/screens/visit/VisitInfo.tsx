@@ -1,49 +1,58 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/28.
  */
-import {Input, Spinner, useToast} from '@src/components'
-import {translate} from '@src/i18n'
-import {VisitInfoScreenProps as ScreenProps} from '@src/navigation'
-import {ITheme, SylCommon, useTheme} from '@src/theme'
-import React, {useEffect, useLayoutEffect, useState} from 'react'
-import {ScrollView, TextStyle, View, ViewStyle} from 'react-native'
-import {SetStatusBar, TableChildren, TableList, TableRow} from '../components'
-import {ApiLib} from "@src/api";
-import {AppObject} from "@src/api/types";
-import {EditTopicHeaderButton} from "@src/screens/components/button";
-import {Picker} from "@react-native-picker/picker";
-import {defaultDictMeta} from "@src/helper/defaultDictMeta";
-import dayjs from "dayjs";
+import { Input, Spinner, useToast } from '@src/components'
+import { translate } from '@src/i18n'
+import { VisitInfoScreenProps as ScreenProps } from '@src/navigation'
+import { ITheme, SylCommon, useTheme } from '@src/theme'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { ScrollView, TextStyle, View, ViewStyle } from 'react-native'
+import { SetStatusBar, TableChildren, TableList, TableRow } from '../components'
+import { ApiLib } from '@src/api'
+import { AppObject } from '@src/api/types'
+import { EditTopicHeaderButton } from '@src/screens/components/button'
+import { Picker } from '@react-native-picker/picker'
+import { defaultDictMeta } from '@src/helper/defaultDictMeta'
+import dayjs from 'dayjs'
 
-const VisitInfo = ({route, navigation}: ScreenProps) => {
-  const {theme} = useTheme()
-  const {visitId} = route.params
+const VisitInfo = ({ route, navigation }: ScreenProps) => {
+  const { theme } = useTheme()
+  const { visitId } = route.params
   // @ts-ignore
-  const [visitInfo, setVisitInfo] = useState<AppObject.VisitInfo>({});
-  const {showMessage} = useToast()
+  const [visitInfo, setVisitInfo] = useState<AppObject.VisitInfo>({})
+  const { showMessage } = useToast()
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: visitInfo ? () =>
-        (
-          <EditTopicHeaderButton onPress={() => {
-            if (visitInfo.id == '') {
-              ApiLib.visit.save(visitInfo).then((res) => {
-                showMessage("更新成功")
-                navigation.goBack()
-              }).catch((error) => {
-                showMessage(error.msg)
-              })
-            } else {
-              ApiLib.visit.add(visitInfo).then((res) => {
-                showMessage("保存成功")
-                navigation.goBack()
-              }).catch((error) => {
-                showMessage(error.msg)
-              })
-            }
-          }}/>
-        ) : undefined
+      headerRight: visitInfo
+        ? () => (
+            <EditTopicHeaderButton
+              onPress={() => {
+                if (visitInfo.id == '') {
+                  ApiLib.visit
+                    .save(visitInfo)
+                    .then((res) => {
+                      showMessage('更新成功')
+                      navigation.goBack()
+                    })
+                    .catch((error) => {
+                      showMessage(error.msg)
+                    })
+                } else {
+                  ApiLib.visit
+                    .add(visitInfo)
+                    .then((res) => {
+                      showMessage('保存成功')
+                      navigation.goBack()
+                    })
+                    .catch((error) => {
+                      showMessage(error.msg)
+                    })
+                }
+              }}
+            />
+          )
+        : undefined
     })
   }, [navigation, visitInfo])
 
@@ -51,50 +60,49 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
 
   const [dictRefund, setDictRefund] = useState<AppObject.DictMeta[]>([])
 
+  const [xAdr, setXAdr] = useState('')
 
-  const [xAdr, setXAdr] = useState('');
-
-
-  const [xFund, setXFund] = useState('');
+  const [xFund, setXFund] = useState('')
 
   useEffect(() => {
-
     if (visitId) {
-      ApiLib.visit.info(route.params.visitId).then(res => {
-        return setVisitInfo(res)
-      }).catch((err) => {
-      })
+      ApiLib.visit
+        .info(route.params.visitId)
+        .then((res) => {
+          return setVisitInfo(res)
+        })
+        .catch((err) => {})
     } else {
       setVisitInfo({
-        address: "",
-        createBy: "",
+        address: '',
+        createBy: '',
         createTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         deptId: 0,
         id: undefined,
-        remark: "",
+        remark: '',
         userId: 0,
-        userName: "",
+        userName: '',
         visitTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-        visitType1: "",
+        visitType1: '',
         visitType2: 0,
         visitType3: 0,
-        visitor: ""
+        visitor: ''
       })
     }
 
-    ApiLib.dict.dict('oa_address').then(res => {
+    ApiLib.dict.dict('oa_address').then((res) => {
       res.unshift(defaultDictMeta)
       setDictAddress(res)
     })
-    ApiLib.dict.dict('oa_visit_type1').then(res => {
+    ApiLib.dict.dict('oa_visit_type1').then((res) => {
       res.unshift(defaultDictMeta)
       setDictRefund(res)
     })
-  }, [visitId, navigation]);
+  }, [visitId, navigation])
 
   const findDict = (dict: AppObject.DictMeta[], dictValue: any) => {
     if (dictValue) {
-      return dict ? dict.find(s => s.dictValue == dictValue)?.dictLabel : '';
+      return dict ? dict.find((s) => s.dictValue == dictValue)?.dictLabel : ''
     } else {
       return ''
     }
@@ -102,12 +110,12 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
 
   const renderContent = () => {
     if (!VisitInfo) {
-      return <Spinner style={{marginTop: 50}}/>
+      return <Spinner style={{ marginTop: 50 }} />
     }
 
     return (
       <>
-        <SetStatusBar/>
+        <SetStatusBar />
         <ScrollView>
           <TableList title={translate('common.customerInfo')}>
             <TableRow
@@ -120,19 +128,16 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
               title={translate(`common.address`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={findDict(dictAddress, visitInfo?.address)}
-            >
+              rightText={findDict(dictAddress, visitInfo?.address)}>
               <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                style={{ position: 'absolute', width: 160, height: 0, transform: [{ scaleX: 0 }] }}
                 selectedValue={xAdr}
                 onValueChange={(itemValue: string, itemIndex) => {
                   setXAdr(itemValue)
-                  setVisitInfo({...visitInfo, address: itemValue})
-                }
-                }>
-                {dictAddress?.map(address => {
-                  return <Picker.Item key={address.dictCode} label={address.dictLabel}
-                                      value={address.dictValue}/>
+                  setVisitInfo({ ...visitInfo, address: itemValue })
+                }}>
+                {dictAddress?.map((address) => {
+                  return <Picker.Item key={address.dictCode} label={address.dictLabel} value={address.dictValue} />
                 })}
               </Picker>
             </TableChildren>
@@ -140,27 +145,23 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
               title={translate(`common.refund`)}
               leftIcon={theme.assets.images.icons.table.email}
               withArrow={true}
-              rightText={findDict(dictRefund, visitInfo?.visitType1)}
-            >
+              rightText={findDict(dictRefund, visitInfo?.visitType1)}>
               <Picker
-                style={{position: 'absolute', width: 160, height: 0, transform: [{scaleX: 0}]}}
+                style={{ position: 'absolute', width: 160, height: 0, transform: [{ scaleX: 0 }] }}
                 selectedValue={xFund}
                 onValueChange={(itemValue: string, itemIndex) => {
                   setXFund(itemValue)
-                  setVisitInfo({...visitInfo, visitType1: itemValue})
-                }
-                }>
-                {dictRefund?.map(refund => {
-                  return <Picker.Item key={refund.dictCode} label={refund.dictLabel}
-                                      value={refund.dictValue}/>
+                  setVisitInfo({ ...visitInfo, visitType1: itemValue })
+                }}>
+                {dictRefund?.map((refund) => {
+                  return <Picker.Item key={refund.dictCode} label={refund.dictLabel} value={refund.dictValue} />
                 })}
               </Picker>
             </TableChildren>
             <TableChildren
               title={translate(`common.nickName`)}
               leftIcon={theme.assets.images.icons.table.email}
-              withArrow={true}
-            >
+              withArrow={true}>
               <Input
                 autoCapitalize="none"
                 underlineColorAndroid="transparent"
@@ -168,7 +169,7 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
                 returnKeyType="next"
                 autoCorrect={false}
                 value={visitInfo?.visitor}
-                onChangeText={(text) => setVisitInfo({...visitInfo, visitor: text})}
+                onChangeText={(text) => setVisitInfo({ ...visitInfo, visitor: text })}
                 containerStyle={styles.input(theme)}
                 textContentType="none"
                 inputStyle={styles.inputSingle(theme)}
@@ -185,7 +186,7 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
               autoCorrect={false}
               value={visitInfo?.remark}
               editable={true}
-              onChangeText={(text) => setVisitInfo({...visitInfo, remark: text})}
+              onChangeText={(text) => setVisitInfo({ ...visitInfo, remark: text })}
               inputStyle={styles.inputStyle(theme)}
               containerStyle={styles.inputContainer(theme)}
             />
@@ -195,10 +196,8 @@ const VisitInfo = ({route, navigation}: ScreenProps) => {
     )
   }
 
-  return <View
-    style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{renderContent()}</View>
+  return <View style={[SylCommon.Layout.fill, SylCommon.View.background(theme)]}>{renderContent()}</View>
 }
-
 
 const styles = {
   inputContainer: (theme: ITheme): ViewStyle => ({
@@ -218,7 +217,7 @@ const styles = {
     width: 200,
     borderWidth: 0,
     right: 8,
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: 'transparent'
   }),
   inputSingle: (theme: ITheme): TextStyle => ({
@@ -229,9 +228,9 @@ const styles = {
   label: (theme: ITheme): TextStyle => ({
     paddingLeft: 10,
     paddingRight: 0,
-    textAlign: "right",
+    textAlign: 'right',
     fontSize: 14,
     maxWidth: 60
-  }),
+  })
 }
 export default VisitInfo

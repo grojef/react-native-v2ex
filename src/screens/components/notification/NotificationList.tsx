@@ -1,27 +1,19 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/05/21.
  */
-import {Placeholder, Spinner, Text, useToast} from '@src/components'
-import {useSession} from '@src/hooks/useSession'
-import {translate} from '@src/i18n'
-import {SylCommon, useTheme} from '@src/theme'
-import {AppObject, ITheme} from '@src/types'
-import {ApiLib} from '@src/api'
+import { Placeholder, Spinner, Text, useToast } from '@src/components'
+import { useSession } from '@src/hooks/useSession'
+import { translate } from '@src/i18n'
+import { SylCommon, useTheme } from '@src/theme'
+import { AppObject, ITheme } from '@src/types'
+import { ApiLib } from '@src/api'
 import dayjs from 'dayjs'
-import React, {useCallback, useState} from 'react'
-import {
-  FlatList,
-  RefreshControl,
-  StyleProp,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle
-} from 'react-native'
-import {NeedLogin} from '../'
-import {BorderLine, TextWithIconPress} from '../common'
-import NavigationService from "@src/navigation/NavigationService";
-import {ROUTES} from "@src/navigation";
+import React, { useCallback, useState } from 'react'
+import { FlatList, RefreshControl, StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { NeedLogin } from '../'
+import { BorderLine, TextWithIconPress } from '../common'
+import NavigationService from '@src/navigation/NavigationService'
+import { ROUTES } from '@src/navigation'
 
 export interface NotificationListProps {
   /**
@@ -30,10 +22,10 @@ export interface NotificationListProps {
   containerStyle?: StyleProp<ViewStyle>
 }
 
-const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: NotificationListProps) => {
-  const {theme} = useTheme()
-  const {logined} = useSession()
-  const {showMessage} = useToast()
+const NotificationList: React.FC<NotificationListProps> = ({ containerStyle }: NotificationListProps) => {
+  const { theme } = useTheme()
+  const { logined } = useSession()
+  const { showMessage } = useToast()
   const [page, setPage] = useState(1)
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const [list, setList] = useState<AppObject.Notification[] | undefined>(undefined)
@@ -63,7 +55,7 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
           setList(rlt)
         })
         .catch((err) => {
-          showMessage({text1:"温馨提示",text2: err.msg, type: 'error'})
+          showMessage({ text1: '温馨提示', text2: err.msg, type: 'error' })
         })
     },
     [showMessage, page, logined]
@@ -74,15 +66,15 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
     fetchNotifications(page)
   }, [])
 
-
-  const renderItemRow = ({item}: { item: AppObject.Notification }) => {
+  const renderItemRow = ({ item }: { item: AppObject.Notification }) => {
     if (!item) return null
     return (
       <View style={[styles.itemContainer(theme), SylCommon.Card.container(theme)]}>
         <View style={styles.itemRight(theme)}>
-          <TouchableOpacity onPress={() => {
-            NavigationService.navigate(ROUTES.NotificationInfo, {noticeId: item?.noticeId})
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              NavigationService.navigate(ROUTES.NotificationInfo, { noticeId: item?.noticeId })
+            }}>
             <View style={styles.itemRightItem(theme)}>
               <Text>{item.noticeTitle}</Text>
             </View>
@@ -92,7 +84,7 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
               icon={theme.assets.images.icons.notification.time}
               text={dayjs(item.createTime, 'yyyy-MM-dd HH:mm:ss').fromNow()}
             />
-            <TextWithIconPress icon={theme.assets.images.icons.notification.action}/>
+            <TextWithIconPress icon={theme.assets.images.icons.notification.action} />
           </View>
         </View>
       </View>
@@ -101,9 +93,9 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
 
   const renderFooter = () => {
     if (loadMore) {
-      return <Spinner style={{padding: theme.spacing.large}}/>
+      return <Spinner style={{ padding: theme.spacing.large }} />
     } else if (list && list.length > 0) {
-      return <Placeholder placeholderText={translate('tips.noMore')}/>
+      return <Placeholder placeholderText={translate('tips.noMore')} />
     }
     return null
   }
@@ -114,9 +106,9 @@ const NotificationList: React.FC<NotificationListProps> = ({containerStyle}: Not
     }
   }
 
-  const renderItemSeparator = () => <BorderLine/>
+  const renderItemSeparator = () => <BorderLine />
 
-  const renderRefreshControl = () => <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+  const renderRefreshControl = () => <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 
   const renderContent = () => {
     return (

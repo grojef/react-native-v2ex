@@ -2,18 +2,19 @@
  * Created by leon<silenceace@gmail.com> on 22/04/18.
  */
 
-import {useToast} from '@src/components'
-import {useSession} from '@src/hooks/useSession'
-import {NODE_TABS} from '@src/navigation'
-import {useTheme} from '@src/theme'
-import {AppObject} from '@src/types'
-import {ApiLib} from '@src/api'
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
-import {RefreshControl, StyleProp, ViewStyle} from 'react-native'
-import {BorderLine, NeedLogin} from '../common'
+import { useToast } from '@src/components'
+import { useSession } from '@src/hooks/useSession'
+import { NODE_TABS } from '@src/navigation'
+import { useTheme } from '@src/theme'
+import { AppObject } from '@src/types'
+import { ApiLib } from '@src/api'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { RefreshControl, StyleProp, ViewStyle } from 'react-native'
+import { BorderLine, NeedLogin } from '../common'
 import TopicCardList from './TopicCardList'
-import CountDown from "@src/screens/components/topic/CountDown";
-import SearchIntent from "@src/screens/components/topic/SearchIntent";
+import CountDown from '@src/screens/components/topic/CountDown'
+import SearchIntent from '@src/screens/components/topic/SearchIntent'
+import { debounce, throttle } from 'lodash'
 
 export interface FetchTopicCardListProps {
   /**
@@ -30,15 +31,14 @@ export interface FetchTopicCardListProps {
 }
 
 const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
-                                                                 nodeName,
-                                                                 v2API = false,
-                                                                 containerStyle,
-                                                                 displayStyle,
-                                                               }: FetchTopicCardListProps) => {
-
-  const {theme} = useTheme()
-  const {logined} = useSession()
-  const {showMessage} = useToast()
+  nodeName,
+  v2API = false,
+  containerStyle,
+  displayStyle
+}: FetchTopicCardListProps) => {
+  const { theme } = useTheme()
+  const { logined } = useSession()
+  const { showMessage } = useToast()
   const [page, setPage] = useState(1)
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const [list, setList] = useState<AppObject.Topic[]>([])
@@ -46,58 +46,52 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
   const [loadMore, setLoadMore] = useState<boolean>(false)
   const specialNode = useMemo(() => [NODE_TABS.LATEST, NODE_TABS.HOT].includes(nodeName), [nodeName])
 
-  const [searchData, setSearchData] = useState<{ qTag: string, qFeat: string }>({
+  const [searchData, setSearchData] = useState<{ qTag: string; qFeat: string }>({
     qTag: '',
     qFeat: ''
   })
 
-
-  const onSearchDataChange = (newData: { qTag: string, qFeat: string }) => {
+  const onSearchDataChange = (newData: { qTag: string; qFeat: string }) => {
     setSearchData(newData)
+    setHasMore(true)
+    setList([])
+    setPage(1)
   }
 
   useEffect(() => {
-    fetchTopics(page, searchData.qTag, searchData.qFeat)
-  }, [page, nodeName, JSON.stringify(searchData)])
+    fetchTopics(searchData.qTag, searchData.qFeat)
+  }, [page, nodeName, searchData.qTag, searchData.qFeat])
 
   const fetchTopics = useCallback(
-    (pageNum: number, qTag: string, qFeat: string) => {
-
-      if (pageNum > 1 && (!v2API || specialNode)) {
-        setHasMore(false)
-        return
-      }
-
-      if (pageNum === 1) {
-        setList([])
-      }
-      setRefreshing(pageNum === 1)
-      setLoadMore(pageNum > 1)
-      ;(nodeName != NODE_TABS.HOT
-          ? ApiLib.topic.pager(nodeName, pageNum)
-          : ApiLib.topic.intent(pageNum, qTag, qFeat)
-      )
-        .then((rlt: AppObject.Topic[]) => {
-          if (rlt.length === 0 || specialNode || !v2API) {
-            setHasMore(false)
-          }
+    (qTag: string, qFeat: string) => {
+      setRefreshing(page === 1)
+      setLoadMore(page > 2)
+      ;(nodeName != NODE_TABS.HOT ? ApiLib.topic.pager(nodeName, page) : ApiLib.topic.intent(page, qTag, qFeat))
+        .then((rlt: AppObject.PageInfo<AppObject.Topic>) => {
           setRefreshing(false)
           setLoadMore(false)
-          setList(rlt)
+          if (rlt.total / 20 <= page) {
+            setHasMore(false)
+          }
+          if (page === 1) {
+            setList(rlt.rows)
+          } else {
+            setList(list.concat(rlt.rows))
+          }
         })
         .catch((err) => {
-          showMessage({text1: "温馨提示", text2: err.msg, type: 'error'})
+          showMessage({ text1: '温馨提示', text2: err.msg, type: 'error' })
         })
     },
-    [nodeName, showMessage, page, v2API, logined, JSON.stringify(searchData)]
+    [nodeName, showMessage, page, hasMore, logined, JSON.stringify(searchData)]
   )
 
   const onRefresh = () => {
     setList([])
     setPage(1)
-    fetchTopics(1, searchData.qTag, searchData.qFeat)
+    setHasMore(true)
+    fetchTopics(searchData.qTag, searchData.qFeat)
   }
-
 
   const onReached = () => {
     if (hasMore && !loadMore && !refreshing) {
@@ -106,25 +100,21 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
   }
 
   const memoCountDown = useMemo(() => {
-    return (<CountDown refreshData={() => fetchTopics(page, searchData.qTag, searchData.qFeat)}/>)
+    return <CountDown refreshData={() => fetchTopics(searchData.qTag, searchData.qFeat)} />
   }, [])
 
   return (
-    <NeedLogin
-      onMount={() => {
-      }}
-      placeholderBackground={theme.colors.surface}>
+    <NeedLogin onMount={() => {}} placeholderBackground={theme.colors.surface}>
       {nodeName == NODE_TABS.LATEST && memoCountDown}
-      {nodeName == NODE_TABS.HOT &&
-      <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange}/>}
-      <BorderLine/>
+      {nodeName == NODE_TABS.HOT && <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange} />}
+      <BorderLine />
       <TopicCardList
         containerStyle={containerStyle}
         topics={list}
         displayStyle={displayStyle}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         onEndReached={onReached}
-        canLoadMoreContent={hasMore}
+        canLoadMoreContent={hasMore && !refreshing}
         searchIndicator={false}
         refreshCallback={onRefresh}
       />

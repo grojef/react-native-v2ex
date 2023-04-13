@@ -1,36 +1,29 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/2/21.
  */
-import {BottomTabNavigationOptions, createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import {
-  DefaultTheme,
-  NavigationContainer,
-  NavigationContainerRefWithCurrent
-} from '@react-navigation/native'
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationOptions
-} from '@react-navigation/native-stack'
-import {ToastProvider} from '@src/components/toast'
-import {useAppSelector} from '@src/hooks'
-import {useUnRead} from '@src/hooks/useUnRead'
-import {changeLocale, LanguageTagType, translate} from '@src/i18n'
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { DefaultTheme, NavigationContainer, NavigationContainerRefWithCurrent } from '@react-navigation/native'
+import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack'
+import { ToastProvider } from '@src/components/toast'
+import { useAppSelector } from '@src/hooks'
+import { useUnRead } from '@src/hooks/useUnRead'
+import { changeLocale, LanguageTagType, translate } from '@src/i18n'
 import * as Screens from '@src/screens'
-import {RootState, store} from '@src/store'
-import {ITheme, useTheme} from '@src/theme'
-import {wait} from '@src/utils/utils'
+import { RootState, store } from '@src/store'
+import { ITheme, useTheme } from '@src/theme'
+import { wait } from '@src/utils/utils'
 import dayjs from 'dayjs'
 import enUS from 'dayjs/locale/en'
 import zhCN from 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import React, {ReactNode, useEffect, useState} from 'react'
-import {Image, Platform, StatusBar, TextStyle, View} from 'react-native'
-import {SheetProvider} from 'react-native-actions-sheet'
-import {EdgeInsets, SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { Image, Platform, StatusBar, TextStyle, View } from 'react-native'
+import { SheetProvider } from 'react-native-actions-sheet'
+import { EdgeInsets, SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import SplashScreen from 'react-native-splash-screen'
 import '../components/actions-sheet'
 import NavigationService from './NavigationService'
-import {RootStackParamList, ROUTES} from './routes'
+import { RootStackParamList, ROUTES } from './routes'
 
 /**
  * dayjs
@@ -101,11 +94,10 @@ const badgeStyles = {
   })
 }
 
-
 const bottomTabBarIconSize = 30
 const renderBottomIcon = (focused: boolean, activeIcon: any, inactiveIcon: any): ReactNode => {
   const icon = focused ? activeIcon : inactiveIcon
-  return <Image source={icon} style={{width: bottomTabBarIconSize, height: bottomTabBarIconSize}}/>
+  return <Image source={icon} style={{ width: bottomTabBarIconSize, height: bottomTabBarIconSize }} />
 }
 
 const defaultTabBarSetting = (theme: ITheme, insets: EdgeInsets): BottomTabNavigationOptions => {
@@ -134,9 +126,9 @@ const defaultTabBarSetting = (theme: ITheme, insets: EdgeInsets): BottomTabNavig
 const MainBottomTabNavigator = createBottomTabNavigator()
 const MainAppNavigator = () => {
   const insets = useSafeAreaInsets()
-  const {unread} = useUnRead()
-  const {languageTag} = useAppSelector((state: RootState) => state.setting)
-  const {theme} = useTheme()
+  const { unread } = useUnRead()
+  const { languageTag } = useAppSelector((state: RootState) => state.setting)
+  const { theme } = useTheme()
 
   useEffect(() => {
     resetLocales(languageTag)
@@ -150,7 +142,7 @@ const MainAppNavigator = () => {
         options={{
           title: translate(`router.${ROUTES.Latest}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({focused}) =>
+          tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.home.active,
@@ -164,7 +156,7 @@ const MainAppNavigator = () => {
         options={{
           title: translate(`router.${ROUTES.Nodes}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({focused}) =>
+          tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.like.active,
@@ -178,7 +170,7 @@ const MainAppNavigator = () => {
         options={{
           title: translate(`router.${ROUTES.Center}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({focused}) =>
+          tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.nodes.active,
@@ -194,7 +186,7 @@ const MainAppNavigator = () => {
         options={{
           title: translate(`router.${ROUTES.My}`),
           ...defaultTabBarSetting(theme, insets),
-          tabBarIcon: ({focused}) =>
+          tabBarIcon: ({ focused }) =>
             renderBottomIcon(
               focused,
               theme.assets.images.icons.bottomTab.my.active,
@@ -209,12 +201,12 @@ const MainAppNavigator = () => {
 const StackNavigator = createNativeStackNavigator<RootStackParamList>()
 
 export const AppNavigationContainer = () => {
-  const {token} = useAppSelector((state: RootState) => state.member)
+  const { token } = useAppSelector((state: RootState) => state.member)
   const {
-    login: {tokenGeneratedLink}
+    login: { tokenGeneratedLink }
   } = useAppSelector((state: RootState) => state.ui)
-  const {languageTag} = useAppSelector((state: RootState) => state.setting)
-  const {theme} = useTheme()
+  const { languageTag } = useAppSelector((state: RootState) => state.setting)
+  const { theme } = useTheme()
   const [mounted, setMounted] = useState<boolean>(false)
 
   if (!mounted) {
@@ -233,7 +225,7 @@ export const AppNavigationContainer = () => {
   }, [languageTag])
 
   return (
-    <SafeAreaProvider style={{backgroundColor: theme.colors.background}}>
+    <SafeAreaProvider style={{ backgroundColor: theme.colors.background }}>
       <ToastProvider>
         <SheetProvider>
           <NavigationContainer
@@ -255,8 +247,8 @@ export const AppNavigationContainer = () => {
                 Platform.OS === 'ios'
                   ? 'default'
                   : theme.name === 'dark'
-                    ? theme.colors.primaryDark
-                    : theme.colors.primary
+                  ? theme.colors.primaryDark
+                  : theme.colors.primary
               }
               barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
             />
@@ -268,15 +260,15 @@ export const AppNavigationContainer = () => {
                   ...defaultScreenOptions,
                   headerBackground: () => null,
                   title: translate(`router.${ROUTES.SignIn}`),
-                  headerTitleStyle: {color: theme.colors.transparent},
+                  headerTitleStyle: { color: theme.colors.transparent },
                   headerBackTitleVisible: false,
-                  headerShown: true,
+                  headerShown: true
                 }}
               />
               <StackNavigator.Screen
                 name={ROUTES.Main}
                 component={MainAppNavigator}
-                options={({route, navigation}) => ({
+                options={({ route, navigation }) => ({
                   ...defaultScreenOptions(theme),
                   headerBackground: undefined,
                   headerShown: false
@@ -522,7 +514,7 @@ export const AppNavigationContainer = () => {
               <StackNavigator.Screen
                 name={ROUTES.WebViewer}
                 component={Screens.WebLinkScreen}
-                options={({route}) => ({
+                options={({ route }) => ({
                   title: route?.params?.title ?? translate('brand.name'),
                   ...defaultScreenOptions(theme),
                   headerShown: true

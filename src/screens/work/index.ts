@@ -1,1 +1,1 @@
-export {default as WorkCenterScreen} from './WorkCenter'
+export { default as WorkCenterScreen } from './WorkCenter'
