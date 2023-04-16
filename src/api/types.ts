@@ -219,6 +219,8 @@ export declare namespace AppAPI {
      */
     topic(id: number): Promise<AppObject.Topic>
 
+    checkPhoneCall(id: number): Promise<AppObject.Topic>
+
     grab(label: string): Promise<AppObject.Grab>
 
     call(id: number): Promise<void>
@@ -229,7 +231,7 @@ export declare namespace AppAPI {
      *  pager note topic list by api version 2
      * @param name : node name
      */
-    pager(name: string, page: number): Promise<AppObject.PageInfo<AppObject.Topic>>
+    only(name: string, page: number): Promise<AppObject.PageInfo<AppObject.Topic>>
 
     intent(page: number, batCode?: string, feature?: string): Promise<AppObject.PageInfo<AppObject.Topic>>
 
@@ -384,6 +386,7 @@ export declare namespace AppObject {
     sex: string
     userId: number
     userName: string
+    risk: boolean
   }
 
   export interface TopicReply {

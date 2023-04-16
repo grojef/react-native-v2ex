@@ -3,15 +3,15 @@
  */
 
 import * as React from 'react'
-import { useState } from 'react'
-import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { AppObject, ITheme } from '@src/types'
-import { SylCommon, useTheme } from '@src/theme'
-import { Avatar, Text, useToast } from '@src/components'
-import { BorderLine, TextWithIconPress } from '../common'
-import { ApiLib } from '@src/api'
+import {useState} from 'react'
+import {StyleProp, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
+import {AppObject, ITheme} from '@src/types'
+import {SylCommon, useTheme} from '@src/theme'
+import {Avatar, Text, useToast} from '@src/components'
+import {BorderLine, TextWithIconPress} from '../common'
+import {ApiLib} from '@src/api'
 import Dialer from '@src/components/dialer'
-import { NavigationService, ROUTES } from '@src/navigation'
+import {NavigationService, ROUTES} from '@src/navigation'
 import dayjs from 'dayjs'
 
 export interface TopicCardItemProps {
@@ -47,9 +47,20 @@ const TopicCardTip = ({ containerStyle, displayStyle, topic, onPress }: TopicCar
   const renderCall = (tip: any) => {
     return (
       tip.callFlag == '1' &&
+      !tip.risk &&
       displayStyle == 'full' && (
         <View style={styles.calledItem()}>
           <Text style={styles.calledTag()}>已拨打</Text>
+        </View>
+      )
+    )
+  }
+  const renderRisk = (tip: any) => {
+    return (
+      tip.risk &&
+      displayStyle == 'full' && (
+        <View style={styles.calledItem()}>
+          <Text style={styles.calledTag()}>风险</Text>
         </View>
       )
     )
@@ -59,13 +70,20 @@ const TopicCardTip = ({ containerStyle, displayStyle, topic, onPress }: TopicCar
 
   const fetchPhoneData = (_tip: AppObject.Topic) => {
     ApiLib.topic
-      .topic(_tip.id)
+      .checkPhoneCall(_tip.id)
       .then((res) => {
-        new Dialer().callPhone(res.phoneNumber, () => {
+        console.log(res)
+        if (res.risk) {
           ApiLib.topic.call(res.id).then(() => {
-            setTip({ ..._tip, callFlag: '1' })
+            setTip({ ..._tip, callFlag: '1', risk: true })
           })
-        })
+        } else {
+          new Dialer().callPhone(res.phoneNumber, () => {
+            ApiLib.topic.call(res.id).then(() => {
+              setTip({ ..._tip, callFlag: '1' })
+            })
+          })
+        }
       })
       .catch((res) => {
         showMessage({ text1: '温馨提示', text2: res.msg, type: 'error' })
@@ -98,16 +116,17 @@ const TopicCardTip = ({ containerStyle, displayStyle, topic, onPress }: TopicCar
               style={[
                 styles.title(theme, tip),
                 styles.callDay(theme, tip),
-                displayStyle == 'full' && tip.callFlag == '1' && styles.called()
+                displayStyle === 'full' && tip.callFlag === '1' && styles.called()
               ]}>
               {tip.phoneNumber}
             </Text>
-            {displayStyle == 'simple' && (
+            {displayStyle === 'simple' && (
               <Text type="caption" style={[styles.nickName(theme, tip), styles.callDay(theme, tip)]}>
                 {tip.nickName}
               </Text>
             )}
             {renderCall(tip)}
+            {renderRisk(tip)}
           </TouchableOpacity>
         </View>
         <View style={styles.infoMainItem(theme)}>
@@ -172,6 +191,7 @@ const styles = {
   }),
   calledTag: (): TextStyle => ({
     fontSize: 10,
+    paddingHorizontal: 2,
     color: '#FFF'
   }),
   called: (): TextStyle => ({

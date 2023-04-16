@@ -1,4 +1,4 @@
-import { AppAPI, AppObject } from '../../types'
+import {AppAPI, AppObject} from '../../types'
 
 export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
   call: (id) => {
@@ -8,7 +8,7 @@ export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
    * pager note topic list by api version 2
    * @param name : node name
    */
-  pager: (name) => v2ex.get<AppObject.Topic[]>(`/cms/claimInfo/only`, undefined, undefined, undefined),
+  only: (name) => v2ex.get<AppObject.PageInfo<AppObject.Topic>>(`/cms/claimInfo/only`, undefined, undefined, undefined),
 
   update: (topic: AppObject.Topic) => {
     return v2ex.send<void>('/cms/claimInfo', 'PUT', undefined, undefined, topic)
@@ -45,5 +45,12 @@ export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
    * Get topic info by topic id
    * @param id : topic id
    */
-  topic: (id: number) => v2ex.get<AppObject.Topic>(`/cms/claimInfo/${id}`, undefined, undefined, undefined)
+  topic: (id: number) => v2ex.get<AppObject.Topic>(`/cms/claimInfo/${id}`, undefined, undefined, undefined),
+
+  /**
+   * check phone risk
+   * @param id
+   */
+  checkPhoneCall: (id: number) =>
+    v2ex.get<AppObject.Topic>(`/cms/claimInfo/checkPhoneCall/${id}`, undefined, undefined, undefined)
 })

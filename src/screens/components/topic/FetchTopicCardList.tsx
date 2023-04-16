@@ -2,19 +2,18 @@
  * Created by leon<silenceace@gmail.com> on 22/04/18.
  */
 
-import { useToast } from '@src/components'
-import { useSession } from '@src/hooks/useSession'
-import { NODE_TABS } from '@src/navigation'
-import { useTheme } from '@src/theme'
-import { AppObject } from '@src/types'
-import { ApiLib } from '@src/api'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { RefreshControl, StyleProp, ViewStyle } from 'react-native'
-import { BorderLine, NeedLogin } from '../common'
+import {useToast} from '@src/components'
+import {useSession} from '@src/hooks/useSession'
+import {NODE_TABS} from '@src/navigation'
+import {useTheme} from '@src/theme'
+import {AppObject} from '@src/types'
+import {ApiLib} from '@src/api'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {RefreshControl, StyleProp, ViewStyle} from 'react-native'
+import {BorderLine, NeedLogin} from '../common'
 import TopicCardList from './TopicCardList'
 import CountDown from '@src/screens/components/topic/CountDown'
 import SearchIntent from '@src/screens/components/topic/SearchIntent'
-import { debounce, throttle } from 'lodash'
 
 export interface FetchTopicCardListProps {
   /**
@@ -44,7 +43,6 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
   const [list, setList] = useState<AppObject.Topic[]>([])
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [loadMore, setLoadMore] = useState<boolean>(false)
-  const specialNode = useMemo(() => [NODE_TABS.LATEST, NODE_TABS.HOT].includes(nodeName), [nodeName])
 
   const [searchData, setSearchData] = useState<{ qTag: string; qFeat: string }>({
     qTag: '',
@@ -66,7 +64,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
     (qTag: string, qFeat: string) => {
       setRefreshing(page === 1)
       setLoadMore(page > 2)
-      ;(nodeName != NODE_TABS.HOT ? ApiLib.topic.pager(nodeName, page) : ApiLib.topic.intent(page, qTag, qFeat))
+      ;(nodeName != NODE_TABS.HOT ? ApiLib.topic.only(nodeName, page) : ApiLib.topic.intent(page, qTag, qFeat))
         .then((rlt: AppObject.PageInfo<AppObject.Topic>) => {
           setRefreshing(false)
           setLoadMore(false)
@@ -104,21 +102,23 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
   }, [])
 
   return (
-    <NeedLogin onMount={() => {}} placeholderBackground={theme.colors.surface}>
-      {nodeName == NODE_TABS.LATEST && memoCountDown}
-      {nodeName == NODE_TABS.HOT && <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange} />}
-      <BorderLine />
-      <TopicCardList
-        containerStyle={containerStyle}
-        topics={list}
-        displayStyle={displayStyle}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        onEndReached={onReached}
-        canLoadMoreContent={hasMore && !refreshing}
-        searchIndicator={false}
-        refreshCallback={onRefresh}
-      />
-    </NeedLogin>
+    <>
+      <NeedLogin onMount={() => {}} placeholderBackground={theme.colors.surface}>
+        {nodeName == NODE_TABS.LATEST && memoCountDown}
+        {nodeName == NODE_TABS.HOT && <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange} />}
+        <BorderLine />
+        <TopicCardList
+          containerStyle={containerStyle}
+          topics={list}
+          displayStyle={displayStyle}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          onEndReached={onReached}
+          canLoadMoreContent={hasMore && !refreshing}
+          searchIndicator={false}
+          refreshCallback={onRefresh}
+        />
+      </NeedLogin>
+    </>
   )
 }
 

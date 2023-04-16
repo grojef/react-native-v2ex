@@ -1,12 +1,13 @@
-import { StyleProp, TextStyle, View, ViewStyle } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { TextWithIconPress } from '@src/screens/components'
-import { ITheme, SylCommon, useTheme } from '@src/theme'
-import { Button, useToast } from '@src/components'
-import { ApiLib } from '@src/api'
-import { AppObject } from '@src/api/types'
-import { Picker } from '@react-native-picker/picker'
-import { defaultDictMeta } from '@src/helper/defaultDictMeta'
+import {StyleProp, TextStyle, View, ViewStyle} from 'react-native'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
+import {TextWithIconPress} from '@src/screens/components'
+import {ITheme, SylCommon, useTheme} from '@src/theme'
+import {Button, useToast} from '@src/components'
+import {ApiLib} from '@src/api'
+import {AppObject} from '@src/api/types'
+import {Picker} from '@react-native-picker/picker'
+import {defaultDictMeta} from '@src/helper/defaultDictMeta'
+import LoadingModal from '../../../components/loading-modal'
 
 export interface CountDownProps {
   /**
@@ -22,6 +23,7 @@ const CountDown: React.FC<CountDownProps> = ({ refreshData }: CountDownProps) =>
   let cd = useRef<number>(counter)
   const timer = useRef<any>(null)
   const [time, setTime] = useState<string>(`倒计时: 0时0分0秒`)
+  const [visible, setVisible] = useState<boolean>(false)
   const decrease = () => {
     timer.current = setInterval(() => {
       if (cd.current <= 0) {
@@ -29,9 +31,9 @@ const CountDown: React.FC<CountDownProps> = ({ refreshData }: CountDownProps) =>
         return
       }
       cd.current--
-      const h = parseInt(((cd.current / (60 * 60)) % 24) + '')
-      const m = parseInt(((cd.current / 60) % 60) + '')
-      const s = parseInt((cd.current % 60) + '')
+      const h = parseInt(((cd.current / (60 * 60)) % 24) + '', 10)
+      const m = parseInt(((cd.current / 60) % 60) + '', 10)
+      const s = parseInt((cd.current % 60) + '', 10)
       setTime(`倒计时: ${h}时${m}分${s}秒`)
     }, 1000)
   }
@@ -63,6 +65,7 @@ const CountDown: React.FC<CountDownProps> = ({ refreshData }: CountDownProps) =>
   }, [])
 
   const pressTag = (labelValue: string) => {
+    setVisible(true)
     ApiLib.topic
       .grab(labelValue)
       .then((data) => {
@@ -78,9 +81,13 @@ const CountDown: React.FC<CountDownProps> = ({ refreshData }: CountDownProps) =>
           setCounter(res.data.delayTime)
         }
       })
+      .finally(() => {
+        setVisible(false)
+      })
   }
   return (
     <View style={[styles.refreshContainer(theme), SylCommon.Card.container(theme)]}>
+      <LoadingModal visible={visible} />
       <View style={[styles.refreshLeft(theme), styles.refreshBox()]}>
         <TextWithIconPress
           containerStyle={{

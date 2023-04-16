@@ -2,8 +2,8 @@
  * Created by leon<silenceace@gmail.com> on 22/2/24.
  */
 
-import type { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { ITheme } from '@src/types'
+import type {NativeStackScreenProps} from '@react-navigation/native-stack'
+import {ITheme} from '@src/types'
 
 export type RootStackParamList = {
   HotDraw: undefined
@@ -263,6 +263,11 @@ export const ROUTES = {
    * 缓存设置
    */
   CacheSetting: 'CacheSetting',
+
+  /**
+   * 修改密码
+   */
+  ModifyPass: 'ModifyPass',
 
   /**
    * URLSchemes
