@@ -1,12 +1,11 @@
-import { AppAPI, AppObject } from '../../types'
+import {AppAPI, AppObject} from '../../types'
 
 export default (v2ex: AppAPI.APP): AppAPI.MemberAPI => ({
-  myToken: () => v2ex.get<AppObject.MemberToken>('/token', undefined, undefined, undefined),
+  myToken: () => v2ex.get<AppObject.MemberToken>('/token'),
 
-  myProfile: () => v2ex.get<AppObject.Member>('/system/user/profile', undefined, undefined, undefined),
+  myProfile: () => v2ex.get<AppObject.Member>('/system/user/profile'),
 
-  profile: (id: string | number) =>
-    v2ex.get<AppObject.Member>(`/system/user/profile`, undefined, undefined, undefined, undefined),
+  profile: (id: string | number) => v2ex.get<AppObject.Member>(`/system/user/profile`),
 
   token: (loginId: string, password, uuid: string, code: string) =>
     v2ex.send<AppObject.MemberToken>(`/login`, 'post', undefined, undefined, {
@@ -15,6 +14,8 @@ export default (v2ex: AppAPI.APP): AppAPI.MemberAPI => ({
       uuid: uuid,
       code: code
     }),
-  logout: () => v2ex.send<AppObject.MemberToken>(`/logout`, 'post', undefined, undefined),
-  captcha: () => v2ex.send<AppObject.Captcha>(`/captchaImage`, 'get', undefined, undefined)
+  logout: () => v2ex.send<AppObject.MemberToken>(`/logout`, 'post'),
+  captcha: () => v2ex.send<AppObject.Captcha>(`/captchaImage`, 'get'),
+
+  updatePwd: (oldPassword: string, newPassword: string) => v2ex.send<void>(`/system/user/profile/updatePwd`, 'put')
 })

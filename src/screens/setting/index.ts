@@ -1,6 +1,7 @@
 export { default as AboutScreen } from './About'
 export { default as FeedbackScreen } from './Feedback'
 export { default as LanguageScreen } from './Language'
+export { default as UpdatePwdScreen } from './UpdatePwdScreen'
 export { default as SettingScreen } from './Setting'
 export { default as ThemeScreen } from './Theme'
 

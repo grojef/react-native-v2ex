@@ -56,7 +56,7 @@ const Profile = ({
         {/*  }}*/}
         {/*/>*/}
         <TableRow
-          title={translate(`router.${ROUTES.ModifyPass}`)}
+          title={translate(`router.${ROUTES.UpdatePwd}`)}
           leftIcon={theme.assets.images.icons.table.opensource}
           withArrow={true}
           onPress={() => {

@@ -147,6 +147,11 @@ export declare namespace AppAPI {
      * 验证码
      */
     captcha: () => Promise<AppObject.Captcha>
+
+    /**
+     * 修改密码
+     */
+    updatePwd: (oldPassword: string, newPassword: string) => Promise<void>
   }
 
   export interface NodeAPI {

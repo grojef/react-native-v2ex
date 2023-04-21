@@ -28,6 +28,7 @@ export type RootStackParamList = {
   FavoriteTopics: undefined
   Setting: undefined
   Language: undefined
+  UpdatePwd: undefined
   About: undefined
   Feedback: undefined
   ThemeSetting: undefined
@@ -76,7 +77,6 @@ export type NotificationsScreenProps = NativeStackScreenProps<RootStackParamList
 export type NotificationInfoScreenProps = NativeStackScreenProps<RootStackParamList, 'NotificationInfo'> &
   CommonScreenProps
 
-export type VisitInfoListScreenProps = NativeStackScreenProps<RootStackParamList, 'VisitInfoList'> & CommonScreenProps
 export type VisitInfoScreenProps = NativeStackScreenProps<RootStackParamList, 'VisitInfo'> & CommonScreenProps
 
 export type NodesScreenProps = NativeStackScreenProps<RootStackParamList, 'Nodes'> & CommonScreenProps
@@ -84,8 +84,6 @@ export type NodesScreenProps = NativeStackScreenProps<RootStackParamList, 'Nodes
 export type NodeTopicsScreenProps = NativeStackScreenProps<RootStackParamList, 'NodeTopics'> & CommonScreenProps
 
 export type TopicDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'TopicDetail'> & CommonScreenProps
-
-export type TopicEditScreenProps = NativeStackScreenProps<RootStackParamList, 'TopicEdit'> & CommonScreenProps
 
 export type MyScreenProps = NativeStackScreenProps<RootStackParamList, 'My'> & CommonScreenProps
 
@@ -98,6 +96,7 @@ export type FavoriteTopicsScreenProps = NativeStackScreenProps<RootStackParamLis
 export type SettingScreenProps = NativeStackScreenProps<RootStackParamList, 'Setting'> & CommonScreenProps
 
 export type LanguageScreenProps = NativeStackScreenProps<RootStackParamList, 'Language'> & CommonScreenProps
+export type UpdatePwdScreenProps = NativeStackScreenProps<RootStackParamList, 'UpdatePwd'> & CommonScreenProps
 
 export type AboutScreenProps = NativeStackScreenProps<RootStackParamList, 'About'> & CommonScreenProps
 
@@ -267,7 +266,7 @@ export const ROUTES = {
   /**
    * 修改密码
    */
-  ModifyPass: 'ModifyPass',
+  UpdatePwd: 'UpdatePwd',
 
   /**
    * URLSchemes
