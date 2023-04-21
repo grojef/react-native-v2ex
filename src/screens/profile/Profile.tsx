@@ -60,7 +60,7 @@ const Profile = ({
           leftIcon={theme.assets.images.icons.table.opensource}
           withArrow={true}
           onPress={() => {
-            navigation.navigate(ROUTES.Language)
+            navigation.navigate(ROUTES.UpdatePwd)
           }}
         />
         <TableRow
