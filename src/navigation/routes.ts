@@ -177,7 +177,7 @@ export const ROUTES = {
   /**
    * 节点列表
    */
-  Nodes: 'Nodes',
+  Intent: 'Intent',
   /**
    * 节点话题列表
    */
@@ -187,10 +187,6 @@ export const ROUTES = {
    */
   TopicDetail: 'TopicDetail',
 
-  /**
-   * 话题详情
-   */
-  TopicEdit: 'TopicEdit',
 
   /**
    * 到访列表

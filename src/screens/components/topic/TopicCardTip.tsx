@@ -23,7 +23,7 @@ export interface TopicCardItemProps {
   /**
    * Display Style
    */
-  displayStyle?: 'simple' | 'full' | 'auto'
+  displayStyle?: 'intent' | 'home' | 'search'
 
   /**
    * Whether to show last reply users
@@ -48,9 +48,9 @@ const TopicCardTip = ({ containerStyle, displayStyle, topic, onPress }: TopicCar
     return (
       tip.callFlag == '1' &&
       !tip.risk &&
-      displayStyle == 'full' && (
+      displayStyle == 'home' && (
         <View style={styles.calledItem()}>
-          <Text style={styles.calledTag()}>已拨打</Text>
+          <Text style={styles.calledTag()}>拨打</Text>
         </View>
       )
     )
@@ -58,7 +58,7 @@ const TopicCardTip = ({ containerStyle, displayStyle, topic, onPress }: TopicCar
   const renderRisk = (tip: any) => {
     return (
       tip.risk &&
-      displayStyle == 'full' && (
+      displayStyle == 'home' && (
         <View style={styles.calledItem()}>
           <Text style={styles.calledTag()}>风险</Text>
         </View>
@@ -72,7 +72,6 @@ const TopicCardTip = ({ containerStyle, displayStyle, topic, onPress }: TopicCar
     ApiLib.topic
       .checkPhoneCall(_tip.id)
       .then((res) => {
-        console.log(res)
         if (res.risk) {
           ApiLib.topic.call(res.id).then(() => {
             setTip({ ..._tip, callFlag: '1', risk: true })
@@ -109,18 +108,18 @@ const TopicCardTip = ({ containerStyle, displayStyle, topic, onPress }: TopicCar
             activeOpacity={0.8}
             style={styles.infoMainItem(theme)}
             onPress={() => {
-              displayStyle == 'full' ? fetchPhoneData(tip) : detail(tip)
+              displayStyle == 'home' ? fetchPhoneData(tip) : detail(tip)
             }}>
             <Text
               type="body"
               style={[
                 styles.title(theme, tip),
-                styles.callDay(theme, tip),
-                displayStyle === 'full' && tip.callFlag === '1' && styles.called()
+                displayStyle === 'intent' && styles.callDay(theme, tip),
+                displayStyle === 'home' && tip.callFlag === '1' && styles.called()
               ]}>
               {tip.phoneNumber}
             </Text>
-            {displayStyle === 'simple' && (
+            {(displayStyle === 'intent' || displayStyle ==='search') && (
               <Text type="caption" style={[styles.nickName(theme, tip), styles.callDay(theme, tip)]}>
                 {tip.nickName}
               </Text>
@@ -210,11 +209,11 @@ const styles = {
   },
 
   callDayTag: (
-    displayStyle: 'simple' | 'full' | 'auto' | undefined,
+    displayStyle: 'intent' | 'home' | 'search' | undefined,
     theme: ITheme,
     tip: AppObject.Topic
   ): TextStyle => {
-    if (displayStyle == 'simple' && dayjs().diff(dayjs(tip.callTime), 'day') >= 7) {
+    if (displayStyle == 'intent' && dayjs().diff(dayjs(tip.callTime), 'day') >= 7) {
       return {
         color: '#fff'
       }
@@ -224,8 +223,8 @@ const styles = {
     }
   },
 
-  callBackground: (displayStyle: 'simple' | 'full' | 'auto' | undefined, tip: AppObject.Topic): TextStyle => {
-    if (displayStyle == 'simple') {
+  callBackground: (displayStyle: 'intent' | 'home' | 'search' | undefined, tip: AppObject.Topic): TextStyle => {
+    if (displayStyle == 'intent') {
       if (dayjs().diff(dayjs(tip.callTime), 'day') >= 14) {
         return {
           backgroundColor: '#586e58',

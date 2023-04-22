@@ -17,5 +17,5 @@ export default (v2ex: AppAPI.APP): AppAPI.MemberAPI => ({
   logout: () => v2ex.send<AppObject.MemberToken>(`/logout`, 'post'),
   captcha: () => v2ex.send<AppObject.Captcha>(`/captchaImage`, 'get'),
 
-  updatePwd: (oldPassword: string, newPassword: string) => v2ex.send<void>(`/system/user/profile/updatePwd`, 'put')
+  updatePwd: (oldPassword: string, newPassword: string) => v2ex.send<void>(`/system/user/profile/updatePwd`, 'put',undefined,{oldPassword:oldPassword,newPassword:newPassword})
 })

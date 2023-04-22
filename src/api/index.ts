@@ -1,17 +1,16 @@
 import _ from 'lodash'
-import { AppAPI, AppObject } from './types'
+import {AppAPI, AppObject} from './types'
 import member from './lib/member'
 import node from './lib/node'
 import dict from './lib/dict'
 import notification from './lib/notification'
 import topic from './lib/topic'
-import reply from './lib/reply'
 import visit from './lib/visit'
-import { NavigationService } from '@src/navigation'
+import {NavigationService} from '@src/navigation'
 
-import { logError } from '../helper/logger'
+import {logError} from '../helper/logger'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { MEMBER_TOKEN_KEY } from '@config/constants'
+import {MEMBER_TOKEN_KEY} from '@config/constants'
 
 /**
  * default configuration
@@ -31,7 +30,6 @@ class V2ex {
   configuration: AppAPI.APIConfiguration = defaultConfiguration
   root_path?: string
   token?: string
-  reply: AppAPI.ReplyAPI = reply(this)
   member: AppAPI.MemberAPI = member(this)
   dict: AppAPI.DictAPI = dict(this)
   visit: AppAPI.VisitPI = visit(this)
@@ -127,7 +125,6 @@ class V2ex {
     version?: AppAPI.API_VERSION
   ): Promise<T> {
     let uri = `${this.configuration.url}${path}`
-
     if (params) {
       let separator = '?'
       Object.keys(params).forEach((key) => {

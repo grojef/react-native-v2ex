@@ -1,12 +1,12 @@
-import { Placeholder, Spinner } from '@src/components'
-import { translate } from '@src/i18n'
-import { SylCommon, useTheme } from '@src/theme'
-import { AppObject, IState, ITheme } from '@src/types'
-import React, { memo } from 'react'
-import { FlatList, ListRenderItem, StyleProp, View, ViewStyle } from 'react-native'
-import Animated, { FadeInDown } from 'react-native-reanimated'
+import {Placeholder, Spinner} from '@src/components'
+import {translate} from '@src/i18n'
+import {SylCommon, useTheme} from '@src/theme'
+import {AppObject, IState, ITheme} from '@src/types'
+import React, {memo} from 'react'
+import {FlatList, ListRenderItem, StyleProp, View, ViewStyle} from 'react-native'
+import Animated from 'react-native-reanimated'
 import TopicCardTip from './TopicCardTip'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
 export interface TopicCardListProps {
   /**
@@ -26,7 +26,7 @@ export interface TopicCardListProps {
   /**
    * Display Style
    */
-  displayStyle?: 'simple' | 'full' | 'auto'
+  displayStyle?: 'intent' | 'home' | 'search'
   app: IState.AppState
   useFlatList?: boolean
 }

@@ -3,12 +3,12 @@
  */
 
 import * as React from 'react'
-import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { AppObject, ITheme } from '@src/types'
-import { useTheme } from '@src/theme'
-import { Avatar, Text } from '@src/components'
+import {StyleProp, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
+import {AppObject, ITheme} from '@src/types'
+import {useTheme} from '@src/theme'
+import {Avatar, Text} from '@src/components'
 import dayjs from 'dayjs'
-import { BorderLine, TextWithIconPress } from '../common'
+import {BorderLine, TextWithIconPress} from '../common'
 
 export interface TopicCardItemProps {
   /**
@@ -19,7 +19,7 @@ export interface TopicCardItemProps {
   /**
    * Display Style
    */
-  displayStyle?: 'simple' | 'full' | 'auto' | 'disable'
+  displayStyle?: 'home' | 'intent' | 'search' | 'disable'
 
   /**
    * Whether to show last reply users

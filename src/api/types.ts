@@ -65,7 +65,6 @@ export declare namespace AppAPI {
     visit: VisitPI
     member: MemberAPI
     dict: DictAPI
-    reply: ReplyAPI
     setOptions: (options: APIConfiguration) => void
     init: () => void
 
@@ -236,31 +235,15 @@ export declare namespace AppAPI {
      *  pager note topic list by api version 2
      * @param name : node name
      */
-    only(name: string, page: number): Promise<AppObject.PageInfo<AppObject.Topic>>
+    only(): Promise<AppObject.PageInfo<AppObject.Topic>>
 
     intent(page: number, batCode?: string, feature?: string): Promise<AppObject.PageInfo<AppObject.Topic>>
 
     /**
-     * get node topic by api version 1
-     * @param id : topic id
-     * @param get_type :  'username' | 'node_id' | 'node_name'
+     * 搜索功能
+     * @param phone
      */
-    topics(id: string | number, get_type: 'username' | 'node_id' | 'node_name' | 'id'): Promise<AppObject.Topic[]>
-  }
-
-  export interface ReplyAPI {
-    /**
-     * Get topic replies by api version 1
-     * @param topic_id : topic id
-     * @param page : page number
-     */
-    pager(topic_id: number, page: number): Promise<AppObject.TopicReply[]>
-
-    /**
-     * Get topic replies
-     * @param topic_id : topic id
-     */
-    replies(topic_id: number): Promise<AppObject.TopicReply[]>
+    search(phone:string):Promise<AppObject.PageInfo<AppObject.Topic>>
   }
 
   export interface DictAPI {

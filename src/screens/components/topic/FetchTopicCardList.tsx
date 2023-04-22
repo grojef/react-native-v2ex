@@ -4,7 +4,6 @@
 
 import {useToast} from '@src/components'
 import {useSession} from '@src/hooks/useSession'
-import {NODE_TABS} from '@src/navigation'
 import {useTheme} from '@src/theme'
 import {AppObject} from '@src/types'
 import {ApiLib} from '@src/api'
@@ -21,17 +20,14 @@ export interface FetchTopicCardListProps {
    */
   containerStyle?: StyleProp<ViewStyle>
 
-  nodeName: string
   v2API?: boolean
   /**
    * Display Style
    */
-  displayStyle?: 'simple' | 'full' | 'auto'
+  displayStyle?: 'intent' | 'home' | 'search'
 }
 
 const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
-  nodeName,
-  v2API = false,
   containerStyle,
   displayStyle
 }: FetchTopicCardListProps) => {
@@ -58,13 +54,13 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
 
   useEffect(() => {
     fetchTopics(searchData.qTag, searchData.qFeat)
-  }, [page, nodeName, searchData.qTag, searchData.qFeat])
+  }, [page,searchData.qTag, searchData.qFeat])
 
   const fetchTopics = useCallback(
     (qTag: string, qFeat: string) => {
       setRefreshing(page === 1)
       setLoadMore(page > 2)
-      ;(nodeName != NODE_TABS.HOT ? ApiLib.topic.only(nodeName, page) : ApiLib.topic.intent(page, qTag, qFeat))
+      ;(displayStyle ==='home' ? ApiLib.topic.only() : ApiLib.topic.intent(page, qTag, qFeat))
         .then((rlt: AppObject.PageInfo<AppObject.Topic>) => {
           setRefreshing(false)
           setLoadMore(false)
@@ -81,7 +77,7 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
           showMessage({ text1: '温馨提示', text2: err.msg, type: 'error' })
         })
     },
-    [nodeName, showMessage, page, hasMore, logined, JSON.stringify(searchData)]
+    [showMessage, page, hasMore, logined, JSON.stringify(searchData)]
   )
 
   const onRefresh = () => {
@@ -104,8 +100,8 @@ const FetchTopicCardList: React.FC<FetchTopicCardListProps> = ({
   return (
     <>
       <NeedLogin onMount={() => {}} placeholderBackground={theme.colors.surface}>
-        {nodeName == NODE_TABS.LATEST && memoCountDown}
-        {nodeName == NODE_TABS.HOT && <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange} />}
+        {displayStyle == 'home' && memoCountDown}
+        {displayStyle == 'intent' && <SearchIntent refreshData={searchData} onDataChange={onSearchDataChange} />}
         <BorderLine />
         <TopicCardList
           containerStyle={containerStyle}

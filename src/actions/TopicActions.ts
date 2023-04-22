@@ -2,21 +2,19 @@
  * Created by leon<silenceace@gmail.com> on 22/2/22.
  */
 
-import { Dispatch } from 'redux'
-import { ApiLib } from '@src/api'
-import { logError } from '@src/helper/logger'
+import {Dispatch} from 'redux'
+import {ApiLib} from '@src/api'
+import {logError} from '@src/helper/logger'
 
 import {
-  TOPIC_GET,
-  TOPIC_REPLIES,
-  MEMBER_READ_TOPIC,
-  APP_NODE_LOAD_ERROR,
-  APP_NODE_TOPICS_REFRESH,
-  APP_NODE_LOAD_MORE_TOPICS,
-  APP_NODE_TOPICS_LOAD_SUCCESS,
-  AppObject
+    APP_NODE_LOAD_ERROR,
+    APP_NODE_LOAD_MORE_TOPICS,
+    APP_NODE_TOPICS_LOAD_SUCCESS,
+    APP_NODE_TOPICS_REFRESH,
+    AppObject,
+    MEMBER_READ_TOPIC
 } from '@src/types'
-import { SPECIAL_NODE_NAME_MAP } from '@src/config/constants'
+import {SPECIAL_NODE_NAME_MAP} from '@src/config/constants'
 
 /**
  * 阅读主题
@@ -66,7 +64,6 @@ export const getHomeNodeTopics =
           _topics = await ApiLib.topic.latestTopics()
         }
       } else {
-        _topics = await (v2Use ? ApiLib.topic.pager(node, page) : ApiLib.topic.topics(node, 'node_name'))
       }
 
       dispatch({
@@ -87,17 +84,3 @@ export const getHomeNodeTopics =
       })
     }
   }
-
-export const topicGet = (topicId: string) => async (dispatch: Dispatch) => {
-  dispatch({
-    type: TOPIC_GET,
-    payload: {}
-  })
-}
-
-export const topicReplies = (topicId: string, pager: number) => async (dispatch: Dispatch) => {
-  dispatch({
-    type: TOPIC_REPLIES,
-    payload: {}
-  })
-}

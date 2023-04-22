@@ -1,49 +1,72 @@
 import React, {useState} from 'react'
-import {Button, InputItem, Text, Toast, View} from '@ant-design/react-native'
+import {ApiLib} from "@src/api";
+import navigationService from "@src/navigation/NavigationService";
+import {Button, Input, useToast} from "@src/components";
+import {View} from "react-native";
 
 const UpdatePwdScreen = () => {
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-
-  const handleChangePassword = () => {
-    // TODO: Implement password change logic here
-    if (newPassword !== confirmPassword) {
-      Toast.fail('Passwords do not match')
-    } else {
-      Toast.success('Password changed successfully')
+    const [currentPassword, setCurrentPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const {showMessage} = useToast()
+    const handleChangePassword = () => {
+        if (newPassword !== confirmPassword) {
+            showMessage({text1: '温馨提示', text2: '新密码和确认密码不一致', type: 'error'})
+        } else if (newPassword == currentPassword) {
+            showMessage({text1: '温馨提示', text2: '新密码和原密码不能一样', type: 'error'})
+        } else {
+            ApiLib.member.updatePwd(currentPassword, newPassword).then(res => {
+                showMessage({text1: '温馨提示', text2: '修改成功！'})
+                navigationService.goBack()
+            }).catch(res => {
+                showMessage({text1: '温馨提示', text2: res.msg, type: 'error'})
+            })
+        }
     }
-  }
 
-  return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20 }}>Change Password</Text>
-      <InputItem
-        type="password"
-        value={currentPassword}
-        placeholder="Current Password"
-        onChange={(value: any) => setCurrentPassword(value)}
-        style={{ marginBottom: 20 }}
-      />
-      <InputItem
-        type="password"
-        value={newPassword}
-        placeholder="New Password"
-        onChange={(value: any) => setNewPassword(value)}
-        style={{ marginBottom: 20 }}
-      />
-      <InputItem
-        type="password"
-        value={confirmPassword}
-        placeholder="Confirm Password"
-        onChange={(value: any) => setConfirmPassword(value)}
-        style={{ marginBottom: 20 }}
-      />
-      <Button type="primary" onPress={handleChangePassword} style={{ marginTop: 20 }}>
-        Change Password
-      </Button>
-    </View>
-  )
+    return (
+        <View style={{padding: 10}} >
+            <Input
+                label={"原密码："}
+                secureTextEntry={true}
+                autoCapitalize="none"
+                underlineColorAndroid="transparent"
+                keyboardType="default"
+                returnKeyType="next"
+                autoCorrect={false}
+                value={currentPassword}
+                onChangeText={(value: any) => setCurrentPassword(value)}
+                textContentType="none"
+            />
+            <Input
+                secureTextEntry={true}
+                label={"新密码："}
+                autoCapitalize="none"
+                underlineColorAndroid="transparent"
+                keyboardType="default"
+                returnKeyType="next"
+                autoCorrect={false}
+                value={newPassword}
+                onChangeText={(value: any) => setNewPassword(value)}
+                textContentType="none"
+            />
+            <Input
+                label={"确认密码："}
+                secureTextEntry={true}
+                autoCapitalize="none"
+                underlineColorAndroid="transparent"
+                keyboardType="default"
+                returnKeyType="next"
+                autoCorrect={false}
+                value={confirmPassword}
+                onChangeText={(value: any) => setConfirmPassword(value)}
+                textContentType="none"
+            />
+            <Button type={"large"} onPress={handleChangePassword} style={{marginTop: 20,width:'100%'}}>
+                确认
+            </Button>
+        </View>
+    )
 }
 
 export default UpdatePwdScreen

@@ -1,2 +1,3 @@
-export { default as HomeTopTabListScreen } from './HomeTabs'
-export { default as LatestScreen } from './LatestTopics'
+export { default as LatestScreen } from './HomeTopics'
+export { default as SearchTopicsScreen  } from './SearchTopics'
+export { default as IntentTopicsScreen  } from './IntentTopics'

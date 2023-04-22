@@ -151,10 +151,10 @@ const MainAppNavigator = () => {
         }}
       />
       <MainBottomTabNavigator.Screen
-        name={ROUTES.Nodes}
-        component={Screens.NodesScreen}
+        name={ROUTES.Intent}
+        component={Screens.IntentTopicsScreen}
         options={{
-          title: translate(`router.${ROUTES.Nodes}`),
+          title: translate(`router.${ROUTES.Intent}`),
           ...defaultTabBarSetting(theme, insets),
           tabBarIcon: ({ focused }) =>
             renderBottomIcon(
@@ -278,28 +278,10 @@ export const AppNavigationContainer = () => {
                 }}
               />
               <StackNavigator.Screen
-                name={ROUTES.NodeTopics}
-                component={Screens.NodeTopicListScreen}
-                options={{
-                  title: translate(`router.${ROUTES.NodeTopics}`),
-                  ...defaultScreenOptions(theme),
-                  headerShown: true
-                }}
-              />
-              <StackNavigator.Screen
                 name={ROUTES.TopicDetail}
                 component={Screens.TopicDetailScreen}
                 options={{
                   title: translate(`router.${ROUTES.TopicDetail}`),
-                  ...defaultScreenOptions(theme),
-                  headerShown: true
-                }}
-              />
-              <StackNavigator.Screen
-                name={ROUTES.TopicEdit}
-                component={Screens.TopicEditScreen}
-                options={{
-                  title: translate(`router.${ROUTES.TopicEdit}`),
                   ...defaultScreenOptions(theme),
                   headerShown: true
                 }}
@@ -504,7 +486,7 @@ export const AppNavigationContainer = () => {
               />
               <StackNavigator.Screen
                 name={ROUTES.Search}
-                component={Screens.SearchScreen}
+                component={Screens.SearchTopicsScreen}
                 options={{
                   title: translate(`router.${ROUTES.Search}`),
                   ...defaultScreenOptions(theme),
