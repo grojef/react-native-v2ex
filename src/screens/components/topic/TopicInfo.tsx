@@ -8,7 +8,7 @@ import {StyleProp, View, ViewStyle} from 'react-native'
 import {RenderHTML} from '../common'
 import TopicCardItem from './TopicCardItem'
 import {ApiLib} from '@src/api'
-import Dialer from '@src/components/dialer'
+import dialer from '@src/components/dialer'
 import callDetector from "@src/components/call";
 
 /**
@@ -36,7 +36,7 @@ const TopicInfo: React.FC<TopicInfoProps> = ({ containerStyle, info }: TopicInfo
           topic={info}
           displayStyle={'intent'}
           onPress={() => {
-            new Dialer().callPhone(info.phoneNumber, () => {
+            dialer.callPhone(info.phoneNumber, () => {
                 callDetector.func = (duration) => {
                     ApiLib.topic.insertCallLog(info.id, duration).then(()=>undefined)
 

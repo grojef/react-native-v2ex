@@ -2,7 +2,7 @@
  * App Api Configuration
  */
 export const AppApiOptions = {
-  url: 'http://192.168.2.103:8080',
+  url: 'http://192.168.10.151:8080',
   store: 'api',
   userAgent: 'SanHe',
   authentication: {

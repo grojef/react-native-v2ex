@@ -10,7 +10,7 @@ import {SylCommon, useTheme} from '@src/theme'
 import {Avatar, Text, useToast} from '@src/components'
 import {BorderLine, TextWithIconPress} from '../common'
 import {ApiLib} from '@src/api'
-import Dialer from '@src/components/dialer'
+import dialer from '@src/components/dialer'
 import {NavigationService, ROUTES} from '@src/navigation'
 import dayjs from 'dayjs'
 import callDetector from "@src/components/call";
@@ -79,7 +79,7 @@ const TopicCardTip = ({containerStyle, displayStyle, topic, onPress}: TopicCardI
                         setTip({..._tip, callFlag: '1', risk: true})
                     })
                 } else {
-                    new Dialer().callPhone(res.phoneNumber, () => {
+                    dialer.callPhone(res.phoneNumber, () => {
                         callDetector.func = (duration) => {
                            ApiLib.topic.insertCallLog(res.id, duration).then(()=>undefined)
                             setTip({..._tip, callFlag: '1'})
@@ -208,7 +208,7 @@ const styles = {
             }
         }
         return {
-            color: '#111010'
+           // color: '#111010'
         }
     },
 

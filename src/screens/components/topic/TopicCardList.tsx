@@ -4,7 +4,7 @@ import {SylCommon, useTheme} from '@src/theme'
 import {AppObject, IState, ITheme} from '@src/types'
 import React, {memo} from 'react'
 import {FlatList, ListRenderItem, StyleProp, View, ViewStyle} from 'react-native'
-import Animated from 'react-native-reanimated'
+import Animated, {FadeIn, FadeOut} from 'react-native-reanimated'
 import TopicCardTip from './TopicCardTip'
 import {connect} from 'react-redux'
 
@@ -46,7 +46,7 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
 
   const RenderItem = memo(({ item }: { item: AppObject.Topic }) => {
     return (
-      <Animated.View key={item.id}>
+      <Animated.View key={item.id} exiting={FadeOut} entering={FadeIn}>
         <TopicCardTip
           displayStyle={displayStyle}
           containerStyle={[styles.topicItemContainer(theme), itemContainerStyle]}

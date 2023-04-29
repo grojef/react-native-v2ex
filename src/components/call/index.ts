@@ -7,33 +7,34 @@ class CallDetector {
 
     time: number | undefined
 
-    caller: CallDetectorManager
+    caller: CallDetectorManager | undefined
     startListenerTapped = () => {
+
+        if (this.caller != undefined) {
+            return
+        }
         this.caller = new CallDetectorManager((event: any, phoneNumber: number) => {
                 if (event === 'Disconnected') {
-                    console.log('Disconnected', phoneNumber)
+                  //  console.log('Disconnected', phoneNumber)
                     // @ts-ignore
                     const duration = (new Date().getTime() - this.time) / 1000;
                     this.func && this.func(duration)
                 } else if (event === 'Connected') {
-                    console.log('Connected', phoneNumber)
-                    // This clause will only be executed for iOS
+                  //  console.log('Connected', phoneNumber)
                 } else if (event === 'Dialing') {
-                    console.log('Dialing', phoneNumber)
-                    // This clause will only be executed for iOS
+                  //  console.log('Dialing', phoneNumber)
                 } else if (event === 'Offhook') {
-                    console.log('Offhook', phoneNumber)
+                  //  console.log('Offhook', phoneNumber)
                     // @ts-ignore
                     this.time = new Date().getTime();
-                    // This clause will only be executed for Android
                 } else if (event === 'Missed') {
-                    console.log('Missed', phoneNumber)
+                  //  console.log('Missed', phoneNumber)
 
                 }
             },
             true, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
             () => {
-                console.log(12313)
+               // console.log('permission denied~')
             }, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
             {
                 title: 'Phone State Permission',

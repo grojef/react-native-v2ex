@@ -12,6 +12,8 @@ const UpdatePwdScreen = () => {
     const handleChangePassword = () => {
         if (newPassword !== confirmPassword) {
             showMessage({text1: '温馨提示', text2: '新密码和确认密码不一致', type: 'error'})
+        } else if (newPassword.length<5 || newPassword.length >20) {
+            showMessage({text1: '温馨提示', text2: '新密码长度在5~20之间', type: 'error'})
         } else if (newPassword == currentPassword) {
             showMessage({text1: '温馨提示', text2: '新密码和原密码不能一样', type: 'error'})
         } else {
@@ -25,7 +27,7 @@ const UpdatePwdScreen = () => {
     }
 
     return (
-        <View style={{padding: 10}} >
+        <View style={{padding: 10}}>
             <Input
                 label={"原密码："}
                 secureTextEntry={true}
@@ -62,7 +64,7 @@ const UpdatePwdScreen = () => {
                 onChangeText={(value: any) => setConfirmPassword(value)}
                 textContentType="none"
             />
-            <Button type={"large"} onPress={handleChangePassword} style={{marginTop: 20,width:'100%'}}>
+            <Button type={"large"} onPress={handleChangePassword} style={{marginTop: 20, width: '100%'}}>
                 确认
             </Button>
         </View>

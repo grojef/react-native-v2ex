@@ -29,17 +29,14 @@ public class DialerModule extends ReactContextBaseJavaModule {
     }
 
 
-
-
-
     @ReactMethod
     public void call(String phone) {
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // 没有拨打电话的权限，请求权限
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(context.getCurrentActivity(), new String[]{Manifest.permission.READ_PHONE_STATE}, 100);
+        } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(context.getCurrentActivity(), new String[]{Manifest.permission.CALL_PHONE}, 100);
         } else {
-            // 已经获得了拨打电话的权限，可以执行拨打电话的操作
             Intent intent = new Intent(Intent.ACTION_CALL);
             Uri data = Uri.parse("tel:" + phone);
             intent.setData(data);
