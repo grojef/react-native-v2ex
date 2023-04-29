@@ -1,16 +1,14 @@
 import {
-  Action,
-  APP_AUTH,
-  APP_LOGOUT,
-  IState,
-  MEMBER_INSEREST_NODE,
-  MEMBER_LIKE_TOPICS,
-  MEMBER_PROFILE,
-  MEMBER_READ_TOPIC,
-  MEMBER_SATE_SETTING,
-  MEMBER_TOPICS,
-  MEMBER_UNINTEREST_NODE,
-  MEMBER_UNLIKE_TOPICS
+    Action,
+    APP_AUTH,
+    APP_LOGOUT,
+    IState,
+    MEMBER_LIKE_TOPICS,
+    MEMBER_PROFILE,
+    MEMBER_READ_TOPIC,
+    MEMBER_SATE_SETTING,
+    MEMBER_TOPICS,
+    MEMBER_UNLIKE_TOPICS
 } from '../types'
 
 const INITIAL_STATE: IState.MemberState = {
@@ -22,20 +20,6 @@ const INITIAL_STATE: IState.MemberState = {
 
 export default (state: IState.MemberState = INITIAL_STATE, action: Action): IState.MemberState => {
   switch (action.type) {
-    case MEMBER_INSEREST_NODE:
-      return {
-        ...state,
-        interestNodes: state.interestNodes.concat(
-          state.interestNodes && state.interestNodes.findIndex((v) => v.id === action.payload.id) >= 0
-            ? []
-            : action.payload
-        )
-      }
-    case MEMBER_UNINTEREST_NODE:
-      return {
-        ...state,
-        interestNodes: state.interestNodes.filter((v) => v.id !== action.payload.id)
-      }
     case MEMBER_LIKE_TOPICS:
       return {
         ...state,

@@ -13,6 +13,8 @@ import {Provider} from 'react-redux'
 
 onAppStart(store)
 
+
+
 const App = () => {
     return (
         <Provider store={store}>

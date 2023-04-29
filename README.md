@@ -199,7 +199,7 @@ npx react-native run-android --variant release
 ├── app.json                 #
 ├── babel.config.js          # Babel的配置文件
 ├── global.d.ts              # ts全局声明文件
-├── index.js                 # 程序入口文件
+├── index.ts                 # 程序入口文件
 ├── ios                      # iOS文件所在目录，包含XCode项目环境；
 ├── metro.config.js
 ├── package.json             # 项目基本信息（比如名称、版本、许可证等元数据）以及依赖信息（npm install安装的模块）等

@@ -240,7 +240,7 @@ export const ROUTES = {
   Search: 'Search',
 
   /**
-   * V2EX统计
+   * 通话统计
    */
   SiteStat: 'SiteStat',
 

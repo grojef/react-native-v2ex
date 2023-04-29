@@ -14,6 +14,10 @@ export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
         return v2ex.send<void>('/cms/claimInfo', 'PUT', undefined, undefined, topic)
     },
 
+    insertCallLog(id: number, duration: number): Promise<void> {
+        return v2ex.send<void>(`/cms/claimInfo/insertCallLog`, 'post', undefined, undefined, {id: id, duration: duration})
+    },
+
     intent: (page: number, batCode: string, feature: string) =>
         v2ex.get<AppObject.PageInfo<AppObject.Topic>>(
             `/cms/claimInfo/intent?batCode=${batCode}&feature=${feature}&pageNum=${page}&pageSize=20`,
@@ -21,8 +25,8 @@ export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
             {},
             undefined
         ),
-    search:(phone: string)=>{
-       return v2ex.send<AppObject.PageInfo<AppObject.Topic>>(`/cms/claimInfo/search`,'post',undefined, undefined, {phone: phone})
+    search: (phone: string) => {
+        return v2ex.send<AppObject.PageInfo<AppObject.Topic>>(`/cms/claimInfo/search`, 'post', undefined, undefined, {phone: phone})
     },
 
     grab: (label) => {
@@ -48,5 +52,8 @@ export default (v2ex: AppAPI.APP): AppAPI.TopicAPI => ({
      * @param id
      */
     checkPhoneCall: (id: number) =>
-        v2ex.get<AppObject.Topic>(`/cms/claimInfo/checkPhoneCall/${id}`, )
+        v2ex.get<AppObject.Topic>(`/cms/claimInfo/checkPhoneCall/${id}`,),
+
+    callStat: () =>
+        v2ex.get<AppObject.CallStat>(`/cms/callLog/stat`),
 })

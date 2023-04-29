@@ -1,7 +1,7 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { BorderLine } from '@src/screens/components'
-import { SylCommon, useTheme } from '@src/theme'
-import { NavigationService, ROUTES } from '@src/navigation'
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {BorderLine} from '@src/screens/components'
+import {SylCommon, useTheme} from '@src/theme'
+import {NavigationService, ROUTES} from '@src/navigation'
 
 const WorkCenter = () => {
   const { theme } = useTheme()
@@ -30,13 +30,17 @@ const WorkCenter = () => {
             <Image source={theme.assets.images.icons.table.email} style={styles.itemIcon} />
             <Text style={[styles.itemTitle]}>消息通知</Text>
           </TouchableOpacity>
-
-          <View style={[styles.item]}></View>
+          <TouchableOpacity
+              style={[styles.item]}
+              onPress={() => {
+                NavigationService.navigate(ROUTES.SiteStat)
+              }}>
+            <Image source={theme.assets.images.icons.table.cached} style={styles.itemIcon} />
+            <Text style={[styles.itemTitle]}>通话统计</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={[styles.item, styles.borderTop, styles.borderRight]}></TouchableOpacity>
-
           <TouchableOpacity style={[styles.item, , styles.borderTop, styles.borderRight]}></TouchableOpacity>
-
-          <View style={[styles.item, styles.borderTop]}></View>
+          <TouchableOpacity style={[styles.item, , styles.borderTop, styles.borderRight]}></TouchableOpacity>
         </View>
       </View>
     </ScrollView>
