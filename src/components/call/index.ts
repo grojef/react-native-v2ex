@@ -11,27 +11,26 @@ class CallDetector {
     startListenerTapped = () => {
         this.caller = new CallDetectorManager((event: any, phoneNumber: number) => {
                 if (event === 'Disconnected') {
-                    console.log('Disconnected', phoneNumber)
+                    //  console.log('Disconnected', phoneNumber)
                     // @ts-ignore
                     const duration = (new Date().getTime() - this.time) / 1000;
                     this.func && this.func(duration)
                 } else if (event === 'Connected') {
-                    console.log('Connected', phoneNumber)
+                    // console.log('Connected', phoneNumber)
                 } else if (event === 'Dialing') {
                     this.time = new Date().getTime();
-                    console.log('Dialing', phoneNumber)
+                    // console.log('Dialing', phoneNumber)
                 } else if (event === 'Offhook') {
-                    console.log('Offhook', phoneNumber)
+                    //  console.log('Offhook', phoneNumber)
                     // @ts-ignore
                     this.time = new Date().getTime();
                 } else if (event === 'Missed') {
-                    console.log('Missed', phoneNumber)
-
+                    // console.log('Missed', phoneNumber)
                 }
             },
             true, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
             () => {
-                console.log('Phone State Permission')
+                //   console.log('Phone State Permission')
             }, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
             {
                 title: 'Phone State Permission',
