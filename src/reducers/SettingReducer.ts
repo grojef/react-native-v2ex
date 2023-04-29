@@ -1,8 +1,7 @@
-import { LanguageTagType, APP_SETTING_LOCALES, APP_SETTING_THEME, Action, IState } from '../types'
-import { i18n } from '@src/i18n'
+import {Action, APP_SETTING_LOCALES, APP_SETTING_THEME, IState} from '../types'
 
 const INITIAL_STATE: IState.SettingState = {
-  languageTag: i18n.currentLocale() as LanguageTagType,
+  languageTag: 'zh',
   theme: 'light'
 }
 

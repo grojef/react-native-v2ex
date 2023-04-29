@@ -1,29 +1,29 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/2/21.
  */
-import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { DefaultTheme, NavigationContainer, NavigationContainerRefWithCurrent } from '@react-navigation/native'
-import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack'
-import { ToastProvider } from '@src/components/toast'
-import { useAppSelector } from '@src/hooks'
-import { useUnRead } from '@src/hooks/useUnRead'
-import { changeLocale, LanguageTagType, translate } from '@src/i18n'
+import {BottomTabNavigationOptions, createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {DefaultTheme, NavigationContainer, NavigationContainerRefWithCurrent} from '@react-navigation/native'
+import {createNativeStackNavigator, NativeStackNavigationOptions} from '@react-navigation/native-stack'
+import {ToastProvider} from '@src/components/toast'
+import {useAppSelector} from '@src/hooks'
+import {useUnRead} from '@src/hooks/useUnRead'
+import {changeLocale, LanguageTagType, translate} from '@src/i18n'
 import * as Screens from '@src/screens'
-import { RootState, store } from '@src/store'
-import { ITheme, useTheme } from '@src/theme'
-import { wait } from '@src/utils/utils'
+import {RootState, store} from '@src/store'
+import {ITheme, useTheme} from '@src/theme'
+import {wait} from '@src/utils/utils'
 import dayjs from 'dayjs'
 import enUS from 'dayjs/locale/en'
 import zhCN from 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import React, { ReactNode, useEffect, useState } from 'react'
-import { Image, Platform, StatusBar, TextStyle, View } from 'react-native'
-import { SheetProvider } from 'react-native-actions-sheet'
-import { EdgeInsets, SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
+import React, {ReactNode, useEffect, useState} from 'react'
+import {Image, Platform, StatusBar, TextStyle, View} from 'react-native'
+import {SheetProvider} from 'react-native-actions-sheet'
+import {EdgeInsets, SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context'
 import SplashScreen from 'react-native-splash-screen'
 import '../components/actions-sheet'
 import NavigationService from './NavigationService'
-import { RootStackParamList, ROUTES } from './routes'
+import {RootStackParamList, ROUTES} from './routes'
 
 /**
  * dayjs
@@ -151,10 +151,10 @@ const MainAppNavigator = () => {
         }}
       />
       <MainBottomTabNavigator.Screen
-        name={ROUTES.Nodes}
-        component={Screens.NodesScreen}
+        name={ROUTES.Intent}
+        component={Screens.IntentTopicsScreen}
         options={{
-          title: translate(`router.${ROUTES.Nodes}`),
+          title: translate(`router.${ROUTES.Intent}`),
           ...defaultTabBarSetting(theme, insets),
           tabBarIcon: ({ focused }) =>
             renderBottomIcon(
@@ -278,28 +278,10 @@ export const AppNavigationContainer = () => {
                 }}
               />
               <StackNavigator.Screen
-                name={ROUTES.NodeTopics}
-                component={Screens.NodeTopicListScreen}
-                options={{
-                  title: translate(`router.${ROUTES.NodeTopics}`),
-                  ...defaultScreenOptions(theme),
-                  headerShown: true
-                }}
-              />
-              <StackNavigator.Screen
                 name={ROUTES.TopicDetail}
                 component={Screens.TopicDetailScreen}
                 options={{
                   title: translate(`router.${ROUTES.TopicDetail}`),
-                  ...defaultScreenOptions(theme),
-                  headerShown: true
-                }}
-              />
-              <StackNavigator.Screen
-                name={ROUTES.TopicEdit}
-                component={Screens.TopicEditScreen}
-                options={{
-                  title: translate(`router.${ROUTES.TopicEdit}`),
                   ...defaultScreenOptions(theme),
                   headerShown: true
                 }}
@@ -390,6 +372,15 @@ export const AppNavigationContainer = () => {
                 component={Screens.LanguageScreen}
                 options={{
                   title: translate(`router.${ROUTES.Language}`),
+                  ...defaultScreenOptions(theme),
+                  headerShown: true
+                }}
+              />
+              <StackNavigator.Screen
+                name={ROUTES.UpdatePwd}
+                component={Screens.UpdatePwdScreen}
+                options={{
+                  title: translate(`router.${ROUTES.UpdatePwd}`),
                   ...defaultScreenOptions(theme),
                   headerShown: true
                 }}
@@ -495,7 +486,7 @@ export const AppNavigationContainer = () => {
               />
               <StackNavigator.Screen
                 name={ROUTES.Search}
-                component={Screens.SearchScreen}
+                component={Screens.SearchTopicsScreen}
                 options={{
                   title: translate(`router.${ROUTES.Search}`),
                   ...defaultScreenOptions(theme),

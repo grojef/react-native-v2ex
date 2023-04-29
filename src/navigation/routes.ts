@@ -2,8 +2,8 @@
  * Created by leon<silenceace@gmail.com> on 22/2/24.
  */
 
-import type { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { ITheme } from '@src/types'
+import type {NativeStackScreenProps} from '@react-navigation/native-stack'
+import {ITheme} from '@src/types'
 
 export type RootStackParamList = {
   HotDraw: undefined
@@ -28,6 +28,7 @@ export type RootStackParamList = {
   FavoriteTopics: undefined
   Setting: undefined
   Language: undefined
+  UpdatePwd: undefined
   About: undefined
   Feedback: undefined
   ThemeSetting: undefined
@@ -76,7 +77,6 @@ export type NotificationsScreenProps = NativeStackScreenProps<RootStackParamList
 export type NotificationInfoScreenProps = NativeStackScreenProps<RootStackParamList, 'NotificationInfo'> &
   CommonScreenProps
 
-export type VisitInfoListScreenProps = NativeStackScreenProps<RootStackParamList, 'VisitInfoList'> & CommonScreenProps
 export type VisitInfoScreenProps = NativeStackScreenProps<RootStackParamList, 'VisitInfo'> & CommonScreenProps
 
 export type NodesScreenProps = NativeStackScreenProps<RootStackParamList, 'Nodes'> & CommonScreenProps
@@ -84,8 +84,6 @@ export type NodesScreenProps = NativeStackScreenProps<RootStackParamList, 'Nodes
 export type NodeTopicsScreenProps = NativeStackScreenProps<RootStackParamList, 'NodeTopics'> & CommonScreenProps
 
 export type TopicDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'TopicDetail'> & CommonScreenProps
-
-export type TopicEditScreenProps = NativeStackScreenProps<RootStackParamList, 'TopicEdit'> & CommonScreenProps
 
 export type MyScreenProps = NativeStackScreenProps<RootStackParamList, 'My'> & CommonScreenProps
 
@@ -98,6 +96,7 @@ export type FavoriteTopicsScreenProps = NativeStackScreenProps<RootStackParamLis
 export type SettingScreenProps = NativeStackScreenProps<RootStackParamList, 'Setting'> & CommonScreenProps
 
 export type LanguageScreenProps = NativeStackScreenProps<RootStackParamList, 'Language'> & CommonScreenProps
+export type UpdatePwdScreenProps = NativeStackScreenProps<RootStackParamList, 'UpdatePwd'> & CommonScreenProps
 
 export type AboutScreenProps = NativeStackScreenProps<RootStackParamList, 'About'> & CommonScreenProps
 
@@ -178,7 +177,7 @@ export const ROUTES = {
   /**
    * 节点列表
    */
-  Nodes: 'Nodes',
+  Intent: 'Intent',
   /**
    * 节点话题列表
    */
@@ -188,10 +187,6 @@ export const ROUTES = {
    */
   TopicDetail: 'TopicDetail',
 
-  /**
-   * 话题详情
-   */
-  TopicEdit: 'TopicEdit',
 
   /**
    * 到访列表
@@ -245,7 +240,7 @@ export const ROUTES = {
   Search: 'Search',
 
   /**
-   * V2EX统计
+   * 通话统计
    */
   SiteStat: 'SiteStat',
 
@@ -263,6 +258,11 @@ export const ROUTES = {
    * 缓存设置
    */
   CacheSetting: 'CacheSetting',
+
+  /**
+   * 修改密码
+   */
+  UpdatePwd: 'UpdatePwd',
 
   /**
    * URLSchemes

@@ -1,19 +1,19 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/05/21.
  */
-import { Placeholder, SearchBar, Spinner, Text, useToast } from '@src/components'
-import { useSession } from '@src/hooks/useSession'
-import { translate } from '@src/i18n'
-import { useTheme } from '@src/theme'
-import { AppObject, ITheme } from '@src/types'
-import { ApiLib } from '@src/api'
-import React, { useCallback, useEffect, useState } from 'react'
-import { FlatList, RefreshControl, StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { NeedLogin } from '../'
-import { BorderLine, TextWithIconPress } from '../common'
+import {Placeholder, SearchBar, Spinner, Text, useToast} from '@src/components'
+import {useSession} from '@src/hooks/useSession'
+import {translate} from '@src/i18n'
+import {useTheme} from '@src/theme'
+import {AppObject, ITheme} from '@src/types'
+import {ApiLib} from '@src/api'
+import React, {useCallback, useEffect, useState} from 'react'
+import {FlatList, RefreshControl, StyleProp, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
+import {NeedLogin} from '../'
+import {BorderLine, TextWithIconPress} from '../common'
 import NavigationService from '@src/navigation/NavigationService'
-import { ROUTES } from '@src/navigation'
-import { defaultDictMeta } from '@src/helper/defaultDictMeta'
+import {ROUTES} from '@src/navigation'
+import {defaultDictMeta} from '@src/helper/defaultDictMeta'
 
 export interface VisitInfoListFcProps {
   /**
@@ -88,14 +88,15 @@ const VisitInfoListFc: React.FC<VisitInfoListFcProps> = ({ containerStyle }: Vis
   const findDict = (dict: AppObject.DictMeta[], dictValue: any) => {
     if (dictValue) {
       return dict ? dict.find((s) => s.dictValue == dictValue)?.dictLabel : ''
+    } else {
+      return ''
     }
-    return ''
   }
 
   const renderItemRow = (item: any) => {
     if (!item) return null
     return (
-      <View style={styles.itemContainer(theme)}>
+      <View style={[styles.itemContainer(theme)]}>
         <View style={styles.itemRight(theme)}>
           <TouchableOpacity
             onPress={() => {

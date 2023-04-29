@@ -1,18 +1,18 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/01.
  */
-import { Text } from '@src/components'
-import { ITheme, useTheme } from '@src/theme'
+import {Text} from '@src/components'
+import {ITheme, useTheme} from '@src/theme'
 import React from 'react'
 import {
-  Image,
-  ImageSourcePropType,
-  ImageStyle,
-  StyleProp,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle
+    Image,
+    ImageSourcePropType,
+    ImageStyle,
+    StyleProp,
+    TextStyle,
+    TouchableOpacity,
+    View,
+    ViewStyle
 } from 'react-native'
 
 /**
@@ -63,8 +63,6 @@ export interface TableRowProps {
    */
   rightText?: string
 
-  extra?: string
-
   /**
    * press callback
    */
@@ -97,7 +95,6 @@ const TableRow: React.FC<TableRowProps> = (data: TableRowProps) => {
       </View>
       <View style={rowStyles.right(theme)}>
         {data.rightText && <Text style={rowStyles.rightText(theme)}>{data.rightText}</Text>}
-        {data.extra && <Text style={rowStyles.rightText(theme)}>{data.extra}</Text>}
         {data.withArrow && (
           <Image source={theme.assets.images.icons.table.rightArrow} style={rowStyles.rightIcon(theme)} />
         )}

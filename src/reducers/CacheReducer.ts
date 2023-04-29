@@ -1,19 +1,19 @@
 import {
-  Action,
-  APP_CACHE_ADD_DICT,
-  APP_CACHE_ADD_MEMBER,
-  APP_CACHE_ADD_NODE,
-  APP_CACHE_DELAY_TIME,
-  APP_CACHE_MEMBER_FOLLOWING,
-  APP_CACHE_MEMBER_INTEREST_NODES,
-  APP_CACHE_MEMBER_LIKE_TOPICS,
-  APP_CACHE_RESET,
-  APP_CACHE_RESET_MEMBERS,
-  APP_CACHE_RESET_NODES,
-  APP_LOGOUT,
-  AppObject,
-  IState,
-  MEMBER_PROFILE
+    Action,
+    APP_CACHE_ADD_DICT,
+    APP_CACHE_ADD_MEMBER,
+    APP_CACHE_ADD_NODE,
+    APP_CACHE_DELAY_TIME,
+    APP_CACHE_MEMBER_FOLLOWING,
+    APP_CACHE_MEMBER_INTEREST_NODES,
+    APP_CACHE_MEMBER_LIKE_TOPICS,
+    APP_CACHE_RESET,
+    APP_CACHE_RESET_MEMBERS,
+    APP_CACHE_RESET_NODES,
+    APP_LOGOUT,
+    AppObject,
+    IState,
+    MEMBER_PROFILE
 } from '../types'
 
 const INITIAL_STATE: IState.CacheState = {
@@ -33,7 +33,7 @@ export default (state: IState.CacheState = INITIAL_STATE, action: Action): IStat
     case APP_LOGOUT:
       return { ...state, currentSessionMember: undefined }
     case APP_CACHE_ADD_MEMBER:
-      const { members } = state
+      const members = state.members
       return { ...state, members }
     case APP_CACHE_ADD_NODE:
       const nodes = action.payload

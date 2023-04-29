@@ -1,6 +1,6 @@
-import { NodeTopicsScreenProps as ScreenProps } from '@src/navigation'
-import React, { useEffect } from 'react'
-import { FetchTopicCardList } from '../components'
+import {NodeTopicsScreenProps as ScreenProps} from '@src/navigation'
+import React, {useEffect} from 'react'
+import {FetchTopicCardList} from '../components'
 
 const NodeTopics = ({ route, navigation }: ScreenProps) => {
   useEffect(() => {
@@ -9,7 +9,7 @@ const NodeTopics = ({ route, navigation }: ScreenProps) => {
     })
   }, [route, navigation])
 
-  return <FetchTopicCardList nodeName={route.params.nodeName} />
+  return <FetchTopicCardList/>
 }
 
 export default NodeTopics

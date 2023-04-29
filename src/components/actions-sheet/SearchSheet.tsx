@@ -1,14 +1,14 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/3/10.
  */
-import { Button } from '@src/components'
-import { translate } from '@src/i18n'
-import { SylCommon, useTheme } from '@src/theme'
-import { AppObject, ITheme } from '@src/types'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Text, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import ActionSheet, { ActionSheetRef, SheetManager, SheetProps } from 'react-native-actions-sheet'
-import { ApiLib } from '@src/api'
+import {Button} from '@src/components'
+import {translate} from '@src/i18n'
+import {SylCommon, useTheme} from '@src/theme'
+import {AppObject, ITheme} from '@src/types'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
+import {Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native'
+import ActionSheet, {ActionSheetRef, SheetManager, SheetProps} from 'react-native-actions-sheet'
+import {ApiLib} from '@src/api'
 
 const SearchActionSheet = (props: SheetProps) => {
   const { theme } = useTheme()
@@ -69,7 +69,7 @@ const SearchActionSheet = (props: SheetProps) => {
         <View>
           <Text style={styles.label(theme)}>标签:</Text>
         </View>
-        <View style={styles.tagContainer()}>
+        <View style={[styles.tagContainer()]}>
           {tags?.map((tag) => {
             return (
               <TouchableOpacity
@@ -87,7 +87,7 @@ const SearchActionSheet = (props: SheetProps) => {
         <View>
           <Text style={styles.label(theme)}>属性:</Text>
         </View>
-        <View style={styles.tagContainer()}>
+        <View style={[styles.tagContainer()]}>
           {features?.map((tag) => {
             return (
               <TouchableOpacity

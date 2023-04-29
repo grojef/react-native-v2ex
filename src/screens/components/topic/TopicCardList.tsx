@@ -1,12 +1,12 @@
-import { Placeholder, Spinner } from '@src/components'
-import { translate } from '@src/i18n'
-import { SylCommon, useTheme } from '@src/theme'
-import { AppObject, IState, ITheme } from '@src/types'
-import React from 'react'
-import { FlatList, StyleProp, View, ViewStyle } from 'react-native'
-import Animated, { FadeInDown } from 'react-native-reanimated'
+import {Placeholder, Spinner} from '@src/components'
+import {translate} from '@src/i18n'
+import {SylCommon, useTheme} from '@src/theme'
+import {AppObject, IState, ITheme} from '@src/types'
+import React, {memo} from 'react'
+import {FlatList, ListRenderItem, StyleProp, View, ViewStyle} from 'react-native'
+import Animated, {FadeIn, FadeOut} from 'react-native-reanimated'
 import TopicCardTip from './TopicCardTip'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
 export interface TopicCardListProps {
   /**
@@ -26,7 +26,7 @@ export interface TopicCardListProps {
   /**
    * Display Style
    */
-  displayStyle?: 'simple' | 'full' | 'auto'
+  displayStyle?: 'intent' | 'home' | 'search'
   app: IState.AppState
   useFlatList?: boolean
 }
@@ -35,21 +35,18 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
   app,
   useFlatList = true,
   containerStyle,
-  onRowPress,
   itemContainerStyle,
   canLoadMoreContent,
   displayStyle,
   topics,
   onEndReached,
   refreshControl,
-  searchIndicator,
-  refreshCallback
 }: TopicCardListProps) => {
   const { theme } = useTheme()
 
-  const renderItemRow = ({ item }: { item: AppObject.Topic }) =>
-    !item || false ? null : (
-      <Animated.View key={item.id} entering={FadeInDown}>
+  const RenderItem = memo(({ item }: { item: AppObject.Topic }) => {
+    return (
+      <Animated.View key={item.id} entering={FadeIn} exiting={FadeOut}>
         <TopicCardTip
           displayStyle={displayStyle}
           containerStyle={[styles.topicItemContainer(theme), itemContainerStyle]}
@@ -57,7 +54,11 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
         />
       </Animated.View>
     )
+  })
 
+  const renderItemRow: ListRenderItem<AppObject.Topic> = ({ item }) => {
+    return <RenderItem item={item} />
+  }
   const renderFooter = () => {
     if (canLoadMoreContent) {
       return <Spinner style={{ padding: theme.spacing.large }} />
@@ -85,15 +86,15 @@ const TopicCardList: React.FC<TopicCardListProps> = ({
         style={styles.container(theme)}
         data={topics}
         renderItem={renderItemRow}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id + ''}
         onEndReached={onEndReached}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.2}
         ListFooterComponent={renderFooter}
         numColumns={1}
         showsVerticalScrollIndicator={false}
         key={'ONE COLUMN'}
-        maxToRenderPerBatch={10}
-        initialNumToRender={10}
+        maxToRenderPerBatch={20}
+        initialNumToRender={20}
         ItemSeparatorComponent={renderItemSeparator}
       />
     )

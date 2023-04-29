@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "SH",
+    "name": "SanHe",
     "intro": "这个项目使用了 React Native 构建了一个 V2EX 移动客户端应用。主要目的是为了构建一个 React Native 快速开发脚手架。"
   },
   "common": {
@@ -132,7 +132,7 @@
     "Hot": "热门",
     "Center": "工作栏",
     "Latest": "认领客户",
-    "Nodes": "意向客户",
+    "Intent": "意向客户",
     "Notifications": "通知",
     "NotificationInfo": "通知详情",
     "Setting": "设置",
@@ -155,7 +155,7 @@
     "Profile": "个人资料",
     "History": "浏览记录",
     "WebViewer": "查看网页",
-    "SiteStat": "V2EX",
+    "SiteStat": "通话统计",
     "NodeDetail": "节点",
     "MyTopics": "我的主题",
     "CacheSetting": "缓存清理",
@@ -165,7 +165,8 @@
     "ChangeLog": "更新说明",
     "InterestNodes": "关注",
     "HowToUse": "如何使用",
-    "TermsOfService": "服务条款"
+    "TermsOfService": "服务条款",
+    "UpdatePwd": "修改密码"
   },
   "placeholder": {
     "loading": "加载中...",

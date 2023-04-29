@@ -1,5 +1,5 @@
-import { Platform } from 'react-native'
-import { IThemeTypography } from '../types'
+import {Platform} from 'react-native'
+import {IThemeTypography} from '../types'
 import colors from './colors'
 
 const fontFamily = Platform.select({ android: 'sans-serif', ios: 'Helvetica' })
@@ -79,7 +79,7 @@ const typographys: IThemeTypography = {
   bodyText: {
     fontFamily,
     color: bodyTextColor,
-    fontSize: 15,
+    fontSize: 16,
     lineHeight: 21,
     fontStyle: 'normal',
     fontWeight: fontWeightRegular

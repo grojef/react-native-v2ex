@@ -1,19 +1,14 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/05/21.
  */
-import { Avatar, Placeholder, Spinner, Text, useToast } from '@src/components'
-import { useMember } from '@src/hooks/useMember'
-import { useSession } from '@src/hooks/useSession'
-import { translate } from '@src/i18n'
-import { SylCommon, useTheme } from '@src/theme'
-import { ITheme, AppObject } from '@src/types'
+import {Text} from '@src/components'
+import {SylCommon, useTheme} from '@src/theme'
+import {AppObject, ITheme} from '@src/types'
 import dayjs from 'dayjs'
-import React, { useCallback, useState } from 'react'
-import { FlatList, ScrollView, StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { RenderHTML } from '../'
-import { TextWithIconPress } from '../common'
-import NavigationService from '@src/navigation/NavigationService'
-import { ROUTES } from '@src/navigation'
+import React from 'react'
+import {FlatList, StyleProp, TextStyle, View, ViewStyle} from 'react-native'
+import {RenderHTML} from '../'
+import {TextWithIconPress} from '../common'
 
 export interface NotificationInfoProps {
   /**
@@ -37,7 +32,7 @@ const NotificationDetail: React.FC<NotificationInfoProps> = ({ containerStyle, i
   const renderContent = () => {
     if (!info) return null
     return (
-      <View style={SylCommon.Card.container(theme)}>
+      <View style={[SylCommon.Card.container(theme)]}>
         <View style={styles.itemRight(theme)}>
           <View style={[styles.itemRightItem(theme), styles.textItem(theme)]}>
             <Text type={'body'} bold={true}>

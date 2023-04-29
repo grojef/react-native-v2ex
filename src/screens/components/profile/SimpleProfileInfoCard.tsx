@@ -1,15 +1,15 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/05/27.
  */
-import { Avatar, Text } from '@src/components'
-import { translate } from '@src/i18n'
-import { NavigationService, ROUTES } from '@src/navigation'
-import { ITheme, useTheme } from '@src/theme'
-import { AppObject } from '@src/types'
+import {Avatar, Text} from '@src/components'
+import {translate} from '@src/i18n'
+import {NavigationService, ROUTES} from '@src/navigation'
+import {ITheme, useTheme} from '@src/theme'
+import {AppObject} from '@src/types'
 import dayjs from 'dayjs'
 import React from 'react'
-import { Image, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { ProfileInfoStyle } from './profile'
+import {Image, StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native'
+import {ProfileInfoStyle} from './profile'
 
 /**
  * SimpleProfileInfoCard props
@@ -68,8 +68,7 @@ const SimpleProfileInfoCard: React.FC<SimpleProfileInfoCardProps> = ({
                     ProfileInfoStyle.baseRightItem(theme),
                     styles.baseRightItem(theme),
                     theme.typography.bodyText
-                  ]}
-                />
+                  ]}></Text>
               ) : null}
               {info ? (
                 <Text

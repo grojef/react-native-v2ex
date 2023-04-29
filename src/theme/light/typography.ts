@@ -1,5 +1,5 @@
-import { Platform } from 'react-native'
-import { IThemeTypography } from '../types'
+import {Platform} from 'react-native'
+import {IThemeTypography} from '../types'
 import colors from './colors'
 
 const fontFamily = Platform.select({ android: 'sans-serif', ios: 'Helvetica' })
@@ -79,16 +79,16 @@ const typographys: IThemeTypography = {
   bodyText: {
     fontFamily,
     color: bodyTextColor,
-    fontSize: 15,
-    lineHeight: 21,
+    fontSize: 18,
+    lineHeight: 22,
     fontStyle: 'normal',
     fontWeight: fontWeightRegular
   },
   bodyTextBold: {
     fontFamily,
     color: bodyTextColor,
-    fontSize: 15,
-    lineHeight: 21,
+    fontSize: 18,
+    lineHeight: 22,
     fontStyle: 'normal',
     fontWeight: fontWeightBold
   },
@@ -99,16 +99,16 @@ const typographys: IThemeTypography = {
   labelText: {
     fontFamily,
     color: titleTextColor,
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 20,
     fontStyle: 'normal',
     fontWeight: fontWeightRegular
   },
   labelTextBold: {
     fontFamily,
     color: titleTextColor,
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 20,
     fontStyle: 'normal',
     fontWeight: fontWeightBold
   },
@@ -120,16 +120,16 @@ const typographys: IThemeTypography = {
   captionText: {
     fontFamily,
     color: captionTextColor,
-    fontSize: 14,
-    lineHeight: 16,
+    fontSize: 16,
+    lineHeight: 18,
     fontStyle: 'normal',
     fontWeight: fontWeightRegular
   },
   captionTextBold: {
     fontFamily,
     color: captionTextColor,
-    fontSize: 14,
-    lineHeight: 16,
+    fontSize: 16,
+    lineHeight: 18,
     fontStyle: 'normal',
     fontWeight: fontWeightBold
   },
@@ -139,8 +139,8 @@ const typographys: IThemeTypography = {
   inputText: {
     fontFamily,
     fontStyle: 'normal',
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 20,
     color: colors.titleText
   }
 }

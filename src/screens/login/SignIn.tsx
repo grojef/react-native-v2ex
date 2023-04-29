@@ -1,22 +1,22 @@
 /**
  * Created by leon<silenceace@gmail.com> on 22/04/14.
  */
-import { loginByToken } from '@src/actions'
-import { Button, Input, Text, useToast } from '@src/components'
-import { translate } from '@src/i18n'
-import { ROUTES, SignInScreenProps as ScreenProps } from '@src/navigation'
-import { SylCommon, useTheme } from '@src/theme'
-import { APP_AUTH_RESET, APP_LOGOUT, IState, ITheme } from '@src/types'
+import {loginByToken} from '@src/actions'
+import {Button, Input, Text, useToast} from '@src/components'
+import {translate} from '@src/i18n'
+import {ROUTES, SignInScreenProps as ScreenProps} from '@src/navigation'
+import {SylCommon, useTheme} from '@src/theme'
+import {APP_AUTH_RESET, APP_LOGOUT, IState, ITheme} from '@src/types'
 import * as utils from '@src/utils'
-import React, { useEffect, useState } from 'react'
-import { Image, ImageStyle, Pressable, TextStyle, View, ViewStyle } from 'react-native'
-import { connect } from 'react-redux'
-import { SetStatusBar } from '../components'
-import { useAppDispatch } from '@src/hooks'
+import React, {useEffect, useState} from 'react'
+import {Image, ImageStyle, Pressable, TextStyle, View, ViewStyle} from 'react-native'
+import {connect} from 'react-redux'
+import {SetStatusBar} from '../components'
+import {useAppDispatch} from '@src/hooks'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { ApiLib } from '@src/api'
-import { MEMBER_TOKEN_KEY } from '@config/constants'
-import { Verification } from '@src/screens/components/verification'
+import {ApiLib} from '@src/api'
+import {MEMBER_TOKEN_KEY} from '@config/constants'
+import {Verification} from '@src/screens/components/verification'
 
 const Screen = ({
   navigation,
@@ -226,7 +226,8 @@ const styles = {
     flexWrap: 'wrap'
   }),
   footerText: (theme: ITheme): TextStyle => ({
-    ...theme.typography.captionText
+    ...theme.typography.captionText,
+    fontSize:14
   })
 }
 
